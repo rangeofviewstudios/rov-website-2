@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from 'react';
-import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Repeat, Shuffle } from 'lucide-react';
+import { Play, Pause, SkipBack, SkipForward, Volume2, VolumeX, Repeat, Shuffle, Mail, Instagram, Linkedin } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { Renderer, Program, Mesh, Triangle, Vec3 } from "ogl";
 
@@ -352,6 +352,7 @@ export default function MusicPlayer() {
   const [duration, setDuration] = useState(0);
   const [isShuffled, setIsShuffled] = useState(false);
   const [isRepeating, setIsRepeating] = useState(false);
+  const [modalOpen, setModalOpen] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressBarRef = useRef<HTMLDivElement>(null);
@@ -431,9 +432,56 @@ export default function MusicPlayer() {
     return `${minutes}:${seconds.toString().padStart(2, '0')}`;
   };
 
+  const artistLinks: { [key: string]: string } = {
+    "Basu": "https://open.spotify.com/artist/1jvWl3rF1B79uoLznEir6D?si=AsD_zCpcQHyW6n80fSb_qA",
+    "Adil Hasan": "https://open.spotify.com/artist/7kx8kuU4Icm0YHB7JEUmk4?si=sLJb79zNS-qkes64mPHHEw",
+    "DDK": "https://open.spotify.com/artist/7AfTMScTc5pSfjjxtatrIq?si=Qs5Tq616QYOM-1JI9Vz3lw",
+    "mttw": "https://open.spotify.com/artist/2FgWKkYS4KdwS3ucQ5sllQ?si=z-5f3qsKSWqrC1oIzaJ1Pg"
+  };
+
+  const titleLinks: { [key: string]: string } = {
+    "Come Thru": "https://open.spotify.com/track/2f8SxYTeN8QthJpOQ5JZWe?si=56ab33bbde704598",
+    "you could be my woman": "https://open.spotify.com/track/78bezRj4TvB0XJhpsfOi48?si=97302401b91840b9",
+    "Martyr": "https://open.spotify.com/track/7ymgwXU8OoCIMu6yoZwUiP?si=20a1d7f58db54682",
+    "Kiss Of Death": "https://open.spotify.com/track/0Zb2kzvTZSonkLznRaUfLC?si=7cb9d071f9024613",
+    "up late, up early": "https://open.spotify.com/track/53XXNcYJvxiUSYM98cai0U?si=d8f3936455e14e00",
+    "ruin my life": "https://open.spotify.com/track/4zbcB7wvnDzwaliXiyfL9y?si=3e9fdd8318dc47da",
+    "LAST TIME": "https://open.spotify.com/track/1ySQDN5qn1g6DofXjNVNQ3?si=c442fc17586f4b4e"
+  };
+
+  const renderArtistLinks = (artistString: string) => {
+    const artists = artistString.split(',').map(artist => artist.trim());
+    return artists.map((artist, index) => (
+      <span key={artist}>
+        <a 
+          href={artistLinks[artist] || "#"}
+          target="_blank" 
+          rel="noopener noreferrer"
+          className="text-zinc-400 hover:text-white transition-colors"
+        >
+          {artist}
+        </a>
+        {index < artists.length - 1 && <span>, </span>}
+      </span>
+    ));
+  };
+
+  const renderTitleLink = (title: string) => {
+    return (
+      <a
+        href={titleLinks[title] || "#"}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-white hover:text-zinc-200 transition-colors"
+      >
+        {title}
+      </a>
+    );
+  };
+
   return (
     <div className="max-w-4xl mx-auto p-6">
-      {/* TUNE IN Heading - Moved outside the card */}
+      {/* TUNE IN Heading */}
       <div
         className="text-white text-4xl font-bold text-center mb-8"
         style={{ fontFamily: "Flight Maybe Maj, sans-serif" }}
@@ -457,10 +505,13 @@ export default function MusicPlayer() {
             />
             <div>
               <h2 className="text-lg md:text-2xl font-bold" style={{ fontFamily: 'Flight Maybe Maj, sans-serif' }}>
-                {currentTrack.title}
+                {renderTitleLink(currentTrack.title)}
               </h2>
-              <p className="text-zinc-400 text-sm md:text-base" style={{ fontFamily: 'Proxima Nova, sans-serif' }}>
-                {currentTrack.artist}
+              <p 
+                className="text-sm md:text-base"
+                style={{ fontFamily: 'Proxima Nova, sans-serif' }}
+              >
+                {renderArtistLinks(currentTrack.artist)}
               </p>
             </div>
           </div>
@@ -574,6 +625,17 @@ export default function MusicPlayer() {
           </div>
         </div>
 
+        {/* Contact Us Button */}
+        <div className="mt-6 flex justify-center">
+          <button
+            onClick={() => setModalOpen(true)}
+            className="px-6 py-2 bg-white text-black rounded-full hover:bg-zinc-200 transition-colors uppercase tracking-wide text-sm md:text-base"
+            style={{ fontFamily: "Flight Maybe Maj, sans-serif" }}
+          >
+            Contact Us
+          </button>
+        </div>
+
         <audio
           ref={audioRef}
           src={currentTrack.url}
@@ -582,6 +644,53 @@ export default function MusicPlayer() {
           loop={isRepeating}
         />
       </div>
+
+      {/* Contact Us Modal */}
+      {modalOpen && (
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex justify-center items-center z-50">
+          <div
+            className="bg-black text-white p-8 rounded-lg shadow-lg text-center w-96 relative border border-gray-700"
+            style={{ fontFamily: "Flight Maybe Maj, sans-serif" }}
+          >
+            <button
+              className="absolute top-2 right-2 text-gray-400 hover:text-gray-200"
+              onClick={() => setModalOpen(false)}
+            >
+              ✕
+            </button>
+            <h3 className="text-xl font-bold mb-4">Contact Us</h3>
+            <div className="flex flex-col gap-4">
+              <a
+                href="mailto:rangeofview@rovstudios.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <Mail className="w-5 h-5 text-white" />
+                Email
+              </a>
+              <a
+                href="https://www.instagram.com/rangeofviewstudios/?hl=en"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <Instagram className="w-5 h-5 text-pink-500" />
+                Instagram
+              </a>
+              <a
+                href="https://www.linkedin.com/company/range-of-view-studios/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-3 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition-colors"
+              >
+                <Linkedin className="w-5 h-5 text-blue-500" />
+                LinkedIn
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

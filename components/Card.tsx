@@ -18,28 +18,28 @@ const cards = [
   {
     id: 1,
     description:
-      "What's the biggest obstacle stopping creatives and brands from reaching their full potential? \n\nFriction. \nWhether you're an artist struggling with mixing and mastering, a brand in need of standout visuals, or a creator looking to refine your online presence, the creative process can feel overwhelming without the right support. \nUntil now.",
+      "What’s the biggest obstacle stopping creatives and brands from reaching their full potential? \n\nFriction.\n\n Whether you're an artist struggling with mixing and mastering or a brand in need of standout visuals, the creative process can feel overwhelming without the right support. \n\nUntil now.",
     image: "/R.png",
     color: "#FF916E",
   },
   {
     id: 2,
     description:
-      "For artists without a large team or substantial budget, finding the right engineer or spending hours mixing tracks themselves can be an uphill battle. \n\nThis is friction at its core—time lost, energy drained, and creativity dimmed. \n\nAt R.O.V, we bridge that gap by offering professional-grade mixing and mastering services tailored to your needs: all at a fraction of the cost.",
+      "Clean, professional sound shouldn’t be out of your financial grasp.\n\nToo many artists struggle to find high-quality mixing at a fair price, forced to choose between expensive studios or cheap, unreliable work. \n\nWe make top-tier mixing affordable.",
     image: "/O.png",
     color: "#ffc672",
   },
   {
     id: 3,
     description:
-      "Cover art, visualizers, video editing—the visual side of artistry can feel like an endless challenge. But it's not just artists. \n\nBrands and creators alike struggle with crafting visuals that leave a lasting impact. Without a dedicated team, these critical steps often slow progress and limit growth. \n\nThat's where we come in. We simplify the process, delivering stunning designs, polished visuals, and seamless websites that elevate your brand. Cutting through the friction so you can create more, faster, and better.",
+      "A brand without strong visuals is a story left untold.\n\nIf it's a flyer, album cover, or full branding package, design should amplify your message, not get lost in the noise. \n\nWe turn ideas into the story you tell.",
     image: "/V.png",
     color: "#90d0e3",
   },
   {
     id: 4,
     description:
-      "Creativity shouldn't be held back by friction. At Range Of View, we're more than just a service—we're your partner in bringing ideas to life. \n\nWhether you're launching your next big project, refining your brand, or upgrading your website, we make sure nothing slows you down. \n\nYour vision, our expertise. Let's build something remarkable.",
+      "A slow, outdated, or confusing website is a lost opportunity. \n\nYour website isn’t just a digital space—it’s your brand’s first handshake. It should engage, convert, and retain visitors effortlessly. \n\nWe help you set the scene you want to stage",
     image: "/ROV.png",
     color: "linear-gradient(to right, #FF916E, #ffc672, #90d0e3)",
   },
@@ -85,14 +85,14 @@ export function Card({
       className="flex items-center justify-center p-4 sm:p-6 md:p-8"
     >
       <div className="bg-white rounded-1xl w-full max-w-[98%] md:max-w-[84rem] min-h-[70vh] md:h-[80vh] p-8 sm:p-12 md:p-16 overflow-y-hidden">
-        {/* Mobile layout */}
+        {/* Mobile and Tablet layout */}
         <div className="md:hidden flex flex-col h-full">
           <h2 className="text-2xl sm:text-3xl font-bold uppercase tracking-tighter text-left w-full">
             <span style={card.id === 4 ? { backgroundImage: card.color, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' } : { color: card.color }}>
               {headings[card.id]}
             </span>
           </h2>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center flex-grow justify-center">
             <div className="w-full max-w-[200px] aspect-square mb-6">
               <img
                 src={card.image}
@@ -102,7 +102,7 @@ export function Card({
               />
             </div>
             <div 
-              className="text-gray-600 text-base sm:text-lg leading-relaxed whitespace-pre-line w-full mt-8"
+              className="text-gray-600 text-base sm:text-lg leading-relaxed whitespace-pre-line w-full"
               style={{ fontFamily: 'ProximaNovaBlack, sans-serif' }}
             >
               {card.description}
@@ -117,8 +117,9 @@ export function Card({
               {headings[card.id]}
             </span>
           </h2>
-          <div className="flex gap-8">
-            <div className="w-[400px] aspect-square flex-shrink-0">
+          <div className="flex-grow" /> {/* Spacer */}
+          <div className="flex items-end justify-between">
+            <div className="w-[150px] aspect-square">
               <img
                 src={card.image}
                 alt={`Illustration ${card.id}`}
@@ -127,10 +128,14 @@ export function Card({
               />
             </div>
             <div 
-              className="text-gray-600 text-lg leading-relaxed whitespace-pre-line flex-1 mt-8"
+              className="text-gray-600 text-lg leading-relaxed whitespace-pre-line max-w-[70%]"
               style={{ fontFamily: 'ProximaNovaBlack, sans-serif' }}
             >
-              {card.description}
+              {card.description.split('\n\n').map((paragraph, idx) => (
+                <div key={idx} className="mb-4">
+                  {paragraph}
+                </div>
+              ))}
             </div>
           </div>
         </div>

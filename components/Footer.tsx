@@ -75,11 +75,11 @@ export default function Footer() {
                   </div>
                   {/* Mobile-responsive tooltip */}
                   <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 md:px-3 py-1 md:py-2 bg-gray-800 text-white text-xs md:text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-normal md:whitespace-nowrap w-auto max-w-[200px] md:max-w-none text-center break-words md:break-normal">
-                    rangeofviewmusic@gmail.com
+                    rangeofview@rovstudios.com
                   </div>
                 </div>
                 <a
-                  href="https://www.instagram.com/rangeofviewmusic/?hl=en"
+                  href="https://www.instagram.com/rangeofviewstudios/?hl=en"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-gray-400 transition duration-300 text-lg"
@@ -88,7 +88,7 @@ export default function Footer() {
                   Instagram
                 </a>
                 <a
-                  href="https://www.linkedin.com/company/range-of-view-music/"
+                  href="https://www.linkedin.com/company/range-of-view-studios/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="hover:text-gray-400 transition duration-300 text-lg"

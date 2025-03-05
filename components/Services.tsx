@@ -145,7 +145,7 @@ export default function Services() {
               <h3 className="text-xl font-bold mb-4">Contact Us</h3>
               <div className="flex flex-col gap-4">
                 <a
-                  href="mailto:rangeofviewmusic@gmail.com"
+                  href="mailto:rangeofview@rovstudios.com"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700"
@@ -154,7 +154,7 @@ export default function Services() {
                   Email
                 </a>
                 <a
-                  href="https://www.instagram.com/rangeofviewmusic/?hl=en"
+                  href="https://www.instagram.com/rangeofviewstudios/?hl=en"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700"
@@ -163,7 +163,7 @@ export default function Services() {
                   Instagram
                 </a>
                 <a
-                  href="https://www.linkedin.com/company/range-of-view-music/"
+                  href="https://www.linkedin.com/company/range-of-view-studios/"
                   target="_blank"
                   rel="noopener noreferrer"
                   className="flex items-center gap-3 px-4 py-2 bg-gray-800 rounded-lg hover:bg-gray-700"

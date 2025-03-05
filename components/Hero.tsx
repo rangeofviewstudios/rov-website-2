@@ -230,7 +230,7 @@ const Hero: React.FC = () => {
         </CenterImage>
         <TypingTextWrapper>
           <TypingText>
-            Creation, production & promotion of artists. In Atlanta. And everywhere.
+          Making Brands Competitive in the New Digital Era.
           </TypingText>
         </TypingTextWrapper>
       </ContentWrapper>
