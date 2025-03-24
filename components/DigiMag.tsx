@@ -19,15 +19,6 @@ const DigiMag = () => {
           animationDuration={0.3}
           pauseBetweenAnimations={1.5}
         />
-        <div className="relative flex-shrink-0">
-          <Image
-            src="/rov-logo.png" // Replace with your actual image name
-            alt="Magazine Logo"
-            width={80} // Base width for mobile
-            height={80} // Base height for mobile
-            className="w-[40px] h-[40px] sm:w-[80px] sm:h-[80px] md:w-[100px] md:h-[100px] object-contain"
-          />
-        </div>
       </div>
 
       {/* Bento Grid */}
