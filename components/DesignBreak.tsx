@@ -17,11 +17,20 @@ const GlobalStyle = createGlobalStyle`
 
 export default function DesignBreak() {
   const [text, setText] = useState("ఇచ్చిపడేద్దాం");
+  const images = ["/R_break.jpg", "/O_break.jpg", "/V_break.jpg"];
+  const [currentImage, setCurrentImage] = useState(images[0]);
 
   const handleMouseEnter = () => {
     setText(prevText => 
       prevText === "ఇచ్చిపడేద్దాం" ? "Ichipadedham" : "ఇచ్చిపడేద్దాం"
     );
+  };
+
+  const handleImageHover = () => {
+    setCurrentImage(prevImage => {
+      const nextIndex = (images.indexOf(prevImage) + 1) % images.length;
+      return images[nextIndex];
+    });
   };
 
   return (
@@ -30,28 +39,39 @@ export default function DesignBreak() {
       <header className="w-full border-y border-white/20 flex flex-col">
         {/* Top row */}
         <div className="grid grid-cols-12 border-b border-white/20 w-full">
-          {/* Range Of View Collective */}
-          <div className="col-span-5 border-r border-white/20 py-2 sm:py-6 px-1 sm:px-4 flex items-center justify-center w-full">
+          {/* Range Of View Collective with Semi-Circle Outline */}
+          <div className="col-span-5 border-r border-white/20 py-2 sm:py-6 px-1 sm:px-4 flex items-center justify-center w-full relative">
+            {/* Circular Text */}
             <CircularText 
               text="RANGE*OF*VIEW*STUDIOS*" 
               spinDuration={10}
               onHover="slowDown"
-              className="text-white"
+              className="text-white z-10"
+            />
+            {/* Semi-Circle Outline on the Right */}
+            <div 
+              className="absolute right-0 top-0 h-full w-[50%] border-r border-white/50"
+              style={{
+                borderTopLeftRadius: "0",
+                borderBottomLeftRadius: "0",
+                borderTopRightRadius: "100%",
+                borderBottomRightRadius: "100%",
+                background: "transparent", // Ensure no fill
+              }}
             />
           </div>
 
-          {/* Logo with background image */}
-          <div className="col-span-3 border-r border-white/20 py-2 sm:py-6 px-1 sm:px-4 flex items-center justify-center w-full bg-cover bg-center"
-               style={{ backgroundImage: "url('/2.svg')" }}>
-            <div className="flex justify-center items-center w-24 sm:w-32 h-24 sm:h-32">
-              {/* This will now show the background image */}
-            </div>
+          {/* Image that changes on hover */}
+          <div 
+            className="col-span-3 border-r border-white/20 w-full h-full flex items-center justify-center"
+            onMouseEnter={handleImageHover}
+          >
+            <img src={currentImage} alt="Logo" className="w-full h-full object-cover" />
           </div>
 
           {/* Background Image Container */}
           <div className="col-span-4 py-2 sm:py-6 px-1 sm:px-4 flex items-center justify-center w-full bg-cover bg-center"
                style={{ backgroundImage: "url('/3.svg')" }}>
-            {/* The background image will cover the space, adjust if needed */}
           </div>
         </div>
 
@@ -63,7 +83,7 @@ export default function DesignBreak() {
             onMouseEnter={handleMouseEnter}
           >
             <FuzzyText 
-              text={text} // Pass the text state
+              text={text} 
               baseIntensity={0.2} 
               hoverIntensity={0.5} 
               enableHover={false}
@@ -80,9 +100,9 @@ export default function DesignBreak() {
           {/* Since 2021 with Hand Icon and Waves */}
           <div className="col-span-3 py-2 sm:py-6 px-1 sm:px-4 flex items-center justify-center gap-1 sm:gap-3 w-full relative">
             <Waves 
-              lineColor="rgba(255, 255, 255, 0.2)"  // Light white lines with transparency
-              backgroundColor="transparent"          // Keep background transparent
-              waveSpeedX={0.09}                    // Default values, adjust as needed
+              lineColor="rgba(255, 255, 255, 0.2)"  
+              backgroundColor="transparent"          
+              waveSpeedX={0.09}                    
               waveSpeedY={0.05}
               waveAmpX={32}
               waveAmpY={16}
@@ -91,9 +111,9 @@ export default function DesignBreak() {
               friction={0.925}
               tension={0.005}
               maxCursorMove={100}
-              className="z-0"                        // Ensure waves are behind content
+              className="z-0"                        
             />
-            <div className="relative z-10 flex items-center gap-1 sm:gap-3"> {/* Added z-index to keep content above waves */}
+            <div className="relative z-10 flex items-center gap-1 sm:gap-3"> 
               <h2 className="text-[10px] sm:text-xl font-light tracking-wider">Since 2021</h2>
               <div className="relative w-3 sm:w-8 h-3 sm:h-8">
               </div>
