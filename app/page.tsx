@@ -76,7 +76,7 @@ export default function Home() {
           <Hero />
         </section>
 
-        <DesignBreak />
+        {/*<DesignBreak />*/}
 
         <section id="latest-album">
           <MusicPlayer />

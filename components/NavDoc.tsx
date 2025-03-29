@@ -1,7 +1,7 @@
 "use client";
 
+import { Instagram, Linkedin, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Mail, Instagram, Linkedin } from "lucide-react";
 
 interface NavigationDockProps {
   className?: string;
@@ -14,8 +14,8 @@ export function NavigationDock({ className }: NavigationDockProps) {
   const links = [
     { title: "home", to: "hero" },
     { title: "mixes", to: "latest-album" },
+    { title: "gallery", to: "gallery" },
     { title: "services", to: "services" },
-    { title: "gallery", to: "digi-mag" },
     { title: "contact us", to: null },
   ];
 
