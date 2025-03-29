@@ -487,10 +487,10 @@ export default function MusicPlayer() {
         style={{ fontFamily: "Flight Maybe Maj, sans-serif" }}
       >
         <span>
-          <em>TUNE</em> 
+          <em>Our </em> 
         </span>
         <span className="text-transparent [-webkit-text-stroke:1px_white]">
-          IN
+          Mix Tape
         </span>
       </div>
 

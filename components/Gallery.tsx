@@ -41,14 +41,22 @@ function Gallery() {
     return {
       transform: `translate(${translateX}%, ${translateY}%) rotate(${rotationDegree}deg)`,
       zIndex,
-      opacity: 1, // Ensure all images are fully visible
+      opacity: 1,
     };
   };
 
   return (
-    <div className="min-h-screen bg-black">
-      {/* Increase the height of the container to accommodate the rotated images */}
-      <div className="relative w-full h-[150vh] bg-black overflow-hidden flex items-center justify-center">
+    <div className="min-h-screen bg-black pt-16">
+      {/* Gallery Heading without italic */}
+      <div
+        className="text-white text-4xl font-bold text-center"
+        style={{ fontFamily: "Flight Maybe Maj, sans-serif" }}
+      >
+        GALLERY
+      </div>
+
+      {/* Carousel container */}
+      <div className="relative w-full h-[110vh] bg-black overflow-hidden flex items-center justify-center">
         {/* Navigation Buttons */}
         <button
           onClick={handlePrev}
@@ -76,14 +84,11 @@ function Gallery() {
                   index === activeIndex ? "scale-105 z-[100]" : "scale-95"
                 }`}
               >
-                {/* Image */}
                 <img
                   src={item.image}
                   alt={item.title}
                   className="w-full h-full object-cover"
                 />
-
-                {/* Content */}
                 <div className="absolute bottom-8 left-8 right-8 z-20 text-white">
                   <h3 className="text-2xl font-bold mb-4">{item.title}</h3>
                   <div className="absolute right-0 bottom-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
@@ -99,7 +104,6 @@ function Gallery() {
         </div>
       </div>
 
-      {/* Custom CSS for the fonts */}
       <style jsx>{`
         @font-face {
           font-family: "Flight Maybe Maj";
