@@ -7,6 +7,9 @@ const inter = Inter({ subsets: ['latin'] });
 export const metadata: Metadata = {
   title: 'Range of View Music | Official Website',
   description: 'Official website of Range of View Music. Tour dates, music, and more.',
+  icons: {
+    icon: '/rov-logo.png', // Replace with your favicon URL
+  },
 };
 
 export default function RootLayout({
