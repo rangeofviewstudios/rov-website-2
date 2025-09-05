@@ -14,6 +14,7 @@ import Carousel from "@/components/Corousel";
 import Card from "@/components/Card";
 import DesignBreak from "@/components/DesignBreak";
 import { NavigationDock } from "@/components/NavDoc";
+import TestHero from "@/components/TestHero";
 
 // Global Styles for Custom Font
 const GlobalStyle = createGlobalStyle`
@@ -71,12 +72,12 @@ export default function Home() {
     <>
       <GlobalStyle />
       <main className="min-h-screen bg-black text-white">
+       
 
         <section id="hero">
           <Hero />
         </section>
 
-        {/*<DesignBreak />*/}
 
         <section id="latest-album">
           <MusicPlayer />
@@ -101,6 +102,13 @@ export default function Home() {
         <Footer />
 
         <NavigationDock className={isScrolled ? "scrolled" : ""} />
+
+        
+        {/*
+        <TestHero />
+
+        <MusicPlayer />
+        */}
       </main>
     </>
   );
