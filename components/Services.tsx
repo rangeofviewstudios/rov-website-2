@@ -110,7 +110,7 @@ export default function Services() {
           <div className="group relative overflow-hidden rounded-2xl">
             <div className="aspect-square relative">
               <Image
-                src="/web.png"
+                src="/web.webp"
                 alt="Breaking Bad theme service"
                 fill
                 className="object-cover transition-transform duration-500 group-hover:scale-110"

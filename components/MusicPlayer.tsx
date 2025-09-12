@@ -21,7 +21,7 @@ const beforeTracks: Track[] = [
     title: "Martyr",
     artist: "DDK",
     duration: "2:39",
-    cover: "cover7.png",
+    cover: "cover7.webp",
     url: "/tracks/before/martyr_before.wav"
   },
   {
@@ -29,7 +29,7 @@ const beforeTracks: Track[] = [
     title: "Come Thru",
     artist: "Basu",
     duration: "2:17",
-    cover: "cover2.png",
+    cover: "cover2.webp",
     url: "/tracks/before/come_thru_before.wav"
   },
   {
@@ -37,7 +37,7 @@ const beforeTracks: Track[] = [
     title: "ruin my life",
     artist: "Basu, mttw",
     duration: "2:10",
-    cover: "cover6.png",
+    cover: "cover6.webp",
     url: "/tracks/before/martyr_raw.wav"
   },
   {
@@ -45,7 +45,7 @@ const beforeTracks: Track[] = [
     title: "up late, up early",
     artist: "DDK",
     duration: "3:12",
-    cover: "cover5.png",
+    cover: "cover5.webp",
     url: "/tracks/before/up_late_up_early_before.wav"
   },
   {
@@ -53,7 +53,7 @@ const beforeTracks: Track[] = [
     title: "Be My Tine",
     artist: "Sam Suen",
     duration: "2:40",
-    cover: "cover9.png",
+    cover: "cover9.webp",
     url: "/tracks/before/be_my_tine_before.wav"
   },
   {
@@ -61,7 +61,7 @@ const beforeTracks: Track[] = [
     title: "you could be my woman",
     artist: "Basu",
     duration: "2:46",
-    cover: "cover1.png",
+    cover: "cover1.webp",
     url: "/tracks/before/you_could_be_my_woman_before.wav"
   },
   {
@@ -69,7 +69,7 @@ const beforeTracks: Track[] = [
     title: "Feel This Way",
     artist: "Lorenzo Barns",
     duration: "2:24",
-    cover: "cover10.png",
+    cover: "cover10.webp",
     url: "/tracks/before/feel_this_way_before.wav"
   },
   {
@@ -77,7 +77,7 @@ const beforeTracks: Track[] = [
     title: "Talk my shit",
     artist: "DDK",
     duration: "1:48",
-    cover: "cover11.png",
+    cover: "cover11.webp",
     url: "/tracks/before/talk_my_shit_before.wav"
   },
   {
@@ -85,7 +85,7 @@ const beforeTracks: Track[] = [
     title: "Holy",
     artist: "DDK",
     duration: "3:35",
-    cover: "cover7.png",
+    cover: "cover7.webp",
     url: "tracks/before/holy_before.wav"
   },
   {
@@ -93,7 +93,7 @@ const beforeTracks: Track[] = [
     title: "maryland marauders",
     artist: "DDK",
     duration: "2:16",
-    cover: "cover11.png",
+    cover: "cover11.webp",
     url: "tracks/before/maryland_marauders_before.wav"
   },
   {
@@ -101,7 +101,7 @@ const beforeTracks: Track[] = [
     title: "WANNA KNOW",
     artist: "Adil Hasan",
     duration: "2:51",
-    cover: "cover4.png",
+    cover: "cover4.webp",
     url: "tracks/before/wanna_know_before.wav"
   },
   {
@@ -109,7 +109,7 @@ const beforeTracks: Track[] = [
     title: "Kiss of Death",
     artist: "Sniper J",
     duration: "2:36",
-    cover: "cover8.png",
+    cover: "cover8.webp",
     url: "tracks/before/kiss_of_death_before.wav"
   },
   {
@@ -117,7 +117,7 @@ const beforeTracks: Track[] = [
     title: "Last Time",
     artist: "Adil Hasan",
     duration: "2:40",
-    cover: "cover4.png",
+    cover: "cover4.webp",
     url: "tracks/before/last_time_before.wav"
   }
 ];
@@ -129,7 +129,7 @@ const afterTracks: Track[] = [
     title: "Martyr",
     artist: "DDK",
     duration: "2:39",
-    cover: "cover7.png",
+    cover: "cover7.webp",
     url: "/tracks/after/martyr_after.wav"
   },
   {
@@ -137,7 +137,7 @@ const afterTracks: Track[] = [
     title: "Come Thru",
     artist: "Basu",
     duration: "2:17",
-    cover: "cover2.png",
+    cover: "cover2.webp",
     url: "/tracks/after/come_thru_before.wav"
   },
   {
@@ -145,7 +145,7 @@ const afterTracks: Track[] = [
     title: "ruin my life",
     artist: "Basu, mttw",
     duration: "2:10",
-    cover: "cover6.png",
+    cover: "cover6.webp",
     url: "/tracks/after/martyr_after.wav"
   },
   {
@@ -153,7 +153,7 @@ const afterTracks: Track[] = [
     title: "up late, up early",
     artist: "DDK",
     duration: "3:12",
-    cover: "cover5.png",
+    cover: "cover5.webp",
     url: "/tracks/after/up_late_up_early_after.wav"
   },
   {
@@ -161,7 +161,7 @@ const afterTracks: Track[] = [
     title: "Be My Tine",
     artist: "Sam Suen",
     duration: "2:40",
-    cover: "cover9.png",
+    cover: "cover9.webp",
     url: "/tracks/after/be_my_tine_after.wav"
   },
   {
@@ -169,7 +169,7 @@ const afterTracks: Track[] = [
     title: "you could be my woman",
     artist: "Basu",
     duration: "2:46",
-    cover: "cover1.png",
+    cover: "cover1.webp",
     url: "/tracks/after/you_could_be_my_woman_after.wav"
   },
   {
@@ -177,7 +177,7 @@ const afterTracks: Track[] = [
     title: "Feel This Way",
     artist: "Lorenzo Barns",
     duration: "2:24",
-    cover: "cover10.png",
+    cover: "cover10.webp",
     url: "/tracks/after/feel_this_way_after.wav"
   },
   {
@@ -185,7 +185,7 @@ const afterTracks: Track[] = [
     title: "Talk my shit",
     artist: "DDK",
     duration: "1:48",
-    cover: "cover11.png",
+    cover: "cover11.webp",
     url: "/tracks/after/talk_my_shit_after.wav"
   },
   {
@@ -193,7 +193,7 @@ const afterTracks: Track[] = [
     title: "Holy",
     artist: "DDK",
     duration: "3:35",
-    cover: "cover7.png",
+    cover: "cover7.webp",
     url: "tracks/after/holy_after.wav"
   },
   {
@@ -201,7 +201,7 @@ const afterTracks: Track[] = [
     title: "maryland marauders",
     artist: "DDK",
     duration: "2:16",
-    cover: "cover11.png",
+    cover: "cover11.webp",
     url: "tracks/after/maryland_marauders_after.wav"
   },
   {
@@ -209,7 +209,7 @@ const afterTracks: Track[] = [
     title: "WANNA KNOW",
     artist: "Adil Hasan",
     duration: "2:51",
-    cover: "cover4.png",
+    cover: "cover4.webp",
     url: "tracks/after/wanna_know_after.wav"
   },
   {
@@ -217,7 +217,7 @@ const afterTracks: Track[] = [
     title: "Kiss of Death",
     artist: "Sniper J",
     duration: "2:36",
-    cover: "cover8.png",
+    cover: "cover8.webp",
     url: "tracks/after/kiss_of_death_after.wav"
   },
   {
@@ -225,7 +225,7 @@ const afterTracks: Track[] = [
     title: "Last Time",
     artist: "Adil Hasan",
     duration: "2:40",
-    cover: "cover4.png",
+    cover: "cover4.webp",
     url: "tracks/after/last_time_after.wav"
   }
 ];

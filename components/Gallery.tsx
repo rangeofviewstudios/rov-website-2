@@ -9,14 +9,14 @@ interface CarouselItem {
 }
 
 const items: CarouselItem[] = [
-  { id: 1, title: "", image: "/changeit.jpg", number: "" },
-  { id: 2, title: "", image: "/cover2.png", number: "" },
-  { id: 3, title: "", image: "/catchthelight.png", number: "" },
-  { id: 4, title: "", image: "/domcover.JPG", number: "" },
-  { id: 5, title: "", image: "/faithretrologothing.JPG", number: "" },
-  { id: 6, title: "", image: "/miliy1.png", number: "" },
-  { id: 7, title: "", image: "/miliy2.png", number: "" },
-  { id: 8, title: "", image: "/one_at_a_time.JPG", number: "" }
+  { id: 1, title: "", image: "/changeit.webp", number: "" },
+  { id: 2, title: "", image: "/cover2.webp", number: "" },
+  { id: 3, title: "", image: "/catchthelight.webp", number: "" },
+  { id: 4, title: "", image: "/domcover.webp", number: "" },
+  { id: 5, title: "", image: "/faithretrologothing.webp", number: "" },
+  { id: 6, title: "", image: "/miliy1.webp", number: "" },
+  { id: 7, title: "", image: "/miliy2.webp", number: "" },
+  { id: 8, title: "", image: "/one_at_a_time.webp", number: "" }
 ];
 
 function Gallery() {

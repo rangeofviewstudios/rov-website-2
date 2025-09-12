@@ -26,7 +26,7 @@ const DigiMag = () => {
         {/* Large Feature Image */}
         <div className="relative col-span-2 row-span-2 group overflow-visible">
           <TiltedCard
-            imageSrc="/ctltrackprint.jpg"
+            imageSrc="/ctltrackprint.webp"
             altText="Change My Mind"
             captionText="Short Project by Basu and James Esemu. Appearances from Overpade, AVGUST"
             containerHeight="100%"
@@ -44,7 +44,7 @@ const DigiMag = () => {
         {/* Filling Smaller Images */}
         <div className="relative col-span-1 row-span-1 group overflow-visible">
           <TiltedCard
-            imageSrc="/ddk_1.png"
+            imageSrc="/ddk_1.webp"
             altText="DDK Album"
             captionText="Ebro Radio placement, Martyr, mixed/mastered by R.O.V."
             containerHeight="100%"
@@ -81,7 +81,7 @@ const DigiMag = () => {
 
         <div className="relative col-span-1 row-span-2 group overflow-visible">
           <TiltedCard
-            imageSrc="/woman2.png"
+            imageSrc="/woman2.webp"
             altText="Beautiful Woman"
             captionText="Timeless Elegance"
             containerHeight="100%"
@@ -99,7 +99,7 @@ const DigiMag = () => {
         {/* Filling the middle gap */}
         <div className="relative col-span-1 row-span-1 group overflow-visible">
           <TiltedCard
-            imageSrc="/ddk_2.png"
+            imageSrc="/ddk_2.webp"
             altText="DDK Song of the Day"
             captionText="SoundCloud song of the day mixed/mastered by R.O.V."
             containerHeight="100%"
@@ -137,7 +137,7 @@ const DigiMag = () => {
         {/* Bottom Row Fix */}
         <div className="relative col-span-1 row-span-1 group overflow-visible">
           <TiltedCard
-            imageSrc="/cover7.png"
+            imageSrc="/cover7.webp"
             altText="DDK Album"
             captionText="Ebro Radio placement, Martyr, mixed/mastered by R.O.V."
             containerHeight="100%"
@@ -154,7 +154,7 @@ const DigiMag = () => {
 
         <div className="relative col-span-1 row-span-1 group overflow-visible">
           <TiltedCard
-            imageSrc="/art showcase.png"
+            imageSrc="/art showcase.webp"
             altText="Art"
             captionText="R.O.V. Art: A fusion of color and conscious, by YDXX"
             containerHeight="100%"
@@ -171,7 +171,7 @@ const DigiMag = () => {
 
         <div className="relative col-span-2 row-span-1 group overflow-visible">
           <TiltedCard
-            imageSrc="/event_3.jpg"
+            imageSrc="/event_3.webp"
             altText="Live Performance"
             captionText="Performance in Believe Music Hall ATL by Basu and Sam Suen"
             containerHeight="100%"

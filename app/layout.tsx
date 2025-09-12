@@ -1,14 +1,21 @@
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
-import './globals.css';
+// app/layout.tsx
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import dynamic from "next/dynamic";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
+
+// Dynamically import the chat widget (client-only)
+const ChatWidget = dynamic(() => import("@/components/ChatWidget"), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
-  title: 'Range of View Studios',
-  description: 'Official website of Range of View Studios.',
+  title: "Range of View Studios",
+  description: "Official website of Range of View Studios.",
   icons: {
-    icon: '/rov-logo.png', // Replace with your favicon URL
+    icon: "/rov-logo.png", // Replace with your favicon URL
   },
 };
 
@@ -19,7 +26,11 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        {/* Floating chatbot */}
+        <ChatWidget />
+      </body>
     </html>
   );
 }

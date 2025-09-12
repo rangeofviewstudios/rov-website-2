@@ -20,7 +20,7 @@ export default function Footer() {
           {/* Logo Column - First Third */}
           <div className="flex justify-center md:justify-start items-center">
             <Image
-              src="/rov-logo.png"
+              src="/rov-logo.webp"
               alt="ROV Logo"
               width={300}
               height={200}

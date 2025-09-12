@@ -41,37 +41,37 @@ export default function FeaturedArtists() {
       <motion.div className="artists-container" variants={sectionVariants}>
         {[
           {
-            imageUrl: "/cover1.png",
+            imageUrl: "/cover1.webp",
             name: "Gibran Alcocer",
             description:
               "Gibran Alcocer, A Pianist From Mexico, Gaining 5 Million Monthly Listeners On Spotify With His Captivating Melodies, Including His Viral Hit “Idea 10”.",
           },
           {
-            imageUrl: "/cover2.png",
+            imageUrl: "/cover2.webp",
             name: "Izzamuzzic",
             description:
               "Vadim Pavlyuchenko, Known Professionally As “Izzamuzzic,” Is An Electronic Music Artist And Accomplished Music Producer Originating From Kazakhstan.",
           },
           {
-            imageUrl: "/cover1.png",
+            imageUrl: "/cover1.webp",
             name: "Gibran Alcocer",
             description:
               "Gibran Alcocer, A Pianist From Mexico, Gaining 5 Million Monthly Listeners On Spotify With His Captivating Melodies, Including His Viral Hit “Idea 10”.",
           },
           {
-            imageUrl: "/cover1.png",
+            imageUrl: "/cover1.webp",
             name: "Gibran Alcocer",
             description:
               "Gibran Alcocer, A Pianist From Mexico, Gaining 5 Million Monthly Listeners On Spotify With His Captivating Melodies, Including His Viral Hit “Idea 10”.",
           },
           {
-            imageUrl: "/cover2.png",
+            imageUrl: "/cover2.webp",
             name: "Izzamuzzic",
             description:
               "Vadim Pavlyuchenko, Known Professionally As “Izzamuzzic,” Is An Electronic Music Artist And Accomplished Music Producer Originating From Kazakhstan.",
           },
           {
-            imageUrl: "/cover1.png",
+            imageUrl: "/cover1.webp",
             name: "Gibran Alcocer",
             description:
               "Gibran Alcocer, A Pianist From Mexico, Gaining 5 Million Monthly Listeners On Spotify With His Captivating Melodies, Including His Viral Hit “Idea 10”.",

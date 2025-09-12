@@ -19,28 +19,28 @@ const cards = [
     id: 1,
     description:
       "What’s the biggest obstacle stopping creatives and brands from reaching their full potential? \n\nFriction.\n\n Whether you're an artist struggling with mixing and mastering or a brand in need of standout visuals, the creative process can feel overwhelming without the right support. \n\nUntil now.",
-    image: "/R.png",
+    image: "/R.webp",
     color: "#FF916E",
   },
   {
     id: 2,
     description:
       "Clean, professional sound shouldn’t be out of your financial grasp.\n\nToo many artists struggle to find high-quality mixing at a fair price, forced to choose between expensive studios or cheap, unreliable work. \n\nWe make top-tier mixing affordable.",
-    image: "/O.png",
+    image: "/O.webp",
     color: "#ffc672",
   },
   {
     id: 3,
     description:
       "A brand without strong visuals is a story left untold.\n\nIf it's a flyer, album cover, or full branding package, design should amplify your message, not get lost in the noise. \n\nWe turn ideas into the story you tell.",
-    image: "/V.png",
+    image: "/V.webp",
     color: "#90d0e3",
   },
   {
     id: 4,
     description:
       "A slow, outdated, or confusing website is a lost opportunity. \n\nYour website isn’t just a digital space—it’s your brand’s first handshake. It should engage, convert, and retain visitors effortlessly. \n\nWe help you set the scene you want to stage",
-    image: "/ROV.png",
+    image: "/ROV.webp",
     color: "linear-gradient(to right, #FF916E, #ffc672, #90d0e3)",
   },
 ];

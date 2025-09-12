@@ -87,7 +87,7 @@ export default function Home() {
           <Gallery />
         </section>
 
-        <img src="/backgroundimage.png" alt="Page Tear Image"/>
+        <img src="/backgroundimage.webp" alt="Page Tear Image"/>
 
         <section id="services">
           <Services />

@@ -214,7 +214,7 @@ const Hero: React.FC = () => {
         />
         <Logo>
           <img
-            src="rov-logo.png"
+            src="rov-logo.webp"
             alt="ROV Logo"
           />
         </Logo>
@@ -222,7 +222,7 @@ const Hero: React.FC = () => {
         <ContentWrapper>
           <CenterImage>
             <img
-              src="rov-colour.png"
+              src="rov-colour.webp"
               alt="ROV"
               style={{ maxWidth: '100%', height: 'auto' }}
             />
@@ -592,7 +592,7 @@ const Hero: React.FC = () => {
         </CanvasWrapper>
         <Logo>
           <img
-            src="rov-logo.png"
+            src="rov-logo.webp"
             alt="ROV Logo"
           />
         </Logo>
