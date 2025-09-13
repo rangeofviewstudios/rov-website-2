@@ -13,11 +13,11 @@ export function NavigationDock({ className }: NavigationDockProps) {
   const [modalOpen, setModalOpen] = useState(false);
 
   const links = [
-    { title: "home", to: "hero" },
-    { title: "mixes", to: "latest-album" },
-    { title: "gallery", to: "gallery" },
-    { title: "services", to: "services" },
-    { title: "contact us", to: null },
+    { title: "home", to: "hero", isLink: false },
+    { title: "mixes", to: "latest-album", isLink: false },
+    { title: "gallery", to: "gallery", isLink: false },
+    { title: "services", to: "services", isLink: false },
+    { title: "contact us", to: null, isLink: false },
   ];
 
   const scrollToSection = (id: string) => {
