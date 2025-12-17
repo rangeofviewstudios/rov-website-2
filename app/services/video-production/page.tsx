@@ -7,7 +7,7 @@ import VisionMixing from "../../../components/aerielPage/VisionMixing";
 import FlightProcess from "../../../components/aerielPage/FlightProcess";
 import TakeWork from "../../../components/aerielPage/TakeWork";
 import TestimonialSection from "../../../components/aerielPage/TestimonialSection";
-import VisionFaq from "../../../components/aerielPage/VisionFaq.tsx";
+import VisionFaq from "../../../components/aerielPage/VisionFaq";
 import ContactSection from "../../../components/aerielPage/ContactSection";
 import BookCall from "../../../components/aerielPage/BookCall";
 
