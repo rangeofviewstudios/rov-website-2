@@ -2,7 +2,7 @@
 import { motion, Variants } from "framer-motion";
 import { Earth, MoveUpRight } from "lucide-react";
 import { useState } from "react";
-import BookingModal from "../home/BookingModal.tsx";
+import BookingModal from "../Web-Dev/BookingModal";
 
 const BookACall = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
@@ -76,7 +76,7 @@ const BookACall = () => {
             </motion.h2>
 
             <div className="flex justify-center">
-                <button style={{fontFamily:"futura"}} onMouseOver={() => setIsModalOpen(true)} className="relative overflow-hidden bg-[#3d2e2e] flex items-center justify-center cursor-pointer text-white rounded-full py-8 px-12 text-3xl font-semibold tracking-widest group">  
+                <button style={{ fontFamily: "futura" }} onMouseOver={() => setIsModalOpen(true)} className="relative overflow-hidden bg-[#3d2e2e] flex items-center justify-center cursor-pointer text-white rounded-full py-8 px-12 text-3xl font-semibold tracking-widest group">
                     <span className="relative overflow-hidden flex items-center leading-none h-[1.2em]">
                         <span className="block group-hover:-translate-y-full transition-transform duration-700 ease-in-out">
                             Book a call
@@ -106,8 +106,8 @@ const BookACall = () => {
                         <span>FOR FURTHER INQUIRIES </span>
                         <span>
                             <a href="mailto:@rangeofviewstudios"
-                            className="hover:text-[#e5cebb]/40 transition-colors duration-300"
-                        >↳ @rangeofviewstudios </a> 
+                                className="hover:text-[#e5cebb]/40 transition-colors duration-300"
+                            >↳ @rangeofviewstudios </a>
                         </span>
                     </div>
                 </div>

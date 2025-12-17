@@ -74,6 +74,14 @@
   font-style: normal;
 }
 
+@font-face {
+  font-family: 'Norwige Light';
+  src: url('../public/font/norwige-font-family-1750004186-0/Norwige-LightItalic-BF68175f322ddb6.otf');
+  font-weight: 300;
+  font-style: normal;
+}
+
+
 /* --- THEME DEFINITIONS --- */
 @custom-variant dark (&:is(.dark *));
 

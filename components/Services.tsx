@@ -1,249 +1,396 @@
 "use client";
 
-import { Waves, Palette } from "lucide-react";
-import { motion, useAnimation, useInView } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import React, { useState } from "react";
+import { User, Video, Headphones, Cpu, ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import StarBorder from "./StarBorder";
+
+interface ServiceCardProps {
+  id: string;
+  title: string;
+  description: string;
+  icon: React.ReactNode;
+  position: "top-left" | "top-right" | "bottom-left" | "bottom-right";
+  isExpanded: boolean;
+  expandedCard: string | null;
+  onMouseEnter: () => void;
+  onMouseLeave: () => void;
+  link?: string;
+}
+
+const ServiceCard: React.FC<ServiceCardProps> = ({
+  title,
+  description,
+  icon,
+  position,
+  isExpanded,
+  expandedCard,
+  onMouseEnter,
+  onMouseLeave,
+  link = "#",
+}) => {
+  const isAnyExpanded = expandedCard !== null;
+  const isCollapsed = isAnyExpanded && !isExpanded;
+
+  return (
+    <div
+      className={`relative group ${isExpanded ? "expanded-card" : isCollapsed ? "collapsed-card" : "normal-card"
+        }`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
+      {!isExpanded && (
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ borderRadius: '24px' }}>
+          <StarBorder
+            as="div"
+            color="#d4af37"
+            speed="4s"
+            thickness={2}
+            className="w-full h-full"
+          >
+            <div className="w-full h-full" />
+          </StarBorder>
+        </div>
+      )}
+
+      {/* Glass container */}
+      <div
+        className={`relative bg-black/50 backdrop-blur-md border-2 rounded-3xl overflow-hidden h-full ${isExpanded ? "p-6 md:p-8" : "p-4 md:p-6"
+          } cursor-pointer transition-all duration-300 ${isExpanded
+            ? "border-[#d4af37] shadow-[0_0_30px_rgba(212,175,55,0.3)]"
+            : "border-white/10"
+          }`}
+      >
+        {/* Shimmer effect on hover */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300">
+          <div className="shimmer-effect"></div>
+        </div>
+
+        {isExpanded ? (
+          /* Expanded content */
+          <div className="relative z-10 flex flex-col md:flex-row gap-6 h-full opacity-0 animate-fadeIn">
+            {/* Left side - Text content */}
+            <div className="flex-1 flex flex-col justify-between">
+              <div>
+                <h3
+                  className="text-white/90 text-2xl md:text-3xl lg:text-5xl font-medium uppercase tracking-wider mb-4"
+                  style={{ fontFamily: "Futura, sans-serif" }}
+                >
+                  {title}
+                </h3>
+                <p className="text-white/70 text-base md:text-lg mb-4">
+                  {description}
+                </p>
+                <p className="text-white/50 text-sm md:text-base uppercase tracking-wide">
+                  Projects starting $1000
+                </p>
+              </div>
+
+              <Link href={link}>
+                <button className="bg-white/90 text-black px-4 py-2 md:px-6 md:py-3 text-sm md:text-base rounded-full font-semibold hover:bg-white transition-colors duration-300 w-fit">
+                  Learn More
+                </button>
+              </Link>
+            </div>
+
+            {/* Right side - Image/Icon placeholder */}
+            <div className="w-full md:w-96 h-full min-h-[250px] bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 flex items-center justify-center">
+              <div className="text-white/30">{icon}</div>
+            </div>
+          </div>
+        ) : (
+          /* Collapsed content - matching expanded style */
+          <div className="relative z-10 flex flex-col items-center justify-center h-full gap-4">
+            {/* Icon */}
+            <div className="text-white/80">
+              {icon}
+            </div>
+
+            {/* Service title */}
+            <h3
+              className="text-white/90 font-medium text-center uppercase tracking-wider text-base md:text-lg"
+              style={{ fontFamily: "Futura, sans-serif" }}
+            >
+              {title}
+            </h3>
+
+            {/* Pricing text */}
+            <p
+              className="text-white/50 text-xs md:text-sm uppercase tracking-wide"
+              style={{ fontFamily: "Futura, sans-serif" }}
+            >
+              Projects starting from
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Custom CSS */}
+      <style jsx>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+
+        .animate-fadeIn {
+          animation: fadeIn 1s ease-out forwards;
+        }
+
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-150%) rotate(15deg);
+          }
+          100% {
+            transform: translateX(250%) rotate(15deg);
+          }
+        }
+
+        .shimmer-effect {
+          position: absolute;
+          top: -50%;
+          left: -50%;
+          width: 60%;
+          height: 200%;
+          background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0) 0%,
+            rgba(255, 255, 255, 0.25) 50%,
+            rgba(255, 255, 255, 0) 100%
+          );
+          filter: blur(10px);
+          animation: shimmer 2.5s ease-in-out infinite;
+        }
+
+        /* 3D Flip Animation Styles */
+        .flip-container {
+          perspective: 1000px;
+        }
+
+        .flip-card {
+          position: relative;
+          transition: transform 0.8s;
+          transform-style: preserve-3d;
+        }
+
+        .group-folder:hover .flip-card {
+          transform: rotateX(180deg);
+        }
+
+        .flip-card-front,
+        .flip-card-back {
+          position: absolute;
+          width: 100%;
+          height: 100%;
+          backface-visibility: hidden;
+          -webkit-backface-visibility: hidden;
+          top: 0;
+          left: 0;
+        }
+
+        .flip-card-back {
+          transform: rotateX(180deg);
+        }
+      `}</style>
+    </div>
+  );
+};
 
 export default function Services() {
   const router = useRouter();
-  const ref = useRef<HTMLDivElement>(null);
-  const controls = useAnimation();
-  const isInView = useInView(ref, { once: true });
+  const [expandedCard, setExpandedCard] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (isInView) controls.start("visible");
-  }, [isInView, controls]);
-
-  const [flippedCard, setFlippedCard] = useState<string | null>(null);
-  const [modalOpen, setModalOpen] = useState(false);
-
-  const sectionVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 1.2, ease: "easeOut" },
-    },
+  const handleCardHover = (id: string) => {
+    setExpandedCard(id);
   };
 
-  const titleVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 1, ease: "easeOut", delay: 0.5 },
-    },
-  };
-
-  const handleFlip = (id: string) => {
-    setFlippedCard((prev) => (prev === id ? null : id));
-  };
-
-  const handleServiceClick = (service: string) => {
-    switch (service) {
-      case "mixing":
-        router.push("/about");
-        break;
-      case "album-art":
-        router.push("/vision");
-        break;
-      case "web":
-        router.push("/web");
-        break;
-      default:
-        setModalOpen(true);
-    }
+  const handleMouseLeave = () => {
+    setExpandedCard(null);
   };
 
   const services = [
     {
-      id: "mixing",
-      title: "Mixing & Mastering",
-      description:
-        "Transform your raw tracks into professional, radio-ready productions.",
-      color: "bg-purple-600 hover:bg-purple-700",
-      icon: <Waves className="w-8 h-8 text-purple-400" />,
-    },
-    {
-      id: "album-art",
-      title: "Album Artwork",
-      description: "Make a visual impact with stunning album artwork.",
-      color: "bg-teal-600 hover:bg-teal-700",
-      icon: <Palette className="w-8 h-8 text-teal-400" />,
-    },
-    {
       id: "web",
       title: "Web Optimization",
-      description:
-        "Turning clicks into connections with seamless and high impact designs.",
-      color: "bg-yellow-600 hover:bg-yellow-700",
-      icon: <Waves className="w-8 h-8 text-yellow-400" />,
+      icon: <User className="w-16 h-16 text-white/80" />,
+      description: "Turning clicks into connections with seamless and high impact designs.",
+      position: "top-left" as const,
+      link: "/services/web-development",
+    },
+    {
+      id: "sound",
+      title: "Sound Engineering",
+      icon: <Headphones className="w-16 h-16 text-white/80" />,
+      description: "Audio production & mixing that brings your content to life with crystal-clear quality.",
+      position: "top-right" as const,
+      link: "/services/sound-engineering",
+    },
+    {
+      id: "video",
+      title: "Video Production",
+      icon: <Video className="w-16 h-16 text-white/80" />,
+      description: "Cinematic content & aerial media that captures attention and delivers your message.",
+      position: "bottom-left" as const,
+      link: "/services/video-production",
+    },
+    {
+      id: "ai",
+      title: "AI Integration",
+      icon: <Cpu className="w-16 h-16 text-white/80" />,
+      description: "Custom automation solutions powered by AI to streamline your business processes.",
+      position: "bottom-right" as const,
+      link: "/ai-automation",
     },
   ];
 
   return (
-    <>
-      <motion.section
-        ref={ref}
-        id="services"
-        className="py-20 px-4 md:px-8 bg-black relative"
-        initial="hidden"
-        animate={controls}
-        variants={sectionVariants}
-      >
-        {/* Title */}
-        <div className="relative z-10 text-center">
-          <motion.h2
-            className="text-4xl font-bold mb-16 text-white"
-            variants={titleVariants}
-            style={{ fontFamily: "Flight Maybe Maj, sans-serif" }}
+    <section className="min-h-screen bg-black py-20 px-6 relative flex items-center">
+      {/* Decorative stars */}
+      <img
+        src="/star.svg"
+        alt="Star"
+        className="hidden md:block absolute top-16 right-5 md:right-20 w-16 h-16 md:w-32 md:h-32 opacity-90 z-50 pointer-events-none"
+        style={{
+          animation: "float 6s ease-in-out infinite",
+        }}
+      />
+
+      <img
+        src="/star2.svg"
+        alt="Star"
+        className={`hidden md:block absolute top-[40%] left-1/2 -translate-x-1/2 w-16 h-16 md:w-28 md:h-28 z-50 pointer-events-none transition-opacity duration-500 ${expandedCard ? "opacity-0" : "opacity-85"
+          }`}
+        style={{
+          animation: "float 7s ease-in-out infinite",
+        }}
+      />
+
+      <img
+        src="/ques.svg"
+        alt="Question"
+        className="absolute bottom-28 left-5 md:left-16 w-16 h-16 md:w-28 md:h-28 opacity-90 z-50 pointer-events-none"
+        style={{
+          animation: "float 8s ease-in-out infinite",
+        }}
+      />
+
+      <img
+        src="/star3.svg"
+        alt="Star"
+        className="absolute bottom-10 md:bottom-20 right-5 md:right-16 w-16 h-16 md:w-32 md:h-32 opacity-85 z-50 pointer-events-none"
+        style={{
+          animation: "float 6.5s ease-in-out infinite",
+        }}
+      />
+
+      <div className="max-w-7xl mx-auto relative w-full">
+        <style jsx>{`
+          @keyframes float {
+            0%,
+            100% {
+              transform: translate(-50%, 0px);
+            }
+            50% {
+              transform: translate(-50%, -20px);
+            }
+          }
+
+          .services-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+            min-height: auto;
+          }
+
+          @media (min-width: 768px) {
+            .services-grid {
+              grid-template-columns: repeat(2, 1fr);
+              grid-template-rows: repeat(2, 1fr);
+              height: 800px;
+              max-height: 85vh;
+            }
+          }
+
+          .services-grid.has-expanded {
+             /* Mobile behavior when expanded: Expanded card takes order -1 to go top, others show below or hide? 
+                Actually, simpler to just stack them on mobile and expand in place. 
+                The 'grid-column' logic below is desktop specific.
+             */
+             grid-template-columns: 1fr;
+             grid-template-rows: auto;
+          }
+
+          @media (min-width: 768px) {
+            .services-grid.has-expanded {
+              grid-template-columns: 2fr 1fr;
+              grid-template-rows: repeat(3, 1fr);
+              height: 800px;
+              max-height: 85vh;
+            }
+
+            .expanded-card {
+              grid-column: 1 / 2;
+              grid-row: 1 / 4;
+            }
+
+            .collapsed-card {
+              grid-column: 2 / 3;
+            }
+          }
+
+          .normal-card {
+            /* Default positioning in 2x2 grid */
+          }
+
+          @font-face {
+            font-family: "Flight Maybe Maj";
+            src: url("/fonts/Flight Maybe Maj.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+          }
+
+          @font-face {
+            font-family: "ZRTW Bokerough";
+            src: url("/fonts/ZRTW-BokeRoughPersonalUse.otf") format("opentype");
+            font-weight: normal;
+            font-style: normal;
+          }
+        `}</style>
+
+        <div className="text-center mb-12">
+          <h2
+            className="text-4xl md:text-6xl lg:text-[10rem] text-white/90 uppercase tracking-wider mb-4"
+            style={{ fontFamily: "Sink, sans-serif" }}
           >
-            OUR SERVICES
-          </motion.h2>
+            SERVICES
+          </h2>
         </div>
 
-        {/* Grid */}
-        <motion.div
-          className="max-w-7xl mx-auto grid md:grid-cols-3 gap-12 relative z-10 font-proximanova"
-          variants={sectionVariants}
-        >
+        {/* Dynamic grid */}
+        <div className={`services-grid ${expandedCard ? "has-expanded" : ""}`}>
           {services.map((service) => (
-            <div key={service.id} className="flex justify-center">
-              <div
-                className={`flip-folder ${flippedCard === service.id ? "flipped" : ""}`}
-                onClick={() => handleFlip(service.id)}
-              >
-                <div className="flip-folder-inner">
-                  {/* FRONT SIDE */}
-                  <div className="flip-folder-front group">
-                    <div className="file relative w-60 h-40 origin-bottom cursor-pointer">
-                      <div className="work-5 bg-amber-600 w-full h-full origin-top rounded-2xl rounded-tl-none group-hover:shadow-[0_20px_40px_rgba(0,0,0,.2)] transition-all ease duration-300 relative after:absolute after:content-[''] after:bottom-[99%] after:left-0 after:w-20 after:h-4 after:bg-amber-600 after:rounded-t-2xl before:absolute before:content-[''] before:-top-[15px] before:left-[75.5px] before:w-4 before:h-4 before:bg-amber-600 before:[clip-path:polygon(0_35%,0%_100%,50%_100%);]" />
-                      <div className="work-4 absolute inset-1 bg-zinc-400 rounded-2xl transition-all ease duration-300 origin-bottom select-none group-hover:[transform:rotateX(-20deg)]" />
-                      <div className="work-3 absolute inset-1 bg-zinc-300 rounded-2xl transition-all ease duration-300 origin-bottom group-hover:[transform:rotateX(-30deg)]" />
-                      <div className="work-2 absolute inset-1 bg-zinc-200 rounded-2xl transition-all ease duration-300 origin-bottom group-hover:[transform:rotateX(-38deg)]" />
-                      <div className="work-1 absolute bottom-0 bg-gradient-to-t from-amber-500 to-amber-400 w-full h-[156px] rounded-2xl rounded-tr-none after:absolute after:content-[''] after:bottom-[99%] after:right-0 after:w-[146px] after:h-[16px] after:bg-amber-400 after:rounded-t-2xl before:absolute before:content-[''] before:-top-[10px] before:right-[142px] before:size-3 before:bg-amber-400 before:[clip-path:polygon(100%_14%,50%_100%,100%_100%);] transition-all ease duration-300 origin-bottom flex items-end group-hover:shadow-[inset_0_20px_40px_#fbbf24,_inset_0_-20px_40px_#d97706] group-hover:[transform:rotateX(-46deg)_translateY(1px)]" />
-                    </div>
-                    <p className="text-lg text-gray-300 font-semibold mt-3">
-                      {service.title}
-                    </p>
-                  </div>
-
-                  {/* BACK SIDE */}
-                  <div className="flip-folder-back bg-amber-600 text-white flex flex-col justify-center items-center rounded-2xl border border-amber-500 px-4">
-                    <h3 className="text-xl font-bold mb-2">{service.title}</h3>
-                    <p className="text-sm text-center mb-4">
-                      {service.description}
-                    </p>
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleServiceClick(service.id);
-                      }}
-                      className={`mt-2 px-6 py-2 rounded-full transition-colors ${service.color}`}
-                    >
-                      Learn More
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <ServiceCard
+              key={service.id}
+              id={service.id}
+              title={service.title}
+              description={service.description}
+              icon={service.icon}
+              position={service.position}
+              isExpanded={expandedCard === service.id}
+              expandedCard={expandedCard}
+              onMouseEnter={() => handleCardHover(service.id)}
+              onMouseLeave={handleMouseLeave}
+              link={service.link}
+            />
           ))}
-        </motion.div>
-
-        {/* Modal */}
-        {modalOpen && (
-          <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50">
-            <div className="bg-black text-white p-8 rounded-lg shadow-lg text-center w-96 relative border border-gray-700 font-proximanova">
-              <button
-                className="absolute top-2 right-2 text-gray-400 hover:text-gray-200"
-                onClick={() => setModalOpen(false)}
-              >
-                ✕
-              </button>
-              <h3 className="text-xl font-bold mb-4">Contact Us</h3>
-              <p className="text-gray-400 mb-6">
-                Reach us on our social platforms or email!
-              </p>
-              <div className="space-y-3">
-                <a
-                  href="mailto:rangeofview@rovstudios.com"
-                  className="block bg-gray-800 hover:bg-gray-700 rounded-lg py-2"
-                >
-                  Email Us
-                </a>
-                <a
-                  href="https://www.instagram.com/rangeofviewstudios/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block bg-gray-800 hover:bg-gray-700 rounded-lg py-2"
-                >
-                  Instagram
-                </a>
-                <a
-                  href="https://www.linkedin.com/company/range-of-view-studios/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="block bg-gray-800 hover:bg-gray-700 rounded-lg py-2"
-                >
-                  LinkedIn
-                </a>
-              </div>
-            </div>
-          </div>
-        )}
-      </motion.section>
-
-      {/* CSS for Folder Flip Animation */}
-      <style jsx global>{`
-        .font-proximanova {
-          font-family: "Proxima Nova", sans-serif;
-        }
-        .custom-font-flight {
-          font-family: "Flight Maybe", sans-serif;
-        }
-
-        .flip-folder {
-          width: 240px;
-          height: 200px;
-          perspective: 1000px;
-          cursor: pointer;
-        }
-
-        .flip-folder-inner {
-          position: relative;
-          width: 100%;
-          height: 100%;
-          transition: transform 0.9s ease;
-          transform-style: preserve-3d;
-        }
-
-        .flip-folder.flipped .flip-folder-inner {
-          transform: rotateY(180deg);
-        }
-
-        .flip-folder-front,
-        .flip-folder-back {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          border-radius: 1rem;
-          -webkit-backface-visibility: hidden;
-          backface-visibility: hidden;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-direction: column;
-        }
-
-        .flip-folder-front {
-          background: transparent;
-        }
-
-        .flip-folder-back {
-          transform: rotateY(180deg);
-        }
-      `}</style>
-    </>
+        </div>
+      </div>
+    </section>
   );
 }

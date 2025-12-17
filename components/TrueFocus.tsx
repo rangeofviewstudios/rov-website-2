@@ -11,6 +11,10 @@ interface TrueFocusProps {
     glowColor?: string;
     animationDuration?: number;
     pauseBetweenAnimations?: number;
+    fontSize?: string | string[];
+    fontFamily?: string;
+    letterSpacing?: string;
+    className?: string;
 }
 
 interface FocusRect {
@@ -28,6 +32,10 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
     glowColor = "rgba(0, 255, 0, 0.6)",
     animationDuration = 0.5,
     pauseBetweenAnimations = 1,
+    fontSize = "4rem",
+    fontFamily = "'Futura', sans-serif",
+    letterSpacing = "normal",
+    className = "",
 }) => {
     const words = sentence.split(" ");
     const [currentIndex, setCurrentIndex] = useState<number>(0);
@@ -43,8 +51,8 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
         const style = document.createElement("style");
         style.textContent = `
             @font-face {
-                font-family: 'Flight Maybe Maj';
-                src: url('/fonts/Flight Maybe Maj.ttf') format('truetype');
+                font-family: 'Futura';
+                src: local('Futura'), local('Futura-Medium');
             }
         `;
         document.head.appendChild(style);
@@ -80,7 +88,7 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
             width: activeRect.width,
             height: activeRect.height,
         });
-    }, [isMounted, currentIndex, words.length]);
+    }, [isMounted, currentIndex, words.length, fontSize]);
 
     const handleMouseEnter = (index: number) => {
         if (!isMounted || !manualMode) return;
@@ -98,11 +106,16 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
     if (!isMounted) {
         // Render static content during SSR
         return (
-            <div className="relative flex gap-4 justify-center items-center flex-wrap">
+            <div className={`relative flex gap-4 items-center flex-wrap ${className || "justify-center"}`}>
                 {words.map((word, index) => (
                     <span
                         key={index}
-                        className="relative text-[4rem] font-black cursor-pointer"
+                        className="relative font-black cursor-pointer"
+                        style={{
+                            fontSize: Array.isArray(fontSize) ? fontSize[index % fontSize.length] : fontSize,
+                            fontFamily,
+                            letterSpacing
+                        }}
                     >
                         {word}
                     </span>
@@ -113,18 +126,22 @@ const TrueFocus: React.FC<TrueFocusProps> = ({
 
     return (
         <div
-            className="relative flex gap-4 justify-center items-center flex-wrap"
+            className={`relative flex gap-4 items-center flex-wrap ${className || "justify-center"}`}
             ref={containerRef}
         >
             {words.map((word, index) => {
                 const isActive = index === currentIndex;
+                const currentFontSize = Array.isArray(fontSize) ? fontSize[index % fontSize.length] : fontSize;
+
                 return (
                     <span
                         key={index}
                         ref={(el) => (wordRefs.current[index] = el)}
-                        className="relative text-[4rem] font-black cursor-pointer"
+                        className="relative font-black cursor-pointer"
                         style={{
-                            fontFamily: "'Flight Maybe Maj', sans-serif",
+                            fontSize: currentFontSize,
+                            fontFamily,
+                            letterSpacing,
                             filter: isActive
                                 ? `blur(0px)`
                                 : `blur(${blurAmount}px)`,

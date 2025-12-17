@@ -1,13 +1,13 @@
-import DigitalStage from "@/components/home/DigitalStage";
-import HomeBanner from "@/components/home/HomeBanner";
-import WhoWeBuildFor from "@/components/home/WhoWeBuildFor";
-import WorkSection from "../../components/home/WorkSection";
-import HowWeWorkSection from "@/components/home/HowWeWorkSection";
-import FAQSection from "@/components/home/FAQSection";
-import WhatMakesUsDifferent from "@/components/home/WhatMakesUsDifferent";
-import HustleSection from "@/components/home/HustleSection";
+import DigitalStage from "@/components/Web-Dev/DigitalStage";
+import HomeBanner from "@/components/Web-Dev/HomeBanner";
+import WhoWeBuildFor from "@/components/Web-Dev/WhoWeBuildFor";
+import ShowcaseSection from "@/components/Web-Dev/ShowcaseSection";
+import HowWeWorkSection from "@/components/Web-Dev/HowWeWorkSection";
+import FAQSection from "@/components/Web-Dev/FAQSection";
+import WhatMakesUsDifferent from "@/components/Web-Dev/WhatMakesUsDifferent";
+import HustleSection from "@/components/Web-Dev/HustleSection";
 import AnimatedSection from "@/components/common/AnimatedSection";
-import BookACall from "@/components/home/BookACall";
+import BookACall from "@/components/Web-Dev/BookACall";
 import { NavigationDock } from "@/components/NavDoc";
 
 export default function Page() {
@@ -23,9 +23,11 @@ export default function Page() {
       </AnimatedSection>
 
       {/* Added id="gallery" for the NavDoc link */}
-      <AnimatedSection id="gallery">
-        <WorkSection />
-      </AnimatedSection>
+      <div id="gallery">
+        <AnimatedSection>
+          <ShowcaseSection />
+        </AnimatedSection>
+      </div>
 
       <AnimatedSection>
         <WhoWeBuildFor />

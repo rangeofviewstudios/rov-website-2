@@ -70,9 +70,11 @@ const fadeIn = keyframes`
 
 // Styled Components
 const Container = styled.div`
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
   height: 100vh;
-  overflow: hidden;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -80,20 +82,12 @@ const Container = styled.div`
   padding: 80px 20px;
   color: white;
   font-family: 'ProximaNovaBlack', sans-serif;
+  pointer-events: none;
+  z-index: 10;
 
   @media (max-width: 768px) {
     padding: 60px 10px;
   }
-`;
-
-const VideoBackground = styled.video`
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  z-index: 0;
 `;
 
 const SlideInTop = styled.div`
@@ -129,7 +123,8 @@ const Logo = styled(SlideInTop)`
   position: absolute;
   top: 20px;
   left: 20px;
-  z-index: 2;
+  z-index: 20;
+  pointer-events: auto;
 
   img {
     width: 100px;
@@ -175,8 +170,9 @@ const Heading = styled(SlideInTop)`
   top: 20px;
   right: 20px;
   text-align: right;
-  font-family: 'FlightMaybeMaj', sans-serif;
-  z-index: 2;
+  font-family: 'Futura', sans-serif;
+  z-index: 20;
+  pointer-events: auto;
 
   @media (max-width: 768px) {
     top: 10px;
@@ -205,13 +201,6 @@ const Hero: React.FC = () => {
     <>
       <GlobalStyle />
       <Container>
-        <VideoBackground
-          autoPlay
-          loop
-          muted
-          playsInline
-          src="/intro.mp4"
-        />
         <Logo>
           <img
             src="rov-logo.webp"

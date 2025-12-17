@@ -1,12 +1,13 @@
-import MusicBanner from "@/components/about/MusicBanner";
-import FAQSection from "@/components/about/AboutFaq";
-import AgencyIntro from "@/components/about/AgencyIntro";
-import ArtistBreakthrough from "@/components/about/ArtistBreakthrough";
-import BookACall from "@/components/about/BookACall";
-import Gallery from "@/components/about/Gallery";
-import MixesSection from "@/components/about/MixesSection";
-import Story from "@/components/about/Story";
-import VisionSection from "@/components/about/VisionSection";
+import MusicBanner from "@/components/sound_page/MusicBanner";
+import FAQSection from "@/components/sound_page/AboutFaq";
+import AgencyIntro from "@/components/sound_page/AgencyIntro";
+import ArtistBreakthrough from "@/components/sound_page/ArtistBreakthrough";
+import BookACall from "@/components/sound_page/BookACall";
+import Gallery from "@/components/sound_page/Gallery";
+import CarouselGallery from "@/components/Gallery";
+import MixesSection from "@/components/sound_page/MixesSection";
+import Story from "@/components/sound_page/Story";
+import VisionSection from "@/components/sound_page/VisionSection";
 import AnimatedSection from "@/components/common/AnimatedSection";
 // Import NavigationDock from the file you provided (NavDoc.tsx)
 // Adjust this import path if NavDoc.tsx is located elsewhere
@@ -38,6 +39,8 @@ export default function Page() {
       <AnimatedSection>
         <Story />
       </AnimatedSection>
+
+      <CarouselGallery />
 
       <AnimatedSection>
         <AgencyIntro />

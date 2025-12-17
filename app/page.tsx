@@ -3,13 +3,15 @@
 import { useEffect, useState } from "react";
 import { createGlobalStyle } from "styled-components";
 import Loading from "@/components/Loading";
-import Hero from "@/components/Hero";
+import HeroWithAnimation from "@/components/HeroWithAnimation";
 import Services from "@/components/Services";
+import ElevateSection from "@/components/ElevateSection";
 import MusicPlayer from "@/components/MusicPlayer";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 import Gallery from "@/components/Gallery";
 import DigiMag from "@/components/DigiMag";
+import TeamSection from "@/components/TeamSection";
 import Carousel from "@/components/Corousel";
 import Card from "@/components/Card";
 import DesignBreak from "@/components/DesignBreak";
@@ -32,7 +34,28 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(true);
   const [isScrolled, setIsScrolled] = useState(false);
 
+  // Reset scroll on mount
   useEffect(() => {
+    window.scrollTo(0, 0);
+    document.documentElement.scrollTop = 0;
+  }, []);
+
+  useEffect(() => {
+    // Prevent scrolling during loading
+    if (isLoading) {
+      document.body.style.overflow = 'hidden';
+      document.body.style.height = '100vh';
+    } else {
+      document.body.style.overflow = '';
+      document.body.style.height = '';
+      // Reset scroll position to top when loading finishes
+      setTimeout(() => {
+        window.scrollTo(0, 0);
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }, 100);
+    }
+
     // Improved loading mechanism
     const handleLoad = () => {
       setIsLoading(false);
@@ -55,8 +78,16 @@ export default function Home() {
     return () => {
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("load", handleLoad);
+      document.body.style.overflow = '';
+      document.body.style.height = '';
     };
-  }, []);
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (!isLoading) {
+      window.dispatchEvent(new Event("rov-home-loaded"));
+    }
+  }, [isLoading]);
 
   // Loading state with better transition
   if (isLoading) {
@@ -72,38 +103,40 @@ export default function Home() {
     <>
       <GlobalStyle />
       <main className="min-h-screen bg-black text-white">
-       
 
-        <section id="hero">
-          <Hero />
+        <section id="hero-with-animation">
+          <HeroWithAnimation />
         </section>
 
 
-        <section id="latest-album">
+        {/*<section id="latest-album">
           <MusicPlayer />
-        </section>
+        </section>*/}
 
-        <section id="gallery">
+        {/* <section id="gallery">
           <Gallery />
-        </section>
+        </section> */}
 
-        <img src="/backgroundimage.webp" alt="Page Tear Image"/>
+        {/* <img src="/backgroundimage.webp" alt="Page Tear Image" /> */}
 
         <section id="services">
           <Services />
         </section>
 
+        <ElevateSection />
+
         <DigiMag />
 
-        <Card />
+        <TeamSection />
+
+        {/* <Card /> */}
 
         <Carousel />
 
-        <Footer />
 
         <NavigationDock className={isScrolled ? "scrolled" : ""} />
 
-        
+
         {/*
         <TestHero />
 

@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -46,17 +48,22 @@ function Gallery() {
   };
 
   return (
-    <div className="min-h-screen bg-black pt-16">
+    <div
+      className="min-h-screen pt-16 rounded-t-[30px] md:rounded-t-[50px]"
+      style={{
+        backgroundColor: "#18130f",
+      }}
+    >
       {/* Gallery Heading without italic */}
       <div
-        className="text-white text-4xl font-bold text-center"
-        style={{ fontFamily: "Flight Maybe Maj, sans-serif" }}
+        className="text-[#f5e7d1] text-5xl md:text-7xl lg:text-[140px] uppercase font-bold text-center drop-shadow-xl px-4"
+        style={{ fontFamily: "anton" }}
       >
         GALLERY
       </div>
 
       {/* Carousel container */}
-      <div className="relative w-full h-[110vh] bg-black overflow-hidden flex items-center justify-center">
+      <div className="relative w-full h-[110vh] overflow-hidden flex items-center justify-center">
         {/* Navigation Buttons */}
         <button
           onClick={handlePrev}
@@ -80,9 +87,8 @@ function Gallery() {
               style={getItemStyle(index)}
             >
               <div
-                className={`relative w-full h-full rounded-[5px] overflow-hidden cursor-pointer shadow-lg transition-transform duration-300 hover:scale-[1.02] ${
-                  index === activeIndex ? "scale-105 z-[100]" : "scale-95"
-                }`}
+                className={`relative w-full h-full rounded-[5px] overflow-hidden cursor-pointer shadow-lg transition-transform duration-300 hover:scale-[1.02] ${index === activeIndex ? "scale-105 z-[100]" : "scale-95"
+                  }`}
               >
                 <img
                   src={item.image}
