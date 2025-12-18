@@ -6,6 +6,7 @@ import VisionMixing from "@/components/aerielPage/VisionMixing";
 import ContactSection from "@/components/aerielPage/ContactSection";
 import TestimonialSection from "@/components/aerielPage/TestimonialSection";
 import VisionFaq from "@/components/aerielPage/VisionFaq";
+import { NavigationDock } from "@/components/NavDoc";
 
 export default function AerielPage() {
   return (
@@ -18,6 +19,7 @@ export default function AerielPage() {
       <ContactSection />
       <TestimonialSection />
       <VisionFaq />
+      <NavigationDock />
     </main>
   );
 }

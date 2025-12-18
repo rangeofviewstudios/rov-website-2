@@ -90,7 +90,9 @@ const Footer = () => {
                 <li>
                   <a href="/aeriel" className="hover:text-white transition-colors duration-300">DRONE FOOTAGE</a>
                 </li>
-                <li className="hover:text-white transition-colors duration-300">AI SOLUTIONS</li>
+                <li>
+                  <a href="/ai-automation" className="hover:text-white transition-colors duration-300">AI SOLUTIONS</a>
+                </li>
               </ul>
             </div>
           </div>
@@ -206,7 +208,7 @@ const Footer = () => {
                 className="text-[#f8f2e5] text-7xl md:text-8xl tracking-widest uppercase"
                 style={{ fontFamily: 'sink, sans-serif' }}
               >
-                CTRL A\
+                <a href="ctrla">Ctrl A\</a>
               </h2>
             </div>
           </div>

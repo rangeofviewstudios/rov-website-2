@@ -4,6 +4,7 @@ import CreativeFriction from "@/components/ctrla/CreativeFriction";
 import Culture from "@/components/ctrla/Culture";
 import HeroSection from "@/components/ctrla/HeroSection";
 import ToolkitSection from "@/components/ctrla/ToolkitSection";
+import { NavigationDock } from "@/components/NavDoc";
 
 export default function Page() {
   return (
@@ -41,6 +42,7 @@ export default function Page() {
         }}
       ></section>
 
+      <NavigationDock />
     </main>
   );
 }

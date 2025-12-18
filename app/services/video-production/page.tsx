@@ -10,6 +10,7 @@ import TestimonialSection from "../../../components/aerielPage/TestimonialSectio
 import VisionFaq from "../../../components/aerielPage/VisionFaq";
 import ContactSection from "../../../components/aerielPage/ContactSection";
 import BookCall from "../../../components/aerielPage/BookCall";
+import { NavigationDock } from "@/components/NavDoc";
 
 export default function VideoProductionPage() {
     return (
@@ -23,6 +24,7 @@ export default function VideoProductionPage() {
             <VisionFaq />
             <ContactSection />
             <BookCall />
+            <NavigationDock />
         </main>
     );
 }

@@ -10,6 +10,7 @@ import MixesSection from "../../../components/sound_page/MixesSection";
 import Gallery from "../../../components/sound_page/Gallery";
 import AboutFaq from "../../../components/sound_page/AboutFaq";
 import BookACall from "../../../components/sound_page/BookACall";
+import { NavigationDock } from "@/components/NavDoc";
 
 export default function SoundEngineeringPage() {
     return (
@@ -23,6 +24,7 @@ export default function SoundEngineeringPage() {
             <Gallery />
             <AboutFaq />
             <BookACall />
+            <NavigationDock />
         </main>
     );
 }

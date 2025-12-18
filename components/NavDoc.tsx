@@ -149,7 +149,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
             <ul className="space-y-4 w-full max-w-md">
               <li>
                 <a
-                  href="/about"
+                  href="/sound"
                   className="block px-6 py-3 text-white/80 hover:text-white text-base md:text-lg transition-all hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 text-center"
                   style={{ fontFamily: "Futura, sans-serif" }}
                 >
@@ -167,7 +167,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
               </li>
               <li>
                 <a
-                  href="/vision"
+                  href="/aeriel"
                   className="block px-6 py-3 text-white/80 hover:text-white text-base md:text-lg transition-all hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 text-center"
                   style={{ fontFamily: "Futura, sans-serif" }}
                 >
@@ -176,7 +176,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
               </li>
               <li>
                 <a
-                  href="/ctrla"
+                  href="/ai-automation"
                   className="block px-6 py-3 text-white/80 hover:text-white text-base md:text-lg transition-all hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 text-center"
                   style={{ fontFamily: "Futura, sans-serif" }}
                 >

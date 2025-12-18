@@ -10,6 +10,7 @@ import ShowcaseSection from "../../../components/Web-Dev/ShowcaseSection";
 import WhoWeBuildFor from "../../../components/Web-Dev/WhoWeBuildFor";
 import FAQSection from "../../../components/Web-Dev/FAQSection";
 import BookACall from "../../../components/Web-Dev/BookACall";
+import { NavigationDock } from "@/components/NavDoc";
 
 export default function WebDevelopmentPage() {
     return (
@@ -23,6 +24,7 @@ export default function WebDevelopmentPage() {
             <WhoWeBuildFor />
             <FAQSection />
             <BookACall />
+            <NavigationDock />
         </main>
     );
 }

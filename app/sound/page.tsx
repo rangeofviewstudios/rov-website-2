@@ -7,6 +7,7 @@ import ArtistBreakthrough from "@/components/sound_page/ArtistBreakthrough";
 import BookACall from "@/components/sound_page/BookACall";
 import Story from "@/components/sound_page/Story";
 import VisionSection from "@/components/sound_page/VisionSection";
+import { NavigationDock } from "@/components/NavDoc";
 
 export default function SoundPage() {
   return (
@@ -17,9 +18,10 @@ export default function SoundPage() {
       <AboutFaq />
       <AgencyIntro />
       <ArtistBreakthrough />
-      <BookACall />
       <Story />
       <VisionSection />
+      <BookACall />
+      <NavigationDock />
     </main>
   );
 }
