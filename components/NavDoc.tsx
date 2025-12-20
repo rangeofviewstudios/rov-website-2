@@ -141,7 +141,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
           <div className="flex flex-col items-center justify-center h-full">
             <h2
               className="text-white/60 text-sm md:text-base uppercase tracking-widest mb-8"
-              style={{ fontFamily: "Futura, sans-serif" }}
+              style={{ fontFamily: "futura" }}
             >
               R.O.V Services
             </h2>
@@ -151,7 +151,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
                 <a
                   href="/sound"
                   className="block px-6 py-3 text-white/80 hover:text-white text-base md:text-lg transition-all hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 text-center"
-                  style={{ fontFamily: "Futura, sans-serif" }}
+                  style={{ fontFamily: "futura" }}
                 >
                   • Sound Engineering
                 </a>
@@ -160,7 +160,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
                 <a
                   href="/web"
                   className="block px-6 py-3 text-white/80 hover:text-white text-base md:text-lg transition-all hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 text-center"
-                  style={{ fontFamily: "Futura, sans-serif" }}
+                  style={{ fontFamily: "futura" }}
                 >
                   • Web Development
                 </a>
@@ -169,7 +169,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
                 <a
                   href="/aeriel"
                   className="block px-6 py-3 text-white/80 hover:text-white text-base md:text-lg transition-all hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 text-center"
-                  style={{ fontFamily: "Futura, sans-serif" }}
+                  style={{ fontFamily: "futura" }}
                 >
                   • Aerial Media Production
                 </a>
@@ -178,7 +178,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
                 <a
                   href="/ai-automation"
                   className="block px-6 py-3 text-white/80 hover:text-white text-base md:text-lg transition-all hover:bg-white/5 rounded-xl border border-transparent hover:border-white/10 text-center"
-                  style={{ fontFamily: "Futura, sans-serif" }}
+                  style={{ fontFamily: "futura" }}
                 >
                   • Custom AI Automations
                 </a>
@@ -193,7 +193,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
         <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex justify-center items-center z-[101]">
           <div
             className="bg-black/50 backdrop-blur-md text-white p-8 rounded-3xl shadow-lg text-center w-96 relative border border-white/10 md:w-96 sm:w-full sm:p-6"
-            style={{ fontFamily: "Futura, sans-serif" }}
+            style={{ fontFamily: "futura" }}
           >
             <button
               className="absolute top-4 right-4 text-white/60 hover:text-white transition-colors"

@@ -1,10 +1,8 @@
 "use client";
 
-
 import React, { useState, useCallback, useRef } from "react";
-import TeamGallery from "./TeamGallery";
 import { motion, AnimatePresence } from "framer-motion";
-import { MousePointer2 } from "lucide-react";
+import { MousePointer2, ChevronRight, X, Sparkles } from "lucide-react";
 
 type Category = "All" | "Creative" | "Tech" | "Systems";
 
@@ -279,6 +277,7 @@ const TeamSection: React.FC = () => {
     const [activeCategory, setActiveCategory] = useState<Category>("All");
     const [selectedMember, setSelectedMember] = useState<TeamMember | null>(null);
     const [showQuote, setShowQuote] = useState(false);
+    const [expandedMemberId, setExpandedMemberId] = useState<number | null>(null);
 
     const ImageCard = useCallback(({ src, alt, stationary = false, onClick, name, role, rotation = 0 }: { src: string; alt: string, stationary?: boolean, onClick?: () => void, name?: string, role?: string, rotation?: number }) => {
         const [isHovered, setIsHovered] = useState(false);
@@ -359,6 +358,222 @@ const TeamSection: React.FC = () => {
     }, []);
 
     const filteredMembers = teamMembers.filter(m => m.category === activeCategory);
+
+    // New Component for Category Section
+    const CategorySection = ({ category, members }: { category: Category, members: TeamMember[] }) => {
+        const containerRef = useRef<HTMLDivElement>(null);
+
+        return (
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -20 }}
+                className="w-full max-w-7xl mx-auto px-4"
+            >
+
+                {/* Category Grid */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    {members.map((member, index) => (
+                        <motion.div
+                            key={member.id}
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: index * 0.1 }}
+                            className={`relative group cursor-pointer ${expandedMemberId === member.id ? 'lg:col-span-2' : ''}`}
+                            onClick={() => setExpandedMemberId(expandedMemberId === member.id ? null : member.id)}
+                        >
+                            {/* Main Card */}
+                            <div className={`relative rounded-3xl overflow-hidden transition-all duration-500 ${
+                                expandedMemberId === member.id 
+                                    ? 'h-auto min-h-[600px] bg-gradient-to-br from-white/10 to-white/5' 
+                                    : 'h-[400px] bg-gradient-to-br from-white/5 to-transparent'
+                            }`}
+                            style={{
+                                border: '1px solid rgba(255, 255, 255, 0.15)',
+                                boxShadow: expandedMemberId === member.id 
+                                    ? `0 25px 50px -12px rgba(${member.shadowColor || '101, 67, 33'}, 0.5), 0 0 0 1px rgba(255,255,255,0.1)`
+                                    : `0 10px 30px rgba(${member.shadowColor || '101, 67, 33'}, 0.3)`
+                            }}>
+                                
+                                {/* Background Image with Overlay */}
+                                <div className="absolute inset-0">
+                                    <img 
+                                        src={member.image} 
+                                        alt={member.name}
+                                        className="w-full h-full object-cover object-center opacity-40"
+                                        style={{ transform: member.imageRotation ? `rotate(${member.imageRotation}deg)` : undefined }}
+                                    />
+                                    <div className="absolute inset-0 bg-gradient-to-b from-transparent via-black/30 to-black/70" />
+                                </div>
+
+                                {/* Content */}
+                                <div className="relative z-10 p-8 h-full flex flex-col">
+                                    {/* Top Row: Name and Role */}
+                                    <div className="flex-1">
+                                        <div className="flex justify-between items-start mb-4">
+                                            <div>
+                                                <motion.h3 
+                                                    className="font-sink text-[clamp(2.5rem,5vw,4rem)] font-black tracking-[0.05em] uppercase mb-2"
+                                                    style={{ color: '#F7F2E4' }}
+                                                >
+                                                    {member.name}
+                                                </motion.h3>
+                                                <p className="font-norwige text-sm tracking-[0.2em] uppercase text-[#F7F2E4]/80">
+                                                    {member.role}
+                                                </p>
+                                            </div>
+                                            <div className="flex items-center gap-2">
+                                                <span className="font-norwige text-xs tracking-[0.2em] uppercase text-[#F7F2E4]/60">
+                                                    {member.location}
+                                                </span>
+                                                <motion.div
+                                                    animate={{ rotate: expandedMemberId === member.id ? 90 : 0 }}
+                                                    transition={{ duration: 0.3 }}
+                                                    className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center"
+                                                >
+                                                    <ChevronRight className="w-4 h-4 text-white" />
+                                                </motion.div>
+                                            </div>
+                                        </div>
+
+                                        {/* Skills Tags */}
+                                        <div className="flex flex-wrap gap-2 mb-6">
+                                            {member.skills.slice(0, expandedMemberId === member.id ? member.skills.length : 3).map((skill, idx) => (
+                                                <span 
+                                                    key={idx}
+                                                    className="px-3 py-1.5 rounded-full font-norwige text-xs tracking-[0.1em] uppercase"
+                                                    style={{
+                                                        background: 'rgba(255, 255, 255, 0.15)',
+                                                        backdropFilter: 'blur(10px)',
+                                                        border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                        color: '#F7F2E4'
+                                                    }}
+                                                >
+                                                    {skill}
+                                                </span>
+                                            ))}
+                                            {member.skills.length > 3 && expandedMemberId !== member.id && (
+                                                <span className="px-3 py-1.5 rounded-full font-norwige text-xs tracking-[0.1em] uppercase text-[#F7F2E4]/60">
+                                                    +{member.skills.length - 3} more
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {/* Expanded Content */}
+                                    <AnimatePresence>
+                                        {expandedMemberId === member.id && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                exit={{ opacity: 0, height: 0 }}
+                                                transition={{ duration: 0.4 }}
+                                                className="overflow-hidden"
+                                            >
+                                                <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 pt-8 border-t border-white/20">
+                                                    {member.specialties && (
+                                                        <div>
+                                                            <h4 className="font-sink text-lg font-black tracking-[0.1em] uppercase mb-4 text-[#F7F2E4]">
+                                                                Specialties
+                                                            </h4>
+                                                            <p className="font-norwige text-sm leading-relaxed text-[#F7F2E4]/90">
+                                                                {member.specialties}
+                                                            </p>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {member.tools && (
+                                                        <div>
+                                                            <h4 className="font-sink text-lg font-black tracking-[0.1em] uppercase mb-4 text-[#F7F2E4]">
+                                                                Tools
+                                                            </h4>
+                                                            <div className="space-y-2">
+                                                                {member.tools.map((tool, idx) => (
+                                                                    <div key={idx} className="font-norwige text-sm text-[#F7F2E4]/90">
+                                                                        • {tool}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                    
+                                                    {member.keyContributions && (
+                                                        <div>
+                                                            <h4 className="font-sink text-lg font-black tracking-[0.1em] uppercase mb-4 text-[#F7F2E4]">
+                                                                Key Contributions
+                                                            </h4>
+                                                            <div className="space-y-2">
+                                                                {member.keyContributions.map((contribution, idx) => (
+                                                                    <div key={idx} className="font-norwige text-sm text-[#F7F2E4]/90">
+                                                                        • {contribution}
+                                                                    </div>
+                                                                ))}
+                                                            </div>
+                                                        </div>
+                                                    )}
+                                                </div>
+
+                                                {/* Action Buttons */}
+                                                <div className="flex gap-4 mt-8">
+                                                    <motion.button
+                                                        whileHover={{ scale: 1.05 }}
+                                                        whileTap={{ scale: 0.95 }}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setSelectedMember(member);
+                                                        }}
+                                                        className="px-6 py-3 rounded-full font-norwige font-bold tracking-[0.1em] uppercase text-sm"
+                                                        style={{
+                                                            background: 'linear-gradient(135deg, #DAA520, #B8860B)',
+                                                            color: '#1A0F00',
+                                                            border: 'none'
+                                                        }}
+                                                    >
+                                                        View Full Profile
+                                                    </motion.button>
+                                                    
+                                                    {member.secretQuote && (
+                                                        <motion.button
+                                                            whileHover={{ scale: 1.05 }}
+                                                            whileTap={{ scale: 0.95 }}
+                                                            onClick={(e) => {
+                                                                e.stopPropagation();
+                                                                setSelectedMember(member);
+                                                                setTimeout(() => setShowQuote(true), 300);
+                                                            }}
+                                                            className="px-6 py-3 rounded-full font-norwige font-bold tracking-[0.1em] uppercase text-sm"
+                                                            style={{
+                                                                background: 'rgba(255, 255, 255, 0.1)',
+                                                                backdropFilter: 'blur(10px)',
+                                                                border: '1px solid rgba(255, 255, 255, 0.2)',
+                                                                color: '#F7F2E4'
+                                                            }}
+                                                        >
+                                                            <Sparkles className="w-4 h-4 inline-block mr-2" />
+                                                            Secret Quote
+                                                        </motion.button>
+                                                    )}
+                                                </div>
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+                                </div>
+                            </div>
+                        </motion.div>
+                    ))}
+                </div>
+            </motion.div>
+        );
+    };
+
+    const getCategoryDescription = (category: Category): string => {
+        switch(category) {
+            case "Creative": return "Visual Storytellers & Design Innovators";
+            case "Tech": return "Code Architects & Digital Builders";
+            case "Systems": return "Operational Strategists & Process Engineers";
+            default: return "";
+        }
+    };
 
     return (
         <>
@@ -491,18 +706,7 @@ const TeamSection: React.FC = () => {
                     )}
 
                     {activeCategory !== "All" && (
-                        <motion.div
-                            key={activeCategory}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            className="w-full flex justify-center pb-20"
-                        >
-                            <TeamGallery
-                                members={filteredMembers}
-                                onMemberSelect={(member) => setSelectedMember(member)}
-                            />
-                        </motion.div>
+                        <CategorySection category={activeCategory} members={filteredMembers} />
                     )}
                 </div>
 
@@ -528,7 +732,7 @@ const TeamSection: React.FC = () => {
                                     onClickCapture={() => setShowQuote(false)}
                                     className="fixed md:absolute top-4 right-4 md:top-10 md:right-10 w-10 h-10 md:w-[50px] md:h-[50px] bg-black text-white rounded-full border-none cursor-pointer flex items-center justify-center z-[105] font-sink text-lg md:text-2xl shadow-lg hover:scale-110 transition-transform"
                                 >
-                                    ×
+                                    <X className="w-4 h-4 md:w-6 md:h-6" />
                                 </button>
 
 
