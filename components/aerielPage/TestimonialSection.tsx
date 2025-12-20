@@ -25,11 +25,13 @@ const TestimonialsSection = () => {
         {/* Slide 1 */}
         <SwiperSlide>
           <div className="text-center cursor-pointer  flex flex-col md:px-5 md:py-5 py-2 px-3 justify-center ">
-            <div className="underline text-left leading-tight text-sm md:text-2xl lg:text-5xl italic decoration-2 futura font-extrabold tracking-wider">
+            <div className="underline text-left leading-tight text-sm md:text-2xl lg:text-5xl italic decoration-2 font-extrabold tracking-wider"
+            style={{fontFamily: "futura"}}>
               “they are so cool <br /> and awesome”
             </div>
 
-            <p className="lg:mt-6 italic text-sm md:text-2xl lg:text-5xl flex justify-end futura font-extrabold tracking-wider underline">
+            <p className="lg:mt-6 italic text-sm md:text-2xl lg:text-5xl flex justify-end font-extrabold tracking-wider underline"
+            style={{fontFamily: "futura"}}>
               -this client
             </p>
 
@@ -45,11 +47,13 @@ const TestimonialsSection = () => {
         {/* Slide 2 */}
         <SwiperSlide>
           <div className="text-center cursor-pointer flex flex-col md:px-5 md:py-5 py-2 px-3 justify-center ">
-            <div className="underline text-left leading-tight text-sm md:text-2xl lg:text-5xl italic decoration-2 futura font-extrabold tracking-wider">
+            <div className="underline text-left leading-tight text-sm md:text-2xl lg:text-5xl italic decoration-2 futura font-extrabold tracking-wider"
+            style={{fontFamily: "futura"}}>
               “they are so cool <br /> and awesome”
             </div>
 
-            <p className="lg:mt-6 italic text-sm md:text-2xl lg:text-5xl flex justify-end futura font-extrabold tracking-wider underline">
+            <p className="lg:mt-6 italic text-sm md:text-2xl lg:text-5xl flex justify-end futura font-extrabold tracking-wider underline"
+            style={{fontFamily: "futura"}}>
               -this client
             </p>
 

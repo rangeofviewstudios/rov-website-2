@@ -39,7 +39,8 @@ export default function MixingSection() {
     >
       {/* Left small text */}
       <div
-        className="absolute futura top-16 left-4 sm:left-8 md:left-20 text-[#d3d3d3] text-xl sm:text-2xl md:text-4xl leading-snug uppercase font-semibold tracking-wider"
+        className="absolute top-16 left-4 sm:left-8 md:left-20 text-[#d3d3d3] text-xl sm:text-2xl md:text-4xl leading-snug uppercase font-semibold tracking-wider"
+        style={{fontFamily: "futura"}}
       >
         You’re <br /> Seeing Half <br /> the Picture.
       </div>
@@ -58,7 +59,8 @@ export default function MixingSection() {
             <motion.span
               key={i}
               variants={letter}
-              className="text-[#d3d3d3] text-2xl  md:text-[60px] lg:text-[90px] xl:text-[110px] tracking-wider uppercase leading-snug anton"
+              className="text-[#d3d3d3] text-2xl  md:text-[60px] lg:text-[90px] xl:text-[110px] tracking-wider uppercase leading-snug"
+              style={{fontFamily: "anton"}}
             >
               {char === " " ? "\u00A0" : char}
             </motion.span>
@@ -70,7 +72,8 @@ export default function MixingSection() {
       {/* Brown heading */}
       <div className="absolute bottom-10 sm:bottom-16 md:bottom-[90px] left-1/2 -translate-x-[40%]">
         <h3
-          className="text-[#302218] text-3xl sm:text-5xl md:text-7xl lg:text-[100px] tracking-wider uppercase text-center anton"
+          className="text-[#302218] text-3xl sm:text-5xl md:text-7xl lg:text-[100px] tracking-wider uppercase text-center"
+          style={{fontFamily: "anton"}}
         >
           <TypeAnimation
             sequence={["ABOVE YOU", 2000, "", 500]}

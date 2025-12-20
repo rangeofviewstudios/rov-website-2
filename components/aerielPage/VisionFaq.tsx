@@ -49,7 +49,7 @@ export default function FAQSection() {
    backgroundImage: "url('/assets/images/5th.gif')",
     backgroundSize: "cover",
     backgroundPosition: "bottom",
-  }} className="relative  w-full min-h-screen py-20 px-6 flex flex-col items-center">
+  }} className="relative w-full min-h-screen py-20 px-6 flex flex-col items-center">
      
       <div className="max-w-6xl w-full space-y-20">
         {steps.map((step, stepIndex) => (

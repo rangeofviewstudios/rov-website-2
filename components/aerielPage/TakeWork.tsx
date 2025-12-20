@@ -25,13 +25,15 @@ export default function TakeWork() {
         className="flex flex-col md:flex-row md:items-end sink text-[#302218] px-4 sm:px-8 md:px-20 gap-4"
       >
         <h2
-          className="text-2xl  md:text-4xl lg:text-6xl xl:text-8xl tracking-wider anton uppercase leading-tight"
+          className="text-2xl  md:text-4xl lg:text-6xl xl:text-8xl tracking-wider uppercase leading-tight"
+          style={{fontFamily: "anton"}}
         >
           Don’t Take Our <br />
           <span>Word For It /</span>
         </h2>
         <p
-          className=" futura underline italic text-xl md:text-2xl lg:text-3xl font-bold leading-tight md:mb-6 tracking-wider"
+          className="underline italic text-xl md:text-2xl lg:text-3xl font-bold leading-tight md:mb-6 tracking-wider"
+          style={{fontFamily: "futura"}}
         >
           Here’s what our clients say about <br /> our flights
         </p>

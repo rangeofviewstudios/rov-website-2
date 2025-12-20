@@ -1,60 +1,56 @@
-import DigitalStage from "@/components/Web-Dev/DigitalStage";
-import HomeBanner from "@/components/Web-Dev/HomeBanner";
-import WhoWeBuildFor from "@/components/Web-Dev/WhoWeBuildFor";
-import ShowcaseSection from "@/components/Web-Dev/ShowcaseSection";
-import HowWeWorkSection from "@/components/Web-Dev/HowWeWorkSection";
-import FAQSection from "@/components/Web-Dev/FAQSection";
-import WhatMakesUsDifferent from "@/components/Web-Dev/WhatMakesUsDifferent";
-import HustleSection from "@/components/Web-Dev/HustleSection";
-import AnimatedSection from "@/components/common/AnimatedSection";
+import Footer from "@/components/Footer";
+import OverlapSection from "@/components/OverlapSection";
 import BookACall from "@/components/Web-Dev/BookACall";
-import { NavigationDock } from "@/components/NavDoc";
+import DigitalStage from "@/components/Web-Dev/DigitalStage";
+import FAQSection from "@/components/Web-Dev/FAQSection";
+import HomeBanner from "@/components/Web-Dev/HomeBanner";
+import { default as HowWeWorkSection, default as WorkSection } from "@/components/Web-Dev/HowWeWorkSection";
+import HustleSection from "@/components/Web-Dev/HustleSection";
+import WhatMakesUsDifferent from "@/components/Web-Dev/WhatMakesUsDifferent";
+import WhoWeBuildFor from "@/components/Web-Dev/WhoWeBuildFor";
 
 export default function Page() {
   return (
     <>
-      {/* Added id="home" for the NavDoc link */}
-      <div id="home">
+      <OverlapSection index={1}>
         <HomeBanner />
-      </div>
+      </OverlapSection>
 
-      <AnimatedSection>
+      <OverlapSection index={2}>
         <DigitalStage />
-      </AnimatedSection>
+      </OverlapSection>
 
-      {/* Added id="gallery" for the NavDoc link */}
-      <div id="gallery">
-        <AnimatedSection>
-          <ShowcaseSection />
-        </AnimatedSection>
-      </div>
+      <OverlapSection index={3} disableSticky={true}>
+        <WorkSection />
+      </OverlapSection>
 
-      <AnimatedSection>
+      <OverlapSection index={4}>
         <WhoWeBuildFor />
-      </AnimatedSection>
+      </OverlapSection>
 
-      <AnimatedSection>
+      <OverlapSection index={5}>
         <HowWeWorkSection />
-      </AnimatedSection>
+      </OverlapSection>
 
-      <AnimatedSection>
+      <OverlapSection index={6} disableSticky={true}>
         <FAQSection />
-      </AnimatedSection>
+      </OverlapSection>
 
-      <AnimatedSection>
+      <OverlapSection index={7}>
         <WhatMakesUsDifferent />
-      </AnimatedSection>
+      </OverlapSection>
 
-      <AnimatedSection>
+      <OverlapSection index={8}>
         <HustleSection />
-      </AnimatedSection>
+      </OverlapSection>
 
-      <AnimatedSection>
+      {/* LAST SECTION */}
+      <OverlapSection index={9} >
         <BookACall />
-      </AnimatedSection>
-
-      {/* Add the NavigationDock component here */}
-      <NavigationDock />
+      </OverlapSection>
+       <OverlapSection index={10} >
+        <Footer/>
+      </OverlapSection>
     </>
   );
 }

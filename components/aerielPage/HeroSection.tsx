@@ -39,13 +39,15 @@ const HeroSection: React.FC = () => {
                   <div className="flex flex-col justify-between">
                     <h1
                      
-                      className="anton text-4xl md:text-6xl lg:text-8xl text-white leading-tight tracking-wider"
+                      className="text-4xl md:text-6xl lg:text-8xl text-white leading-tight tracking-wider"
+                      style={{fontFamily: "anton"}}
                     >
                       ELEVATE YOUR <br /> VISION
                     </h1>
                     <h1
                       
-                      className="anton text-4xl md:text-7xl lg:text-8xl text-white tracking-wider"
+                      className="text-4xl md:text-7xl lg:text-8xl text-white tracking-wider"
+                      style={{fontFamily: "anton"}}
                     >
                       LITERALLY.
                     </h1>
@@ -54,7 +56,8 @@ const HeroSection: React.FC = () => {
                   {/* Right Column */}
                   <div className="flex flex-col justify-between text-white md:text-right">
                     <p
-                      className="text-2xl futura leading-[1.5] text-[#dcd7c8]"
+                      className="text-2xl leading-[1.5] text-[#dcd7c8]"
+                      style={{fontFamily: "futura"}}
                     >
                       Lake Lanier || Swipe <br />
                       <span>Filmed by</span> <br />
@@ -62,7 +65,8 @@ const HeroSection: React.FC = () => {
                         Range Of View Studios
                       </span>
                     </p>
-                    <p className="md:text-2xl text-lg font-medium tracking-wider italic text-[#dcd7c8] leading-[1.3]">
+                    <p className="md:text-2xl text-lg font-medium tracking-wider italic text-[#dcd7c8] leading-[1.3]"
+                    style={{fontFamily: "futura"}}>
                       We capture the impossible. <br />
                       Your vision, from a new <br /> perspective
                     </p>

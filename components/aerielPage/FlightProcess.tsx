@@ -98,12 +98,13 @@ const FlightProcess = () => {
         </motion.div>
 
         {/* Steps */}
-        <div className="flex flex-col space-y-4 text-7xl tracking-wider  uppercase text-[#302218]">
+        <div className="flex flex-col space-y-4 text-7xl tracking-wider uppercase text-[#302218]">
           {steps.map((step) => (
             <span
               key={step.title}
               onMouseEnter={() => setActiveStep(step)}
-              className="cursor-pointer anton  w-[200px]  transition-transform duration-200 hover:scale-105"
+              className="cursor-pointer  w-[200px]  transition-transform duration-200 hover:scale-105"
+              style={{fontFamily: "anton"}}
             >
               {step.title}
             </span>
@@ -112,7 +113,7 @@ const FlightProcess = () => {
           {/* Modal */}
           {activeStep && (
             <div
-              className="fixed  inset-0 z-50 flex items-center justify-center "
+              className="fixed inset-0 z-50 flex items-center justify-center "
               onMouseLeave={() => setActiveStep(null)}
             >
               <motion.div
@@ -128,11 +129,11 @@ const FlightProcess = () => {
               >
                 {/* Modal Content */}
                 <div className="relative pt-14 text-[#302218]">
-                  <h2 className="text-5xl anton uppercase mb-2">
+                  <h2 className="text-5xl uppercase mb-2" style={{fontFamily: "anton"}}>
                     {activeStep.title}
                   </h2>
 
-                  <p className="text-lg font-normal  px-4 text-[#302218]">
+                  <p className="text-lg font-normal  px-4 text-[#302218]" style={{fontFamily: "futura"}}>
                     {activeStep.description}
                   </p>
 

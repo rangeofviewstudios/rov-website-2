@@ -1,25 +1,52 @@
-import HeroSection from "@/components/aerielPage/HeroSection";
-import WhoWeFlyWith from "@/components/aerielPage/WhoWeFlyWith";
+import BookCall from "@/components/aerielPage/BookCall";
 import FlightProcess from "@/components/aerielPage/FlightProcess";
+import HeroSection from "@/components/aerielPage/HeroSection";
 import TakeWork from "@/components/aerielPage/TakeWork";
-import VisionMixing from "@/components/aerielPage/VisionMixing";
-import ContactSection from "@/components/aerielPage/ContactSection";
-import TestimonialSection from "@/components/aerielPage/TestimonialSection";
-import VisionFaq from "@/components/aerielPage/VisionFaq";
-import { NavigationDock } from "@/components/NavDoc";
-
-export default function AerielPage() {
+import FAQSection from "@/components/aerielPage/VisionFaq";
+import VisionImpact from "@/components/aerielPage/VisionImpact";
+import MissingSection from "@/components/aerielPage/VisionMixing";
+import WhoWeFlyWith from "@/components/aerielPage/WhoWeFlyWith";
+import Footer from "@/components/Footer";
+import OverlapSection from "@/components/OverlapSection";
+export default function Page() {
   return (
-    <main>
-      <HeroSection />
-      <WhoWeFlyWith />
-      <FlightProcess />
-      <TakeWork />
-      <VisionMixing />
-      <ContactSection />
-      <TestimonialSection />
-      <VisionFaq />
-      <NavigationDock />
-    </main>
+    <>
+      <OverlapSection index={1}>
+        <HeroSection />
+      </OverlapSection>
+
+      <OverlapSection index={2}>
+        <WhoWeFlyWith />
+      </OverlapSection>
+
+      <OverlapSection index={3}>
+        <FlightProcess />
+      </OverlapSection>
+
+      <OverlapSection index={4}>
+        <TakeWork />
+      </OverlapSection>
+
+      <OverlapSection index={5}>
+        <MissingSection />
+      </OverlapSection>
+
+      <OverlapSection index={6}>
+        <VisionImpact />
+      </OverlapSection>
+
+      <OverlapSection index={7}>
+        <FAQSection />
+      </OverlapSection>
+
+      <OverlapSection index={8} isBook={true}>
+        <BookCall />
+      </OverlapSection>
+
+      {/* LAST SECTION */}
+      <OverlapSection index={9} >
+        <Footer />
+      </OverlapSection>
+    </>
   );
 }

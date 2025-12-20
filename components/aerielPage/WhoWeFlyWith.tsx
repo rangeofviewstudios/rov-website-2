@@ -25,14 +25,16 @@ const WhoWeFlyWith = () => {
           <div className="relative bg-[#dcd9d5] text-[#1e0202] rounded-lg w-full md:w-full h-auto md:h-full flex flex-col items-center shadow-md ">
             {/* Heading */}
             <h3
-              className="anton text-3xl sm:text-4xl md:text-5xl text-center my-4 md:my-7 bg-[#cac4be] py-2 md:py-3 w-full"
+              className="text-3xl sm:text-4xl md:text-5xl text-center my-4 md:my-7 bg-[#cac4be] py-2 md:py-3 w-full"
+              style={{fontFamily: "anton"}}
             >
               WHO WE FLY WITH
             </h3>
 
             {/* Content */}
             <div
-              className="text-2xl sm:text-3xl futura font-bold text-center tracking-wider uppercase px-4 md:px-0"
+              className="text-2xl sm:text-3xl font-bold text-center tracking-wider uppercase px-4 md:px-0"
+              style={{fontFamily: "futura"}}
             >
               <h2 className="text-4xl sm:text-5xl tracking-wider font-semibold mt-4 md:mt-8">
                 REAL ESTATE
