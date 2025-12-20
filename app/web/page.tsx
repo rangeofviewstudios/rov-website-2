@@ -8,6 +8,7 @@ import { default as HowWeWorkSection, default as WorkSection } from "@/component
 import HustleSection from "@/components/Web-Dev/HustleSection";
 import WhatMakesUsDifferent from "@/components/Web-Dev/WhatMakesUsDifferent";
 import WhoWeBuildFor from "@/components/Web-Dev/WhoWeBuildFor";
+import { NavigationDock } from "@/components/NavDoc";
 
 export default function Page() {
   return (
@@ -20,7 +21,7 @@ export default function Page() {
         <DigitalStage />
       </OverlapSection>
 
-      <OverlapSection index={3} disableSticky={true}>
+      <OverlapSection index={3}>
         <WorkSection />
       </OverlapSection>
 
@@ -32,7 +33,7 @@ export default function Page() {
         <HowWeWorkSection />
       </OverlapSection>
 
-      <OverlapSection index={6} disableSticky={true}>
+      <OverlapSection index={6}>
         <FAQSection />
       </OverlapSection>
 
@@ -52,6 +53,8 @@ export default function Page() {
        <OverlapSection index={10} >
         <Footer/>
       </OverlapSection>
+
+      <NavigationDock />
     </>
   );
 }

@@ -9,6 +9,7 @@ import Story from "@/components/sound_page/Story";
 import VisionSection from "@/components/sound_page/VisionSection";
 import OverlapSection from "@/components/OverlapSection";
 import Footer from "@/components/Footer";
+import { NavigationDock } from "@/components/NavDoc";
 
 export default function Page() {
   return (
@@ -54,6 +55,8 @@ export default function Page() {
       <OverlapSection index={10} >
         <Footer />
       </OverlapSection>
+
+      <NavigationDock />
     </>
   );
 }

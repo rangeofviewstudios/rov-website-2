@@ -221,7 +221,7 @@ export default function Services() {
       icon: <User className="w-16 h-16 text-white/80" />,
       description: "Turning clicks into connections with seamless and high impact designs.",
       position: "top-left" as const,
-      link: "/services/web-development",
+      link: "/web",
     },
     {
       id: "sound",
@@ -229,7 +229,7 @@ export default function Services() {
       icon: <Headphones className="w-16 h-16 text-white/80" />,
       description: "Audio production & mixing that brings your content to life with crystal-clear quality.",
       position: "top-right" as const,
-      link: "/services/sound-engineering",
+      link: "/sound",
     },
     {
       id: "video",
@@ -237,7 +237,7 @@ export default function Services() {
       icon: <Video className="w-16 h-16 text-white/80" />,
       description: "Cinematic content & aerial media that captures attention and delivers your message.",
       position: "bottom-left" as const,
-      link: "/services/video-production",
+      link: "/aeriel",
     },
     {
       id: "ai",
