@@ -55,10 +55,12 @@ export default function MixesSection() {
               <div className="absolute inset-0 bg-[url('/assets/images/gallerybg.webp')] bg-cover bg-center rounded-2xl shadow-2xl overflow-hidden flex items-center justify-center [backface-visibility:hidden]">
                 <div className="absolute inset-0 bg-[#4a2b16]/80"></div>
                 <div className="relative z-10 text-center text-white px-6">
-                  <h2 className="text-[#c7bbab] text-4xl md:text-6xl font-extrabold leading-tight uppercase">
+                  <h2 className="text-[#c7bbab] text-4xl md:text-6xl font-extrabold leading-tight uppercase"
+                  style={{fontFamily: "anton"}}>
                     $50 Mixes <br /> 48-Hour Delivery
                   </h2>
-                  <h2 className=" text-[#c7bbab] text-4xl md:text-5xl mt-5 leading-tight font-extrabold uppercase">
+                  <h2 className=" text-[#c7bbab] text-4xl md:text-5xl mt-5 leading-tight font-extrabold uppercase"
+                  style={{fontFamily: "anton"}}>
                     3 Revisions Included
                   </h2>
                 </div>
@@ -67,7 +69,8 @@ export default function MixesSection() {
               {/* Back Side */}
               <div className="absolute inset-0 bg-[url('/assets/images/gallerybg.webp')] bg-cover bg-center rounded-2xl shadow-2xl overflow-hidden [transform:rotateY(180deg)] [backface-visibility:hidden]">
                 <div className="absolute inset-0 bg-[#4a2b16]/90"></div>
-                <div className="relative z-10 h-full text-[#ccc8be] p-8 flex flex-col justify-center">
+                <div className="relative z-10 h-full text-[#ccc8be] p-8 flex flex-col justify-center"
+                style={{fontFamily: "futura"}}>
                   <ul className="space-y-3 md:text-2xl text-lg">
                     <li>✓ Professional mix + master</li>
                     <li>✓ Loudness-optimized for streaming</li>

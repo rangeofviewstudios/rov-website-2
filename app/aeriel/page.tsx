@@ -8,6 +8,7 @@ import MissingSection from "@/components/aerielPage/VisionMixing";
 import WhoWeFlyWith from "@/components/aerielPage/WhoWeFlyWith";
 import Footer from "@/components/Footer";
 import OverlapSection from "@/components/OverlapSection";
+import { NavigationDock } from "@/components/NavDoc";
 export default function Page() {
   return (
     <>
@@ -47,6 +48,8 @@ export default function Page() {
       <OverlapSection index={9} >
         <Footer />
       </OverlapSection>
+
+      <NavigationDock />
     </>
   );
 }

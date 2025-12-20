@@ -97,7 +97,8 @@ export default function Story() {
 
       {/* Main content */}
       <div className="flex-1 text-center md:text-right md:mt-28">
-        <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl tracking-tight md:tracking-tighter font-bold text-[#382a21] leading-snug md:leading-tight mb-6 md:mb-8 md:mr-24">
+        <h2 className="text-xl sm:text-2xl md:text-4xl lg:text-5xl tracking-tight md:tracking-tighter font-bold text-[#382a21] leading-snug md:leading-tight mb-6 md:mb-8 md:mr-24"
+        style={{fontFamily: "futura"}}>
           YOUR MIX IS JUST THE BEGINNING OF
           <br />
           YOUR STORY.
