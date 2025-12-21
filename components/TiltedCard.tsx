@@ -110,12 +110,10 @@ export default function TiltedCard({
     if (!isMobile) return;
     setIsTouching(true);
     hoverTextOpacity.set(1);
-    e.preventDefault(); // Prevent default only for the specific touch interaction
   };
 
   const handleTouchMove = (e: React.TouchEvent<HTMLElement>) => {
     if (!isMobile || !isTouching) return;
-    // Allow scrolling by not preventing default behavior
   };
 
   const handleTouchEnd = () => {
@@ -134,7 +132,7 @@ export default function TiltedCard({
         height: containerHeight,
         width: containerWidth,
         minHeight: "100px",
-        touchAction: isMobile ? "auto" : "none", // Enable scrolling on mobile
+        touchAction: isMobile ? "auto" : "none",
       }}
       onMouseMove={handleMouse}
       onMouseEnter={handleMouseEnter}
@@ -144,7 +142,7 @@ export default function TiltedCard({
       onTouchEnd={handleTouchEnd}
     >
       {showMobileWarning && (
-        <div className="absolute top-2 text-center text-xs block sm:hidden">
+        <div className="absolute top-2 text-center text-xs block sm:hidden text-white/50">
           Tilt effect disabled on mobile
         </div>
       )}
@@ -168,7 +166,6 @@ export default function TiltedCard({
             className="absolute top-0 left-0 object-cover rounded-[15px] will-change-transform [transform:translateZ(0)] w-full h-full"
           >
             <source src={imageSrc} type="video/mp4" />
-            Your browser does not support the video tag.
           </motion.video>
         ) : (
           <motion.img
@@ -178,17 +175,7 @@ export default function TiltedCard({
           />
         )}
 
-        {/* Hover Text at Bottom */}
-        <motion.div
-          className="absolute bottom-0 left-0 w-full flex items-center justify-center py-1 sm:py-2 rounded-b-[15px] bg-gray-900 bg-opacity-70"
-          style={{
-            opacity: hoverTextOpacity,
-          }}
-        >
-          <span className="text-white text-sm sm:text-lg font-semibold px-2 text-center drop-shadow-md">
-            {captionText}
-          </span>
-        </motion.div>
+        {/* Removed the Hover Text Overlay div entirely to ensure no white/gray strip appears */}
 
         {displayOverlayContent && overlayContent && (
           <motion.div
@@ -199,9 +186,10 @@ export default function TiltedCard({
         )}
       </motion.div>
 
-      {showTooltip && !isMobile && (
+      {/* Logic check: only render figcaption if captionText actually exists */}
+      {showTooltip && !isMobile && captionText && (
         <motion.figcaption
-          className="pointer-events-none absolute bottom-0 left-0 w-full rounded-[4px] bg-white px-[10px] py-[4px] text-[10px] text-[#2d2d2d] opacity-0 z-[3] hidden sm:block"
+          className="pointer-events-none absolute bottom-0 left-0 rounded-[4px] bg-white px-[10px] py-[4px] text-[10px] text-[#2d2d2d] z-[3] hidden sm:block"
           style={{
             x,
             y,

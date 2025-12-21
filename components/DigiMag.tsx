@@ -1,8 +1,7 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
 import TrueFocus from "./TrueFocus";
-import TiltedCard from "./TitledCard";
+import TiltedCard from "./TiltedCard";
 
 const DigiMag = () => {
   return (
@@ -28,7 +27,7 @@ const DigiMag = () => {
         </div>
       </div>
 
-      {/* CREATIVE BENTO GRID - REORGANIZED FOR BETTER VISUAL FLOW */}
+      {/* CREATIVE BENTO GRID */}
       <div
         className="
           grid grid-cols-4
@@ -37,168 +36,147 @@ const DigiMag = () => {
           [grid-auto-flow:dense]
         "
       >
-        {/* TOP LEFT - Large Feature */}
+        {/* All cards updated with showTooltip={false} and empty captions */}
         <div className="col-span-2 row-span-2">
           <TiltedCard
             imageSrc="/video/starscollidemv.mp4"
             altText="Stars Collide MV"
-            captionText="Stars Collide Music Video by Range of View Studios "
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* TOP RIGHT 1 */}
         <div>
           <TiltedCard
             imageSrc="/chain.webp"
             altText="ROV Chain"
-            captionText="Chain at R.O.V. HQ"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* TOP RIGHT 2 - Vertical */}
         <div className="row-span-2">
           <TiltedCard
             imageSrc="/woman2.webp"
             altText="Vices"
-            captionText="Vices by Basu & Sophie Said"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* MIDDLE LEFT 1 */}
         <div>
           <TiltedCard
             imageSrc="/ddk_1.webp"
             altText="DDK Album"
-            captionText="Ebro Radio placement, mixed/mastered by R.O.V."
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* MIDDLE LEFT 2 */}
         <div>
           <TiltedCard
             imageSrc="/ddk_2.webp"
             altText="Song of the Day"
-            captionText="SoundCloud Song of the Day"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* CENTER - Large Horizontal */}
         <div className="col-span-2">
           <TiltedCard
             imageSrc="/james.mp4"
             altText="Open Verse"
-            captionText="Open Verse Challenge by James Esemu"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* BOTTOM LEFT - Large Feature */}
         <div className="col-span-2 row-span-2">
           <TiltedCard
             imageSrc="/event_3.webp"
             altText="Live Performance"
-            captionText="Believe Music Hall ATL performance"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* BOTTOM MIDDLE */}
         <div>
           <TiltedCard
             imageSrc="/catchthelight.webp"
             altText="Catch The Light"
-            captionText="Catch The Light — RangeofView"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* BOTTOM RIGHT - Vertical */}
         <div className="row-span-2">
           <TiltedCard
             imageSrc="/ddk_vid_2.mp4"
             altText="On The Radar"
-            captionText="DDK On The Radar, mixed/mastered by R.O.V."
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* BOTTOM SMALL */}
         <div>
           <TiltedCard
             imageSrc="/art showcase.webp"
             altText="Art Showcase"
-            captionText="R.O.V. Art by YDXX"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
 
-        {/* FINAL TILE - Placed strategically */}
         <div>
           <TiltedCard
             imageSrc="/video/starboymv.mp4"
             altText="StrangeLoots MV"
-            captionText="StrangeLoots x RangeofView MV"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
             rotateAmplitude={15}
-            displayOverlayContent
+            showTooltip={false}
           />
         </div>
       </div>

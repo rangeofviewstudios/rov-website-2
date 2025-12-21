@@ -33,7 +33,7 @@ export default function Page() {
         <HowWeWorkSection />
       </OverlapSection>
 
-      <OverlapSection index={6}>
+      <OverlapSection index={6} disableSticky={true}>
         <FAQSection />
       </OverlapSection>
 

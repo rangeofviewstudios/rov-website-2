@@ -1,6 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { motion, Variants } from "framer-motion";
+import { motion, Variants, AnimatePresence } from "framer-motion";
 
 const FlightProcess = () => {
   interface Step {
@@ -34,7 +34,6 @@ const FlightProcess = () => {
   const text: string[] = ["OUR FLIGHT PROCESS"];
   const [activeStep, setActiveStep] = useState<Step | null>(null);
 
-  // parent animation
   const container: Variants = {
     hidden: { opacity: 0 },
     visible: {
@@ -47,7 +46,6 @@ const FlightProcess = () => {
     },
   };
 
-  // letter animation
   const letter: Variants = {
     hidden: { opacity: 0, y: 40 },
     visible: {
@@ -62,7 +60,6 @@ const FlightProcess = () => {
 
   return (
     <section
-      onMouseLeave={() => setActiveStep(null)}
       className="relative md:rounded-t-[50px] md:-mt-[28px] w-full md:pt-16 md:pb-20 py-5 bg-[#ccc4bd] bg-cover bg-center text-[rgb(56, 42, 33)]"
       style={{
         backgroundImage: "url('/assets/background/new3.jpg')",
@@ -70,7 +67,6 @@ const FlightProcess = () => {
       }}
     >
       <div className="relative z-10 px-6 lg:px-20">
-        {/* Animated Heading */}
         <motion.div
           className="text-center mb-8"
           variants={container}
@@ -97,59 +93,52 @@ const FlightProcess = () => {
           ))}
         </motion.div>
 
-        {/* Steps */}
         <div className="flex flex-col space-y-4 text-7xl tracking-wider uppercase text-[#302218]">
           {steps.map((step) => (
-            <span
+            <div
               key={step.title}
               onMouseEnter={() => setActiveStep(step)}
-              className="cursor-pointer  w-[200px]  transition-transform duration-200 hover:scale-105"
-              style={{fontFamily: "anton"}}
+              onMouseLeave={() => setActiveStep(null)}
+              className="w-fit"
             >
-              {step.title}
-            </span>
+              <span
+                className="cursor-pointer inline-block transition-transform duration-200 hover:scale-105"
+                style={{ fontFamily: "anton" }}
+              >
+                {step.title}
+              </span>
+            </div>
           ))}
 
-          {/* Modal */}
-          {activeStep && (
-            <div
-              className="fixed inset-0 z-50 flex items-center justify-center "
-              onMouseLeave={() => setActiveStep(null)}
-            >
-              <motion.div
-                initial={{ scale: 0.8, opacity: 0 }}
-                animate={{ scale: 1, opacity: 1 }}
-                exit={{ scale: 0.8, opacity: 0 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                className="relative w-[500px] h-[370px] text-center bg-cover bg-center "
-                style={{
-                  backgroundImage: `url(/assets/images/commentbg.webp)`,
-                }}
-                onMouseLeave={() => setActiveStep(null)}
+          <AnimatePresence>
+            {activeStep && (
+              <div 
+                className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none"
               >
-                {/* Modal Content */}
-                <div className="relative pt-14 text-[#302218]">
-                  <h2 className="text-5xl uppercase mb-2" style={{fontFamily: "anton"}}>
-                    {activeStep.title}
-                  </h2>
-
-                  <p className="text-lg font-normal  px-4 text-[#302218]" style={{fontFamily: "futura"}}>
-                    {activeStep.description}
-                  </p>
-
-                  {/* Close Button */}
-                  <button
-                    onClick={() => setActiveStep(null)}
-                    className="mt-4 px-6 py-2 text-sm cursor-pointer uppercase bg-[#302218] text-[#f8f2e5] rounded hover:opacity-80 transition"
-                  >
-                    Close
-                  </button>
-                </div>
-              </motion.div>
-            </div>
-          )}
-
-
+                <motion.div
+                  key={activeStep.title}
+                  initial={{ scale: 0.8, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  transition={{ duration: 0.3, ease: "easeOut" }}
+                  className="relative w-[500px] h-[370px] text-center bg-cover bg-center flex flex-col justify-start"
+                  style={{
+                    backgroundImage: `url(/assets/images/commentbg.webp)`,
+                    pointerEvents: "auto"
+                  }}
+                >
+                  <div className="relative pt-14 px-8 text-[#302218]">
+                    <h2 className="text-5xl uppercase mb-2" style={{ fontFamily: "anton" }}>
+                      {activeStep.title}
+                    </h2>
+                    <p className="text-lg font-normal text-[#302218]" style={{ fontFamily: "futura" }}>
+                      {activeStep.description}
+                    </p>
+                  </div>
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
         </div>
       </div>
     </section>

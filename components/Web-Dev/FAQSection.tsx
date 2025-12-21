@@ -17,10 +17,22 @@ const steps: Step[] = [
   {
     title: "DISCOVER / I",
     items: [
-      { question: "Discovery Deep-Dive", answer: "We run a deep analysis of your needs and project goals." },
-      { question: "Strategic Alignment", answer: "We align our strategies with your business objectives." },
-      { question: "Creative Briefing", answer: "We define the creative direction together." },
-      { question: "Team Calibration", answer: "We bring the right team members to collaborate with you." },
+      {
+        question: "Discovery Deep-Dive",
+        answer: "We run a deep analysis of your needs and project goals.",
+      },
+      {
+        question: "Strategic Alignment",
+        answer: "We align our strategies with your business objectives.",
+      },
+      {
+        question: "Creative Briefing",
+        answer: "We define the creative direction together.",
+      },
+      {
+        question: "Team Calibration",
+        answer: "We bring the right team members to collaborate with you.",
+      },
     ],
   },
   {
@@ -50,21 +62,27 @@ export default function FAQSection() {
   };
 
   return (
-    <section style={{
-      backgroundImage: "url('/assets/images/5th.gif')",
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-    }} className="relative  rounded-t-[50px] -mt-[27px] w-full min-h-screen py-20 px-6 flex flex-col items-center">
-
+    <section
+      style={{
+        backgroundImage: "url('/assets/images/5th.gif')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+      className="relative z-[100] rounded-t-[50px]  w-full min-h-screen h-auto py-10 px-6 flex flex-col items-center"
+    >
       <div className="max-w-6xl w-full space-y-20">
         {steps.map((step, stepIndex) => (
-          <div key={stepIndex} className=" md:h-[60vh]">
+          <div key={stepIndex} className="md:h-[60vh]">
             {/* Section Title */}
-            <h2 style={{ fontFamily: 'anton' }} className="text-[38px] md:text-[68px]  tracking-wide uppercase mb-8 text-[#2f2621]">
+            <h2
+              className="text-[38px] md:text-[68px] tracking-wide uppercase mb-8 text-[#2f2621]"
+              style={{fontFamily: "anton"}}
+            >
               {step.title}
             </h2>
+
             {/* FAQ Items */}
-            <div>
+            <div style={{fontFamily: "futura"}}>
               {step.items.map((item, itemIndex) => {
                 const id = `${stepIndex}-${itemIndex}`;
                 const isOpen = open === id;
@@ -81,21 +99,18 @@ export default function FAQSection() {
                     className="border-b-4 border-[#2f2621] overflow-hidden group cursor-pointer"
                   >
                     <button
-                      style={{ fontFamily: 'futura' }}
                       onClick={() => toggle(id)}
-                      className={`w-full flex justify-between items-center text-left  text-[20px] tracking-wide px-3 py-4 cursor-pointer 
+                      className={`w-full flex justify-between items-center text-left text-2xl tracking-wide px-3 py-4 cursor-pointer 
                         group-hover:bg-[#2f2621] group-hover:text-white transition-colors 
                         ${isOpen ? "bg-[#2f2621] text-white" : ""}`}
+                      style={{fontFamily: "futura"}}
                     >
                       {item.question}
                       <span className="ml-4 text-2xl">
-                        {isOpen ? (
-                          <ArrowUpRight size={26} />
-                        ) : (
-                          <ArrowDownLeft size={26} />
-                        )}
+                        {isOpen ? <ArrowUpRight size={26} /> : <ArrowDownLeft size={26} />}
                       </span>
                     </button>
+
                     <AnimatePresence>
                       {isOpen && (
                         <motion.div
@@ -105,7 +120,9 @@ export default function FAQSection() {
                           transition={{ duration: 0.3, ease: "easeInOut" }}
                           className="px-2 pb-4"
                         >
-                          <p style={{ fontFamily: 'futura' }} className="text-[19px] leading-relaxed">
+                          <p
+                            className="text-2xl leading-relaxed futura"
+                          >
                             {item.answer}
                           </p>
                         </motion.div>
