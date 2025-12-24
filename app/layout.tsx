@@ -1,15 +1,41 @@
-import './globals.css';
-import type { Metadata } from 'next';
-import { Inter } from 'next/font/google';
+// app/layout.tsx
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+import dynamic from "next/dynamic";
+import Footer from "@/components/Footer";
 
-const inter = Inter({ subsets: ['latin'] });
+const inter = Inter({ subsets: ["latin"] });
+
+// Dynamically import the chat widget (client-only)
+const ChatWidget = dynamic(() => import("@/components/ChatWidget"), {
+  ssr: false,
+});
 
 export const metadata: Metadata = {
-  title: 'Range of View Music | Official Website',
-  description: 'Official website of Range of View Music. Tour dates, music, and more.',
+  title: "Range of View Studios",
+  description: "Official website of Range of View Studios.",
   icons: {
-    icon: '/rov-logo.png', // Replace with your favicon URL
+    icon: [
+      { url: "/favicon.ico", sizes: "any" },
+      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
+      { url: "/favicon-32x32.png", sizes: "32x32", type: "image/png" },
+    ],
+    apple: [
+      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
+    ],
+    other: [
+      {
+        rel: "android-chrome-192x192",
+        url: "/android-chrome-192x192.png",
+      },
+      {
+        rel: "android-chrome-512x512",
+        url: "/android-chrome-512x512.png",
+      },
+    ],
   },
+  manifest: "/site.webmanifest",
 };
 
 export default function RootLayout({
@@ -19,7 +45,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={inter.className}>
+        {children}
+        <Footer />
+        {/* Floating chatbot */}
+        <ChatWidget />
+      </body>
     </html>
   );
 }

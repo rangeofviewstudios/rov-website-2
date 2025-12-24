@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
 
 export default function DesignBreak() {
   const [text, setText] = useState("ఇచ్చిపడేద్దాం");
-  const images = ["/R_break.jpg", "/O_break.jpg", "/V_break.jpg"];
+  const images = ["/R_break.webp", "/O_break.webp", "/V_break.webp"];
   const [currentImage, setCurrentImage] = useState(images[0]);
 
   const handleMouseEnter = () => {

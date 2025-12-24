@@ -1,209 +1,183 @@
 "use client";
 
-import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
 import TrueFocus from "./TrueFocus";
-import TiltedCard from "./TitledCard";
+import TiltedCard from "./TiltedCard";
 
 const DigiMag = () => {
-  return (  
-    <div className="w-full max-w-7xl mx-auto p-2 sm:p-4" id="digi-mag">
+  return (
+    <div
+      id="digi-mag"
+      className="w-full px-6 sm:px-12 md:px-16 mt-16 mb-24"
+    >
       {/* Header */}
-      <div className="flex justify-start items-center gap-2 sm:gap-4 mb-8 sm:mb-2 md:mb-4 pl-4 sm:pl-0">
-        <TrueFocus
-          sentence="DIGITAL MAGAZINE"
-          manualMode={false}
-          blurAmount={5}
-          borderColor="rgba(6, 247, 255, 0.7)"
-          glowColor="rgba(255, 255, 255, 0.6)"
-          animationDuration={0.3}
-          pauseBetweenAnimations={1.5}
-        />
+      <div className="w-full flex justify-center md:justify-start mb-10">
+        <div className="hidden md:block w-full">
+          <TrueFocus
+            sentence="DIGITAL MAGAZINE"
+            manualMode
+            blurAmount={5}
+            borderColor="rgba(6,247,255,0.7)"
+            glowColor="rgba(255,255,255,0.6)"
+            animationDuration={0.15}
+            pauseBetweenAnimations={1.5}
+            fontSize="clamp(4rem, 10vw, 14rem)"
+            fontFamily="Sink"
+            letterSpacing="0.05em"
+          />
+        </div>
       </div>
 
-      {/* Bento Grid */}
-      <div className="grid grid-cols-4 gap-1 sm:gap-4 auto-rows-[120px] sm:auto-rows-[150px] md:auto-rows-[300px]">
-        {/* Large Feature Image */}
-        <div className="relative col-span-2 row-span-2 group overflow-visible">
+      {/* CREATIVE BENTO GRID */}
+      <div
+        className="
+          grid grid-cols-4
+          auto-rows-[140px] sm:auto-rows-[180px] md:auto-rows-[260px]
+          gap-3 sm:gap-4
+          [grid-auto-flow:dense]
+        "
+      >
+        {/* All cards updated with showTooltip={false} and empty captions */}
+        <div className="col-span-2 row-span-2">
           <TiltedCard
-            imageSrc="/ctltrackprint.jpg"
-            altText="Change My Mind"
-            captionText="Short Project by Basu and James Esemu. Appearances from Overpade, AVGUST"
+            imageSrc="/video/starscollidemv.mp4"
+            altText="Stars Collide MV"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
-            scaleOnHover={1}
             rotateAmplitude={15}
-            showMobileWarning={false}
             showTooltip={false}
-            displayOverlayContent={true}
           />
         </div>
 
-        {/* Filling Smaller Images */}
-        <div className="relative col-span-1 row-span-1 group overflow-visible">
+        <div>
           <TiltedCard
-            imageSrc="/ddk_1.png"
+            imageSrc="/chain.webp"
+            altText="ROV Chain"
+            containerHeight="100%"
+            containerWidth="100%"
+            imageHeight="100%"
+            imageWidth="100%"
+            rotateAmplitude={15}
+            showTooltip={false}
+          />
+        </div>
+
+        <div className="row-span-2">
+          <TiltedCard
+            imageSrc="/woman2.webp"
+            altText="Vices"
+            containerHeight="100%"
+            containerWidth="100%"
+            imageHeight="100%"
+            imageWidth="100%"
+            rotateAmplitude={15}
+            showTooltip={false}
+          />
+        </div>
+
+        <div>
+          <TiltedCard
+            imageSrc="/ddk_1.webp"
             altText="DDK Album"
-            captionText="Ebro Radio placement, Martyr, mixed/mastered by R.O.V."
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
-            scaleOnHover={1}
             rotateAmplitude={15}
-            showMobileWarning={false}
             showTooltip={false}
-            displayOverlayContent={true}
           />
         </div>
 
-        {/* Video 1 */}
-        <div className="relative col-span-1 row-span-1 group overflow-visible">
-          <a href="https://youtu.be/qcIkMitGIbc" target="_blank" rel="noopener noreferrer">
-            <TiltedCard
-              imageSrc="/ddk_vid_1.mp4"
-              altText="Video 1"
-              captionText="DDK music video for up late, up early, mixed/mastered by R.O.V."
-              containerHeight="100%"
-              containerWidth="100%"
-              imageHeight="100%"
-              imageWidth="100%"
-              scaleOnHover={1}
-              rotateAmplitude={15}
-              showMobileWarning={false}
-              showTooltip={false}
-              displayOverlayContent={true}
-            />
-          </a>
-        </div>
-
-        <div className="relative col-span-1 row-span-2 group overflow-visible">
+        <div>
           <TiltedCard
-            imageSrc="/woman2.png"
-            altText="Beautiful Woman"
-            captionText="Timeless Elegance"
+            imageSrc="/ddk_2.webp"
+            altText="Song of the Day"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
-            scaleOnHover={1}
             rotateAmplitude={15}
-            showMobileWarning={false}
             showTooltip={false}
-            displayOverlayContent={true}
           />
         </div>
 
-        {/* Filling the middle gap */}
-        <div className="relative col-span-1 row-span-1 group overflow-visible">
+        <div className="col-span-2">
           <TiltedCard
-            imageSrc="/ddk_2.png"
-            altText="DDK Song of the Day"
-            captionText="SoundCloud song of the day mixed/mastered by R.O.V."
+            imageSrc="/james.mp4"
+            altText="Open Verse"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
-            scaleOnHover={1}
             rotateAmplitude={15}
-            showMobileWarning={false}
             showTooltip={false}
-            displayOverlayContent={true}
           />
         </div>
 
-        {/* Video 2 */}
-        <div className="relative col-span-2 row-span-1 group overflow-visible">
-          <a href="https://www.youtube.com/watch?v=gu43a-83-4c" target="_blank" rel="noopener noreferrer">
-            <TiltedCard
-              imageSrc="/james.mp4"
-              altText="Video 2"
-              captionText="Open verse challenge by James Esemu"
-              containerHeight="100%"
-              containerWidth="100%"
-              imageHeight="100%"
-              imageWidth="100%"
-              scaleOnHover={1}
-              rotateAmplitude={15}
-              showMobileWarning={false}
-              showTooltip={false}
-              displayOverlayContent={true}
-            />
-          </a>
-        </div>
-
-        {/* Bottom Row Fix */}
-        <div className="relative col-span-1 row-span-1 group overflow-visible">
+        <div className="col-span-2 row-span-2">
           <TiltedCard
-            imageSrc="/cover7.png"
-            altText="DDK Album"
-            captionText="Ebro Radio placement, Martyr, mixed/mastered by R.O.V."
-            containerHeight="100%"
-            containerWidth="100%"
-            imageHeight="100%"
-            imageWidth="100%"
-            scaleOnHover={1}
-            rotateAmplitude={15}
-            showMobileWarning={false}
-            showTooltip={false}
-            displayOverlayContent={true}
-          />
-        </div>
-
-        <div className="relative col-span-1 row-span-1 group overflow-visible">
-          <TiltedCard
-            imageSrc="/art showcase.png"
-            altText="Art"
-            captionText="R.O.V. Art: A fusion of color and conscious, by YDXX"
-            containerHeight="100%"
-            containerWidth="100%"
-            imageHeight="100%"
-            imageWidth="100%"
-            scaleOnHover={1}
-            rotateAmplitude={15}
-            showMobileWarning={false}
-            showTooltip={false}
-            displayOverlayContent={true}
-          />
-        </div>
-
-        <div className="relative col-span-2 row-span-1 group overflow-visible">
-          <TiltedCard
-            imageSrc="/event_3.jpg"
+            imageSrc="/event_3.webp"
             altText="Live Performance"
-            captionText="Performance in Believe Music Hall ATL by Basu and Sam Suen"
             containerHeight="100%"
             containerWidth="100%"
             imageHeight="100%"
             imageWidth="100%"
-            scaleOnHover={1}
             rotateAmplitude={15}
-            showMobileWarning={false}
             showTooltip={false}
-            displayOverlayContent={true}
           />
         </div>
 
-        {/* Video 3 */}
-        <div className="relative col-span-1 row-span-1 group overflow-visible">
-          <a href="https://www.youtube.com/watch?v=fZQ8AywmXrI&ab_channel=OnTheRadarRadio" target="_blank" rel="noopener noreferrer">
-            <TiltedCard
-              imageSrc="/ddk_vid_2.mp4"
-              altText="Video 3"
-              captionText="DDK On the Radar, mixed/mastered by R.O.V."
-              containerHeight="100%"
-              containerWidth="100%"
-              imageHeight="100%"
-              imageWidth="100%"
-              scaleOnHover={1}
-              rotateAmplitude={15}
-              showMobileWarning={false}
-              showTooltip={false}
-              displayOverlayContent={true}
-            />
-          </a>
+        <div>
+          <TiltedCard
+            imageSrc="/catchthelight.webp"
+            altText="Catch The Light"
+            containerHeight="100%"
+            containerWidth="100%"
+            imageHeight="100%"
+            imageWidth="100%"
+            rotateAmplitude={15}
+            showTooltip={false}
+          />
+        </div>
+
+        <div className="row-span-2">
+          <TiltedCard
+            imageSrc="/ddk_vid_2.mp4"
+            altText="On The Radar"
+            containerHeight="100%"
+            containerWidth="100%"
+            imageHeight="100%"
+            imageWidth="100%"
+            rotateAmplitude={15}
+            showTooltip={false}
+          />
+        </div>
+
+        <div>
+          <TiltedCard
+            imageSrc="/art showcase.webp"
+            altText="Art Showcase"
+            containerHeight="100%"
+            containerWidth="100%"
+            imageHeight="100%"
+            imageWidth="100%"
+            rotateAmplitude={15}
+            showTooltip={false}
+          />
+        </div>
+
+        <div>
+          <TiltedCard
+            imageSrc="/video/starboymv.mp4"
+            altText="StrangeLoots MV"
+            containerHeight="100%"
+            containerWidth="100%"
+            imageHeight="100%"
+            imageWidth="100%"
+            rotateAmplitude={15}
+            showTooltip={false}
+          />
         </div>
       </div>
     </div>

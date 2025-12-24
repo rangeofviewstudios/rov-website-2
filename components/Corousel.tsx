@@ -95,30 +95,30 @@ const Carousel: React.FC = () => {
     { imageUrl: "/rov_album_1.webp" },
     { imageUrl: "/rov_album_2.webp" },
     { imageUrl: "/rov_album_3.webp" },
-    { imageUrl: "/cover1.png" },
-    { imageUrl: "/cover2.png" },
-    { imageUrl: "/cover3.png" },
+    { imageUrl: "/cover1.webp" },
+    { imageUrl: "/cover2.webp" },
+    { imageUrl: "/cover3.webp" },
     { imageUrl: "/rov_album_4.webp" },
     { imageUrl: "/rov_album_1.webp" },
     { imageUrl: "/rov_album_2.webp" },
     { imageUrl: "/rov_album_3.webp" },
-    { imageUrl: "/cover1.png" },
-    { imageUrl: "/cover2.png" },
-    { imageUrl: "/cover3.png" },
+    { imageUrl: "/cover1.webp" },
+    { imageUrl: "/cover2.webp" },
+    { imageUrl: "/cover3.webp" },
     { imageUrl: "/rov_album_4.webp" },
     { imageUrl: "/rov_album_1.webp" },
     { imageUrl: "/rov_album_2.webp" },
     { imageUrl: "/rov_album_3.webp" },
-    { imageUrl: "/cover1.png" },
-    { imageUrl: "/cover2.png" },
-    { imageUrl: "/cover3.png" },
+    { imageUrl: "/cover1.webp" },
+    { imageUrl: "/cover2.webp" },
+    { imageUrl: "/cover3.webp" },
     { imageUrl: "/rov_album_4.webp" },
     { imageUrl: "/rov_album_1.webp" },
     { imageUrl: "/rov_album_2.webp" },
     { imageUrl: "/rov_album_3.webp" },
-    { imageUrl: "/cover1.png" },
-    { imageUrl: "/cover2.png" },
-    { imageUrl: "/cover3.png" },
+    { imageUrl: "/cover1.webp" },
+    { imageUrl: "/cover2.webp" },
+    { imageUrl: "/cover3.webp" },
   ];
 
   const carouselRef = useRef<HTMLDivElement>(null);
@@ -133,7 +133,8 @@ const Carousel: React.FC = () => {
     if (!carousel) return;
 
     const itemWidth = 300; // Width of each item
-    const totalWidth = itemWidth * items.length; // Total width of the original items
+    const gap = 20; // Gap between items
+    const totalWidth = (itemWidth + gap) * items.length; // Total width of one set
 
     let animationFrameId: number;
 
@@ -143,9 +144,10 @@ const Carousel: React.FC = () => {
       // Update the translateX value
       currentTranslateX.current -= isHovered ? 0.5 : 1; // Slow down animation on hover
 
-      // Reset to the middle of the cloned items when reaching the end
-      if (currentTranslateX.current < -totalWidth * 2) {
-        currentTranslateX.current = -totalWidth;
+      // Reset to create seamless infinite loop
+      // When we've scrolled past one complete set, reset to the beginning
+      if (Math.abs(currentTranslateX.current) >= totalWidth + 300) {
+        currentTranslateX.current += totalWidth;
       }
 
       // Apply the translateX value to the carousel
@@ -172,7 +174,7 @@ const Carousel: React.FC = () => {
         width: "100%",
         height: "400px",
         position: "relative",
-        paddingTop: "150px",
+        paddingTop: "100px",
       }}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}

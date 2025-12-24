@@ -21,16 +21,16 @@ export default function Navbar({ isScrolled }: NavbarProps) {
     <>
       {/* Navbar Component */}
       <nav
-        className={`fixed w-full z-50 transition-all duration-300 ${
-          isScrolled ? "bg-black/90 backdrop-blur-sm" : "bg-transparent"
-        } transform translate-y-[-100%] opacity-0 animate-navbar`}
+        className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? "bg-black/90 backdrop-blur-sm" : "bg-transparent"
+          } transform translate-y-[-100%] opacity-0 animate-navbar`}
+        style={{ fontFamily: 'Norwige Light, sans-serif' }}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
             {/* Logo/Link to Hero Section */}
             <a
               href="#hero"
-              className="text-xl font-bold tracking-wider"
+              className="text-xl font-bold tracking-widest"
               onClick={(e) => {
                 e.preventDefault();
                 handleScroll("hero"); // Scroll to the hero section
@@ -43,7 +43,7 @@ export default function Navbar({ isScrolled }: NavbarProps) {
             <div className="hidden md:flex items-center space-x-8">
               <a
                 href="#services"
-                className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors"
+                className="text-sm uppercase tracking-widest hover:text-gray-300 transition-colors"
                 onClick={(e) => {
                   e.preventDefault();
                   handleScroll("services"); // Scroll to the services section
@@ -53,7 +53,7 @@ export default function Navbar({ isScrolled }: NavbarProps) {
               </a>
               <a
                 href="#music"
-                className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors"
+                className="text-sm uppercase tracking-widest hover:text-gray-300 transition-colors"
                 onClick={(e) => {
                   e.preventDefault();
                   handleScroll("music"); // Scroll to the music section
@@ -63,7 +63,7 @@ export default function Navbar({ isScrolled }: NavbarProps) {
               </a>
               <a
                 href="#store"
-                className="text-sm uppercase tracking-wider hover:text-gray-300 transition-colors"
+                className="text-sm uppercase tracking-widest hover:text-gray-300 transition-colors"
                 onClick={(e) => {
                   e.preventDefault();
                   handleScroll("store"); // Scroll to the store section
@@ -97,14 +97,13 @@ export default function Navbar({ isScrolled }: NavbarProps) {
 
           {/* Mobile Menu */}
           <div
-            className={`md:hidden absolute top-20 left-0 right-0 bg-black/95 backdrop-blur-sm transition-all duration-300 ${
-              isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
-            }`}
+            className={`md:hidden absolute top-20 left-0 right-0 bg-black/95 backdrop-blur-sm transition-all duration-300 ${isMobileMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
+              }`}
           >
             <div className="px-4 py-6 space-y-4">
               <a
                 href="#services"
-                className="block text-sm uppercase tracking-wider hover:text-gray-300 transition-colors"
+                className="block text-sm uppercase tracking-widest hover:text-gray-300 transition-colors"
                 onClick={(e) => {
                   e.preventDefault();
                   handleScroll("services"); // Scroll to the services section
@@ -114,7 +113,7 @@ export default function Navbar({ isScrolled }: NavbarProps) {
               </a>
               <a
                 href="#music"
-                className="block text-sm uppercase tracking-wider hover:text-gray-300 transition-colors"
+                className="block text-sm uppercase tracking-widest hover:text-gray-300 transition-colors"
                 onClick={(e) => {
                   e.preventDefault();
                   handleScroll("music"); // Scroll to the music section
@@ -124,7 +123,7 @@ export default function Navbar({ isScrolled }: NavbarProps) {
               </a>
               <a
                 href="#store"
-                className="block text-sm uppercase tracking-wider hover:text-gray-300 transition-colors"
+                className="block text-sm uppercase tracking-widest hover:text-gray-300 transition-colors"
                 onClick={(e) => {
                   e.preventDefault();
                   handleScroll("store"); // Scroll to the store section
