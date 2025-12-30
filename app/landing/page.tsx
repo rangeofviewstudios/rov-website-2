@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import Footer from "@/components/Footer";
 
 // Register GSAP plugins
 if (typeof window !== "undefined") {
@@ -162,6 +163,7 @@ export default function LandingPage() {
             {/* Content after the animation */}
             <div className="relative bg-white min-h-screen">
                 {/* Additional content can be added here */}
+                <Footer />
             </div>
         </div>
     );

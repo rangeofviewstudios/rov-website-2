@@ -4,6 +4,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { NavigationDock } from '@/components/NavDoc';
+import Footer from '@/components/Footer';
 
 export default function AIAutomationPage() {
     return (
@@ -332,6 +333,8 @@ export default function AIAutomationPage() {
                     ))}
                 </div>
             </section>
+
+            <Footer />
 
             <NavigationDock />
         </div>

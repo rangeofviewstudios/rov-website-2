@@ -35,18 +35,17 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
       <div className="relative group cursor-pointer">
         {/* Main Card */}
         <div
-          className="flex flex-col items-center justify-center gap-2.5 transition-all duration-300 hover:shadow-lg"
+          className="flex flex-col items-center justify-center gap-2.5 transition-all duration-300 hover:shadow-lg p-8 md:py-[60px] md:px-[80px]"
           style={{
             borderRadius: '28px',
             border: '1px solid #D0BEA5',
             background: '#110C09',
             boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
-            padding: '60px 80px',
             minHeight: '500px'
           }}
         >
           {/* Folder Icon with overlaid button */}
-          <div className="relative mb-12 transform scale-150">
+          <div className="relative mb-12 transform scale-100 md:scale-150">
             <svg width="280" height="200" viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg">
               <defs>
                 <linearGradient id="folderGradient" x1="140" y1="12" x2="140" y2="188" gradientUnits="userSpaceOnUse">
@@ -61,9 +60,9 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             </svg>
 
             {/* View More Button - Overlaid on folder */}
-            <div className="absolute top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+            <div className="absolute top-[75%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
               <button
-                className="px-8 py-2.5 rounded-full text-white/90 text-base font-normal transition-all duration-300 whitespace-nowrap hover:bg-white/10 hover:border-white/50"
+                className="px-6 py-2 rounded-full text-white/90 text-sm font-normal transition-all duration-300 whitespace-nowrap hover:bg-white/10 hover:border-white/50"
                 style={{
                   fontFamily: 'Roboto, sans-serif',
                   background: 'rgba(255, 244, 227, 0.10)',
@@ -80,8 +79,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
 
           {/* Service Title - Inside the card */}
           <h3
-            className="text-white/90 text-2xl md:text-3xl text-center font-normal"
-            style={{ fontFamily: 'Roboto, sans-serif' }}
+            className="text-2xl md:text-3xl text-center font-normal"
+            style={{ fontFamily: 'Roboto, sans-serif', color: '#FFF4E3' }}
           >
             {title}
           </h3>

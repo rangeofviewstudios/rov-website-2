@@ -6,24 +6,71 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 // Register GSAP plugins
 gsap.registerPlugin(ScrollTrigger);
 
+const LoadingOverlay = styled.div<{ $isLoaded: boolean }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #000;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  transition: opacity 0.8s ease-in-out, visibility 0.8s;
+  opacity: ${props => (props.$isLoaded ? 0 : 1)};
+  visibility: ${props => (props.$isLoaded ? 'hidden' : 'visible')};
+`;
+
+const LoadingText = styled.div`
+  color: #FFF4E3;
+  font-family: 'Norwige', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  margin-bottom: 20px;
+`;
+
+const ProgressNumber = styled.div`
+  color: #FFF4E3;
+  font-family: 'Norwige', sans-serif;
+  font-size: clamp(4rem, 15vw, 120px);
+  font-weight: 800;
+  line-height: 1;
+`;
+
 const AnimationSection = styled.section`
   position: relative;
   width: 100%;
+  height: 500vh; /* Natural height for scrolling */
+  background: black;
+`;
+
+const StickyContainer = styled.div`
+  position: sticky;
+  top: 0;
+  width: 100%;
   height: 100vh;
+  overflow: hidden;
 `;
 
 const Canvas = styled.canvas`
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   z-index: 0;
+
+  @media (max-width: 768px) {
+    filter: brightness(0.6);
+  }
 `;
 
 const DimOverlay = styled.div<{ $opacity: number }>`
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
@@ -36,12 +83,12 @@ const DimOverlay = styled.div<{ $opacity: number }>`
 `;
 
 const HeroOverlay = styled.div<{ $isVisible: boolean }>`
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100vh;
-  display: flex;
+  display: ${props => props.$isVisible ? 'flex' : 'none'};
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -59,7 +106,7 @@ const HeroOverlay = styled.div<{ $isVisible: boolean }>`
 `;
 
 const TextOverlay = styled.div<{ $isVisible: boolean }>`
-  position: fixed;
+  position: absolute;
   top: 50%;
   left: 0;
   width: 100%;
@@ -69,10 +116,12 @@ const TextOverlay = styled.div<{ $isVisible: boolean }>`
   display: ${props => props.$isVisible ? 'flex' : 'none'};
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  flex-direction: column; 
+  gap: 0.5rem; /* Reduced gap for stacking context on mobile */
   padding: 0 1rem;
 
   @media (min-width: 768px) {
+    flex-direction: row;
     gap: 15rem;
     padding: 0 5%;
   }
@@ -81,38 +130,45 @@ const TextOverlay = styled.div<{ $isVisible: boolean }>`
 const CreativeText = styled.div`
   color: #FFF4E3;
   font-family: 'Norwige Light', sans-serif;
-  font-size: 2.5rem;
+  font-size: clamp(2.5rem, 12vw, 100px); /* Slightly smaller min-size for mobile */
   font-weight: 300;
   font-style: normal;
   letter-spacing: 0.02em;
-  line-height: 150%;
-  text-align: right;
+  line-height: 110%;
+  text-align: center;
   flex: 1;
-  max-width: 50%;
+  width: 100%;
+  max-width: 100%;
   
   @media (min-width: 768px) {
-    font-size: 100px;
+    text-align: right;
+    max-width: 50%;
+    line-height: 150%;
+    font-size: clamp(3rem, 10vw, 100px);
   }
 `;
 
 const ChangingWord = styled.div`
   color: #FFF4E3;
   font-family: 'Norwige', sans-serif;
-  font-size: 2.5rem;
+  font-size: clamp(2.5rem, 12vw, 100px); /* Matching mobile size adjustment */
   font-weight: 800;
   font-style: italic;
-  letter-spacing: -2.2px;
-  line-height: 150%;
-  text-align: left;
+  letter-spacing: -1px; /* Tighter letter spacing on mobile */
+  line-height: 110%;
+  text-align: center;
   flex: 1;
-  max-width: 50%;
+  width: 100%;
+  max-width: 100%;
   
   @media (min-width: 768px) {
-    font-size: 100px;
+    text-align: left;
+    max-width: 50%;
+    line-height: 150%;
+    letter-spacing: -2.2px;
+    font-size: clamp(3rem, 10vw, 100px);
   }
 `;
-
-
 
 const Logo = styled.div`
   position: absolute;
@@ -158,20 +214,20 @@ const Heading = styled.div`
 
 const HeroWithAnimation: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const sectionRef = useRef<HTMLElement>(null);
+  const sectionRef = useRef<HTMLDivElement>(null);
   const creativeRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<HTMLDivElement>(null);
+
   const isFirstRun = useRef(true);
   const [showHero, setShowHero] = useState(true);
   const [currentWord, setCurrentWord] = useState("Identity");
   const [dimOpacity, setDimOpacity] = useState(0);
 
-  useEffect(() => {
-    // Reset scroll position and ScrollTrigger on mount
-    window.scrollTo(0, 0);
-    document.documentElement.scrollTop = 0;
-    ScrollTrigger.refresh();
+  // New loading states
+  const [isLoading, setIsLoading] = useState(true);
+  const [loadProgress, setLoadProgress] = useState(0);
 
+  useEffect(() => {
     const canvas = canvasRef.current;
     const section = sectionRef.current;
     if (!canvas || !section) return;
@@ -180,10 +236,17 @@ const HeroWithAnimation: React.FC = () => {
     if (!context) return;
 
     // Set canvas dimensions
-    canvas.width = 1920;
-    canvas.height = 1080;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
-    const frameCount = 652;
+    const totalFrames = 652;
+    // Optimization: Skip frames to reduce load time and memory usage
+    // Mobile: Every 3rd frame (~217 frames)
+    // Desktop: Every 2nd frame (~326 frames) - still high quality but much lighter
+    const isMobile = window.innerWidth < 768;
+    const stride = isMobile ? 3 : 2;
+
+    // Calculate actual frames to load based on stride
     const currentFrame = (index: number) => {
       return `/assets/SpiralShotHorizontalV2Frames/SpiralShotHorizontal60fpsV2_${index.toString().padStart(5, '0')}.webp`;
     };
@@ -193,74 +256,116 @@ const HeroWithAnimation: React.FC = () => {
       frame: 0
     };
 
-    // Preload all images
-    for (let i = 0; i < frameCount; i++) {
-      const img = new Image();
-      img.src = currentFrame(i);
-      images.push(img);
+    let loadedCount = 0;
+    const framesToLoad: number[] = [];
+
+    // Calculate which frame indices to load
+    for (let i = 0; i < totalFrames; i += stride) {
+      framesToLoad.push(i);
     }
+
+    const totalFramesToLoad = framesToLoad.length;
+
+    // Preload selected images
+    framesToLoad.forEach((frameIndex) => {
+      const img = new Image();
+      img.src = currentFrame(frameIndex);
+      img.onload = () => {
+        loadedCount++;
+        const progress = Math.round((loadedCount / totalFramesToLoad) * 100);
+        setLoadProgress(progress);
+
+        if (loadedCount === totalFramesToLoad) {
+          setIsLoading(false); // All images loaded
+          window.dispatchEvent(new Event("rov-site-loaded"));
+        }
+      };
+      images.push(img);
+    });
+
+    // Dispatch initial loading event
+    window.dispatchEvent(new Event("rov-site-loading"));
 
     // Render function
     function render() {
       if (!context || !canvas) return;
       context.clearRect(0, 0, canvas.width, canvas.height);
+      // Validating images[animation.frame] exists is crucial
       if (images[animation.frame] && images[animation.frame].complete) {
-        context.drawImage(images[animation.frame], 0, 0, canvas.width, canvas.height);
+        // Draw image to fill canvas while maintaining aspect ratio
+        const img = images[animation.frame];
+        const imgAspect = img.width / img.height;
+        const canvasAspect = canvas.width / canvas.height;
+
+        let drawWidth, drawHeight, offsetX, offsetY;
+
+        if (canvasAspect > imgAspect) {
+          drawWidth = canvas.width;
+          drawHeight = canvas.width / imgAspect;
+          offsetX = 0;
+          offsetY = (canvas.height - drawHeight) / 2;
+        } else {
+          drawHeight = canvas.height;
+          drawWidth = canvas.height * imgAspect;
+          offsetX = (canvas.width - drawWidth) / 2;
+          offsetY = 0;
+        }
+
+        context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
       }
     }
 
-    // GSAP scroll animation with pinning
-    const tl = gsap.timeline({
-      scrollTrigger: {
+    // Only initialize GSAP after loading is complete
+    if (!isLoading) {
+      ScrollTrigger.create({
         trigger: section,
-        scrub: 0.5,
-        pin: true,
         start: 'top top',
-        end: '+=400%',
+        end: 'bottom bottom',
+        scrub: 0.5, // slightly smoother scrub
         onUpdate: (self) => {
           const progress = self.progress;
 
-          // Determine which word to show based on scroll progress
-          // 0-30%: "Identity", 30-65%: "Systems", 65-95%: "Strategy", 95-100%: fade out
-          if (progress < 0.3) {
+          // Map progress to the REDUCED number of frames
+          const frameIndex = Math.min(
+            Math.floor(progress * (totalFramesToLoad - 1)),
+            totalFramesToLoad - 1
+          );
+          animation.frame = frameIndex;
+          render();
+
+          // Update words based on progress
+          if (progress < 0.2) {
             setCurrentWord("Identity");
             setDimOpacity(0);
-          } else if (progress < 0.65) {
+            setShowHero(true);
+          } else if (progress < 0.4) {
             setCurrentWord("Systems");
             setDimOpacity(0);
-          } else if (progress < 0.95) {
+            setShowHero(true);
+          } else if (progress < 0.6) {
             setCurrentWord("Strategy");
             setDimOpacity(0);
+            setShowHero(true);
           } else {
-            // Fade out from progress 0.95 to 1.0
-            const fadeProgress = (progress - 0.95) / 0.05;
+            // Fade out
+            const fadeProgress = Math.min((progress - 0.6) / 0.4, 1);
             setDimOpacity(fadeProgress);
+            if (progress > 0.95) {
+              setShowHero(false);
+            }
           }
-        },
-        onLeave: () => {
-          setShowHero(false);
-        },
-        onEnterBack: () => {
-          setShowHero(true);
         }
-      }
-    });
+      });
+      // Initial render once loaded
+      render();
+    }
 
-    tl.to(animation, {
-      frame: frameCount - 1,
-      snap: 'frame',
-      ease: 'none',
-      onUpdate: render
-    });
-
-    // Render first frame when loaded
-    images[0].onload = render;
 
     // Cleanup
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
-  }, []);
+  }, [isLoading]); // Re-run effect when isLoading changes
 
   // Animate the changing word
   useEffect(() => {
@@ -270,13 +375,11 @@ const HeroWithAnimation: React.FC = () => {
     }
 
     if (wordRef.current) {
-      // Fade from bottom to up
       gsap.fromTo(wordRef.current,
         { opacity: 0, y: 30 },
         { opacity: 1, y: 0, duration: 0.6, ease: "power2.out" }
       );
 
-      // Shine animation (background gradient movement)
       gsap.fromTo(wordRef.current,
         { backgroundPosition: "200% center" },
         { backgroundPosition: "-200% center", duration: 1, ease: "power2.inOut" }
@@ -286,26 +389,33 @@ const HeroWithAnimation: React.FC = () => {
 
   return (
     <AnimationSection ref={sectionRef}>
-      <Canvas ref={canvasRef} />
-      <DimOverlay $opacity={dimOpacity} />
-      <HeroOverlay $isVisible={showHero}>
-        <Logo>
-          <img
-            src="rov-logo.webp"
-            alt="ROV Logo"
-          />
-        </Logo>
-        <Heading>
-          <div className="text-3xl md:text-5xl font-bold leading-tight md:leading-[1.2]">
-            CREATIVE<br />STUDIO
-          </div>
-        </Heading>
-      </HeroOverlay>
+      <LoadingOverlay $isLoaded={!isLoading}>
+        <LoadingText>SYSTEM OPTIMIZING...</LoadingText>
+        <ProgressNumber>{loadProgress}%</ProgressNumber>
+      </LoadingOverlay>
 
-      <TextOverlay $isVisible={dimOpacity < 1}>
-        <CreativeText ref={creativeRef}>Creative</CreativeText>
-        <ChangingWord ref={wordRef}>{currentWord}</ChangingWord>
-      </TextOverlay>
+      <StickyContainer>
+        <Canvas ref={canvasRef} />
+        <DimOverlay $opacity={dimOpacity} />
+        <HeroOverlay $isVisible={showHero}>
+          <Logo>
+            <img
+              src="rov-logo.webp"
+              alt="ROV Logo"
+            />
+          </Logo>
+          <Heading>
+            <div className="text-3xl md:text-5xl font-bold leading-tight md:leading-[1.2]">
+              CREATIVE<br />STUDIO
+            </div>
+          </Heading>
+        </HeroOverlay>
+
+        <TextOverlay $isVisible={dimOpacity < 1}>
+          <CreativeText ref={creativeRef}>Creative</CreativeText>
+          <ChangingWord ref={wordRef}>{currentWord}</ChangingWord>
+        </TextOverlay>
+      </StickyContainer>
     </AnimationSection>
   );
 };

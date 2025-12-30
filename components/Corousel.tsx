@@ -181,33 +181,15 @@ const Carousel: React.FC = () => {
     >
       {/* Top Left Gradient Blob */}
       <div
+        className="absolute top-0 left-0 rounded-full pointer-events-none z-0 blob-gradient"
         style={{
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '800px',
-          height: '800px',
-          borderRadius: '50%',
-          pointerEvents: 'none',
-          zIndex: 0,
-          background: 'rgba(96, 62, 37, 0.60)',
-          filter: 'blur(200px)',
           transform: 'translate(-30%, -30%)'
         }}
       />
       {/* Bottom Right Gradient Blob */}
       <div
+        className="absolute bottom-0 right-0 rounded-full pointer-events-none z-0 blob-gradient"
         style={{
-          position: 'absolute',
-          bottom: 0,
-          right: 0,
-          width: '800px',
-          height: '800px',
-          borderRadius: '50%',
-          pointerEvents: 'none',
-          zIndex: 0,
-          background: 'rgba(96, 62, 37, 0.60)',
-          filter: 'blur(200px)',
           transform: 'translate(30%, 30%)'
         }}
       />
@@ -223,6 +205,22 @@ const Carousel: React.FC = () => {
           <CarouselItem key={index} {...item} />
         ))}
       </div>
+      <style jsx>{`
+        .blob-gradient {
+          width: 300px;
+          height: 300px;
+          background: rgba(96, 62, 37, 0.30);
+          filter: blur(60px);
+        }
+        @media (min-width: 768px) {
+          .blob-gradient {
+            width: 500px;
+            height: 500px;
+            background: rgba(96, 62, 37, 0.40);
+            filter: blur(100px);
+          }
+        }
+      `}</style>
     </div>
   );
 };

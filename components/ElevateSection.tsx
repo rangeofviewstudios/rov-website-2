@@ -171,28 +171,40 @@ const ArrowButton = styled(motion.button)`
     stroke: #000;
   }
   
-  &::before {
-    content: '';
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    left: -50px;
-    border-radius: 50%;
-    border: 2px solid #FFF4E3;
-    background: transparent;
-    z-index: -1;
+  @media (min-width: 969px) {
+    &::before {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      left: -50px;
+      border-radius: 50%;
+      border: 2px solid #FFF4E3;
+      background: transparent;
+      z-index: -1;
+    }
+    
+    &::after {
+      content: '';
+      position: absolute;
+      width: 80px;
+      height: 80px;
+      right: -50px;
+      border-radius: 50%;
+      border: 2px solid #FFF4E3;
+      background: transparent;
+      z-index: -1;
+    }
   }
-  
-  &::after {
-    content: '';
-    position: absolute;
-    width: 80px;
-    height: 80px;
-    right: -50px;
-    border-radius: 50%;
-    border: 2px solid #FFF4E3;
-    background: transparent;
-    z-index: -1;
+
+  @media (max-width: 968px) {
+    width: 60px;
+    height: 60px;
+    
+    svg {
+      width: 24px;
+      height: 24px;
+    }
   }
 `;
 

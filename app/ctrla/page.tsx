@@ -5,6 +5,7 @@ import Culture from "@/components/ctrla/Culture";
 import HeroSection from "@/components/ctrla/HeroSection";
 import ToolkitSection from "@/components/ctrla/ToolkitSection";
 import { NavigationDock } from "@/components/NavDoc";
+import Footer from "@/components/Footer";
 
 export default function Page() {
   return (
@@ -32,7 +33,7 @@ export default function Page() {
         And if you leave without licking your fingers, you did it wrong.`}
       />
       <BookACall />
-      <CreativeFriction/>
+      <CreativeFriction />
       <section
         className="h-screen"
         style={{
@@ -41,6 +42,8 @@ export default function Page() {
           backgroundPosition: "center",
         }}
       ></section>
+
+      <Footer />
 
       <NavigationDock />
     </main>

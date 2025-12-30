@@ -21,9 +21,17 @@ export default function ChatWidget() {
     if (pathname === "/") {
       setIsVisible(false);
       const onLoaded = () => setIsVisible(true);
+      const onLoading = () => setIsVisible(false);
+
       window.addEventListener("rov-home-loaded", onLoaded);
-      // Check if already loaded? No, event-based is safer given page.tsx logic
-      return () => window.removeEventListener("rov-home-loaded", onLoaded);
+      window.addEventListener("rov-site-loaded", onLoaded);
+      window.addEventListener("rov-site-loading", onLoading);
+
+      return () => {
+        window.removeEventListener("rov-home-loaded", onLoaded);
+        window.removeEventListener("rov-site-loaded", onLoaded);
+        window.removeEventListener("rov-site-loading", onLoading);
+      };
     } else {
       setIsVisible(true);
     }

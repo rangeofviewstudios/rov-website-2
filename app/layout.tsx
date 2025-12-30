@@ -47,7 +47,6 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         {children}
-        <Footer />
         {/* Floating chatbot */}
         <ChatWidget />
       </body>

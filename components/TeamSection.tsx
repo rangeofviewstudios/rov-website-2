@@ -179,7 +179,6 @@ const TeamSection: React.FC = () => {
     const [expandedMemberId, setExpandedMemberId] = useState<number | null>(null);
 
     const handleMarqueeMemberClick = (member: TeamMember) => {
-        setActiveCategory(member.category);
         setExpandedMemberId(member.id);
     };
 
@@ -233,7 +232,7 @@ const TeamSection: React.FC = () => {
         );
     }, []);
 
-    const filteredMembers = teamMembers.filter(m => m.category === activeCategory);
+    const filteredMembers = activeCategory === "All" ? teamMembers : teamMembers.filter(m => m.category === activeCategory);
 
     // Fixed CategorySection definition to accept props correctly
     const CategorySection = ({ category, members }: { category: Category, members: TeamMember[] }) => {
@@ -343,44 +342,41 @@ const TeamSection: React.FC = () => {
             }}
         >
             {/* Top Left Gradient Blob */}
+            {/* Top Left Gradient Blob */}
             <div
-                className="absolute top-0 left-0 w-[800px] h-[800px] rounded-full pointer-events-none z-0"
+                className="absolute top-0 left-0 rounded-full pointer-events-none z-0 blob-gradient"
                 style={{
-                    background: 'rgba(96, 62, 37, 0.60)',
-                    filter: 'blur(200px)',
                     transform: 'translate(-30%, -30%)'
                 }}
             />
             {/* Bottom Right Gradient Blob */}
             <div
-                className="absolute bottom-0 right-0 w-[800px] h-[800px] rounded-full pointer-events-none z-0"
+                className="absolute bottom-0 right-0 rounded-full pointer-events-none z-0 blob-gradient"
                 style={{
-                    background: 'rgba(96, 62, 37, 0.60)',
-                    filter: 'blur(200px)',
                     transform: 'translate(30%, 30%)'
                 }}
             />
-            <div className="z-50 mb-12 flex items-center gap-6 justify-end w-full px-8">
+            <div className="z-50 mb-8 md:mb-12 flex flex-wrap items-center gap-2 md:gap-6 justify-center md:justify-end w-full px-2 md:px-8">
                 <button
                     onClick={() => { setActiveCategory("All"); setExpandedMemberId(null); }}
-                    className={`text-lg md:text-xl font-normal transition-all duration-300 ${activeCategory === "All" ? "text-white" : "text-white/50 hover:text-white/80"}`}
+                    className={`text-sm md:text-xl font-normal transition-all duration-300 ${activeCategory === "All" ? "text-white" : "text-white/50 hover:text-white/80"}`}
                     style={{ fontFamily: 'Roboto, sans-serif' }}
                 > ALL </button>
-                <span className="text-white/30">|</span>
+                <span className="text-white/30 text-xs md:text-base">|</span>
                 {categories.map((cat, index) => (
                     <React.Fragment key={cat}>
                         <button
                             onClick={() => { setActiveCategory(cat); setExpandedMemberId(null); }}
-                            className={`text-lg md:text-xl font-normal transition-all duration-300 ${activeCategory === cat ? "text-white" : "text-white/50 hover:text-white/80"}`}
+                            className={`text-sm md:text-xl font-normal transition-all duration-300 ${activeCategory === cat ? "text-white" : "text-white/50 hover:text-white/80"}`}
                             style={{ fontFamily: 'Roboto, sans-serif' }}
                         > {cat.toUpperCase()} </button>
-                        {index < categories.length - 1 && <span className="text-white/30">|</span>}
+                        {index < categories.length - 1 && <span className="text-white/30 text-xs md:text-base">|</span>}
                     </React.Fragment>
                 ))}
             </div>
 
             <div className="w-full flex-1 flex items-center justify-center">
-                {activeCategory === "All" ? (
+                {activeCategory === "All" && !expandedMemberId ? (
                     <motion.div key="marquee" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="w-full">
                         <div className="marquee-row">
                             <div className="marquee-track scroll-left">
@@ -443,6 +439,21 @@ const TeamSection: React.FC = () => {
                 @keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
                 @keyframes scrollRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
                 @media (max-width: 768px) { .image-card { width: 240px !important; height: 135px !important; } .category-button { height: 135px; padding: 20px 10px; } }
+
+                .blob-gradient {
+                    width: 400px;
+                    height: 400px;
+                    background: rgba(96, 62, 37, 0.30);
+                    filter: blur(60px);
+                }
+                @media (min-width: 768px) {
+                    .blob-gradient {
+                        width: 600px;
+                        height: 600px;
+                        background: rgba(96, 62, 37, 0.45);
+                        filter: blur(150px);
+                    }
+                }
             `}</style>
         </section>
     );
