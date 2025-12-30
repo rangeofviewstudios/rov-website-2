@@ -30,175 +30,66 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
   onMouseLeave,
   link = "#",
 }) => {
-  const isAnyExpanded = expandedCard !== null;
-  const isCollapsed = isAnyExpanded && !isExpanded;
-
   return (
-    <div
-      className={`relative group ${isExpanded ? "expanded-card" : isCollapsed ? "collapsed-card" : "normal-card"
-        }`}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      {!isExpanded && (
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{ borderRadius: '24px' }}>
-          <StarBorder
-            as="div"
-            color="#d4af37"
-            speed="4s"
-            thickness={2}
-            className="w-full h-full"
+    <Link href={link}>
+      <div className="relative group cursor-pointer">
+        {/* Main Card */}
+        <div
+          className="flex flex-col items-center justify-center gap-2.5 transition-all duration-300 hover:shadow-lg"
+          style={{
+            borderRadius: '28px',
+            border: '1px solid #D0BEA5',
+            background: '#110C09',
+            boxShadow: '0 4px 4px 0 rgba(0, 0, 0, 0.25)',
+            padding: '60px 80px',
+            minHeight: '500px'
+          }}
+        >
+          {/* Folder Icon with overlaid button */}
+          <div className="relative mb-12 transform scale-150">
+            <svg width="280" height="200" viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="folderGradient" x1="140" y1="12" x2="140" y2="188" gradientUnits="userSpaceOnUse">
+                  <stop offset="-9.53%" stopColor="#3B2114" />
+                  <stop offset="92.5%" stopColor="#7F5230" />
+                </linearGradient>
+              </defs>
+              {/* Folder back tab - Gradient Fill */}
+              <path d="M20 40 L20 20 C20 15 23 12 28 12 L100 12 L120 32 L252 32 C257 32 260 35 260 40 L260 180 C260 185 257 188 252 188 L28 188 C23 188 20 185 20 180 Z" fill="url(#folderGradient)" />
+              {/* Folder main body - Solid Fill #7F5230 */}
+              <path d="M20 60 L20 180 C20 185 23 188 28 188 L252 188 C257 188 260 185 260 180 L260 70 C260 65 257 62 252 62 L120 62 L100 42 L28 42 C23 42 20 45 20 50 Z" fill="#7F5230" />
+            </svg>
+
+            {/* View More Button - Overlaid on folder */}
+            <div className="absolute top-[60%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
+              <button
+                className="px-8 py-2.5 rounded-full text-white/90 text-base font-normal transition-all duration-300 whitespace-nowrap hover:bg-white/10 hover:border-white/50"
+                style={{
+                  fontFamily: 'Roboto, sans-serif',
+                  background: 'rgba(255, 244, 227, 0.10)',
+                  backdropFilter: 'blur(10px)',
+                  border: '1px solid rgba(255, 255, 255, 0.3)',
+                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+                  borderRadius: '30px'
+                }}
+              >
+                View More
+              </button>
+            </div>
+          </div>
+
+          {/* Service Title - Inside the card */}
+          <h3
+            className="text-white/90 text-2xl md:text-3xl text-center font-normal"
+            style={{ fontFamily: 'Roboto, sans-serif' }}
           >
-            <div className="w-full h-full" />
-          </StarBorder>
-        </div>
-      )}
-
-      {/* Glass container */}
-      <div
-        className={`relative bg-black/50 backdrop-blur-md border-2 rounded-3xl overflow-hidden h-full ${isExpanded ? "p-6 md:p-8" : "p-4 md:p-6"
-          } cursor-pointer transition-all duration-300 ${isExpanded
-            ? "border-[#d4af37] shadow-[0_0_30px_rgba(212,175,55,0.3)]"
-            : "border-white/10"
-          }`}
-      >
-        {/* Shimmer effect on hover */}
-        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity duration-300">
-          <div className="shimmer-effect"></div>
+            {title}
+          </h3>
         </div>
 
-        {isExpanded ? (
-          /* Expanded content */
-          <div className="relative z-10 flex flex-col md:flex-row gap-6 h-full opacity-0 animate-fadeIn">
-            {/* Left side - Text content */}
-            <div className="flex-1 flex flex-col justify-between">
-              <div>
-                <h3
-                  className="text-white/90 text-2xl md:text-3xl lg:text-5xl font-medium uppercase tracking-wider mb-4"
-                  style={{ fontFamily: "Futura, sans-serif" }}
-                >
-                  {title}
-                </h3>
-                <p className="text-white/70 text-base md:text-lg mb-4">
-                  {description}
-                </p>
-                <p className="text-white/50 text-sm md:text-base uppercase tracking-wide">
-                  Projects starting $1000
-                </p>
-              </div>
 
-              <Link href={link}>
-                <button className="bg-white/90 text-black px-4 py-2 md:px-6 md:py-3 text-sm md:text-base rounded-full font-semibold hover:bg-white transition-colors duration-300 w-fit">
-                  Learn More
-                </button>
-              </Link>
-            </div>
-
-            {/* Right side - Image/Icon placeholder */}
-            <div className="w-full md:w-96 h-full min-h-[250px] bg-white/5 backdrop-blur-sm rounded-2xl border border-white/10 flex items-center justify-center">
-              <div className="text-white/30">{icon}</div>
-            </div>
-          </div>
-        ) : (
-          /* Collapsed content - matching expanded style */
-          <div className="relative z-10 flex flex-col items-center justify-center h-full gap-4">
-            {/* Icon */}
-            <div className="text-white/80">
-              {icon}
-            </div>
-
-            {/* Service title */}
-            <h3
-              className="text-white/90 font-medium text-center uppercase tracking-wider text-base md:text-lg"
-              style={{ fontFamily: "Futura, sans-serif" }}
-            >
-              {title}
-            </h3>
-
-            {/* Pricing text */}
-            <p
-              className="text-white/50 text-xs md:text-sm uppercase tracking-wide"
-              style={{ fontFamily: "Futura, sans-serif" }}
-            >
-              Projects starting from
-            </p>
-          </div>
-        )}
       </div>
-
-      {/* Custom CSS */}
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        .animate-fadeIn {
-          animation: fadeIn 1s ease-out forwards;
-        }
-
-        @keyframes shimmer {
-          0% {
-            transform: translateX(-150%) rotate(15deg);
-          }
-          100% {
-            transform: translateX(250%) rotate(15deg);
-          }
-        }
-
-        .shimmer-effect {
-          position: absolute;
-          top: -50%;
-          left: -50%;
-          width: 60%;
-          height: 200%;
-          background: linear-gradient(
-            90deg,
-            rgba(255, 255, 255, 0) 0%,
-            rgba(255, 255, 255, 0.25) 50%,
-            rgba(255, 255, 255, 0) 100%
-          );
-          filter: blur(10px);
-          animation: shimmer 2.5s ease-in-out infinite;
-        }
-
-        /* 3D Flip Animation Styles */
-        .flip-container {
-          perspective: 1000px;
-        }
-
-        .flip-card {
-          position: relative;
-          transition: transform 0.8s;
-          transform-style: preserve-3d;
-        }
-
-        .group-folder:hover .flip-card {
-          transform: rotateX(180deg);
-        }
-
-        .flip-card-front,
-        .flip-card-back {
-          position: absolute;
-          width: 100%;
-          height: 100%;
-          backface-visibility: hidden;
-          -webkit-backface-visibility: hidden;
-          top: 0;
-          left: 0;
-        }
-
-        .flip-card-back {
-          transform: rotateX(180deg);
-        }
-      `}</style>
-    </div>
+    </Link>
   );
 };
 
@@ -250,46 +141,29 @@ export default function Services() {
   ];
 
   return (
-    <section className="min-h-screen bg-black py-20 px-6 relative flex items-center">
-      {/* Decorative stars */}
-      <img
-        src="/star.svg"
-        alt="Star"
-        className="hidden md:block absolute top-16 right-5 md:right-20 w-16 h-16 md:w-32 md:h-32 opacity-90 z-50 pointer-events-none"
+    <section className="min-h-screen bg-black py-20 w-full px-6 sm:px-12 md:px-16 relative flex flex-col justify-center">
+      {/* Top Left Gradient Blob */}
+      <div
+        className="absolute top-0 left-0 w-[800px] h-[800px] rounded-full pointer-events-none z-0"
         style={{
-          animation: "float 6s ease-in-out infinite",
+          background: 'rgba(96, 62, 37, 0.60)',
+          filter: 'blur(200px)',
+          transform: 'translate(-30%, -30%)'
+        }}
+      />
+      {/* Bottom Right Gradient Blob */}
+      <div
+        className="absolute bottom-0 right-0 w-[800px] h-[800px] rounded-full pointer-events-none z-0"
+        style={{
+          background: 'rgba(96, 62, 37, 0.60)',
+          filter: 'blur(200px)',
+          transform: 'translate(30%, 30%)'
         }}
       />
 
-      <img
-        src="/star2.svg"
-        alt="Star"
-        className={`hidden md:block absolute top-[40%] left-1/2 -translate-x-1/2 w-16 h-16 md:w-28 md:h-28 z-50 pointer-events-none transition-opacity duration-500 ${expandedCard ? "opacity-0" : "opacity-85"
-          }`}
-        style={{
-          animation: "float 7s ease-in-out infinite",
-        }}
-      />
+      {/* Decorative stars - REMOVED */}
 
-      <img
-        src="/ques.svg"
-        alt="Question"
-        className="absolute bottom-28 left-5 md:left-16 w-16 h-16 md:w-28 md:h-28 opacity-90 z-50 pointer-events-none"
-        style={{
-          animation: "float 8s ease-in-out infinite",
-        }}
-      />
-
-      <img
-        src="/star3.svg"
-        alt="Star"
-        className="absolute bottom-10 md:bottom-20 right-5 md:right-16 w-16 h-16 md:w-32 md:h-32 opacity-85 z-50 pointer-events-none"
-        style={{
-          animation: "float 6.5s ease-in-out infinite",
-        }}
-      />
-
-      <div className="max-w-7xl mx-auto relative w-full">
+      <div className="w-full relative z-10">
         <style jsx>{`
           @keyframes float {
             0%,
@@ -311,9 +185,9 @@ export default function Services() {
           @media (min-width: 768px) {
             .services-grid {
               grid-template-columns: repeat(2, 1fr);
-              grid-template-rows: repeat(2, 1fr);
-              height: 800px;
-              max-height: 85vh;
+              grid-template-rows: auto;
+              height: auto;
+              gap: 2rem;
             }
           }
 
@@ -363,10 +237,10 @@ export default function Services() {
           }
         `}</style>
 
-        <div className="text-center mb-12">
+        <div className="mb-12">
           <h2
-            className="text-4xl md:text-6xl lg:text-[10rem] text-white/90 uppercase tracking-wider mb-4"
-            style={{ fontFamily: "Sink, sans-serif" }}
+            className="text-4xl md:text-6xl lg:text-[10rem] text-white/90 uppercase tracking-wider mb-4 text-left"
+            style={{ fontFamily: "Norwige, sans-serif" }}
           >
             SERVICES
           </h2>

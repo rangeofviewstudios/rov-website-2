@@ -73,41 +73,42 @@ const TextOverlay = styled.div<{ $isVisible: boolean }>`
   padding: 0 1rem;
 
   @media (min-width: 768px) {
-    gap: 10rem;
+    gap: 15rem;
     padding: 0 5%;
   }
 `;
 
 const CreativeText = styled.div`
-  color: white;
-  font-family: 'sink', sans-serif;
+  color: #FFF4E3;
+  font-family: 'Norwige Light', sans-serif;
   font-size: 2.5rem;
-  font-weight: 700;
-  letter-spacing: 0.1em;
+  font-weight: 300;
+  font-style: normal;
+  letter-spacing: 0.02em;
+  line-height: 150%;
   text-align: right;
   flex: 1;
   max-width: 50%;
   
   @media (min-width: 768px) {
-    font-size: 7rem;
+    font-size: 100px;
   }
 `;
 
 const ChangingWord = styled.div`
-  color: white;
-  font-family: 'Norwige Light', sans-serif;
-  font-size: 2.2rem;
-  font-weight: 300;
-  letter-spacing: 0.05em;
+  color: #FFF4E3;
+  font-family: 'Norwige', sans-serif;
+  font-size: 2.5rem;
+  font-weight: 800;
+  font-style: italic;
+  letter-spacing: -2.2px;
+  line-height: 150%;
   text-align: left;
   flex: 1;
   max-width: 50%;
   
   @media (min-width: 768px) {
-    font-size: 6rem;
-  }
-  @media (min-width: 768px) {
-    font-size: 6rem;
+    font-size: 100px;
   }
 `;
 

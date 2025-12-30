@@ -170,7 +170,7 @@ const Carousel: React.FC = () => {
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
-        overflow: "hidden",
+
         width: "100%",
         height: "400px",
         position: "relative",
@@ -179,6 +179,38 @@ const Carousel: React.FC = () => {
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
+      {/* Top Left Gradient Blob */}
+      <div
+        style={{
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '800px',
+          height: '800px',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 0,
+          background: 'rgba(96, 62, 37, 0.60)',
+          filter: 'blur(200px)',
+          transform: 'translate(-30%, -30%)'
+        }}
+      />
+      {/* Bottom Right Gradient Blob */}
+      <div
+        style={{
+          position: 'absolute',
+          bottom: 0,
+          right: 0,
+          width: '800px',
+          height: '800px',
+          borderRadius: '50%',
+          pointerEvents: 'none',
+          zIndex: 0,
+          background: 'rgba(96, 62, 37, 0.60)',
+          filter: 'blur(200px)',
+          transform: 'translate(30%, 30%)'
+        }}
+      />
       <div
         ref={carouselRef}
         style={{

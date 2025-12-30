@@ -188,7 +188,7 @@ const TeamSection: React.FC = () => {
 
         return (
             <motion.div
-                className="image-card md:w-[450px] md:h-[253px] w-[240px] h-[135px] rounded-[20px] overflow-hidden shrink-0 relative cursor-pointer"
+                className="image-card md:w-[450px] md:h-[253px] w-[240px] h-[135px] rounded-[10px] overflow-hidden shrink-0 relative cursor-pointer"
                 onClick={onClick}
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
@@ -218,11 +218,11 @@ const TeamSection: React.FC = () => {
                                 alignItems: 'center', justifyContent: 'center', gap: '10px', zIndex: 10
                             }}
                         >
-                            <h3 className="font-sink text-[clamp(2.5rem,5vw,3.5rem)] font-black text-white uppercase tracking-widest m-0">
+                            <h3 className="text-[clamp(2.5rem,5vw,3.5rem)] font-black text-white uppercase tracking-widest m-0" style={{ fontFamily: 'Norwige, sans-serif' }}>
                                 {name}
                             </h3>
                             {role && (
-                                <p className="font-norwige text-[clamp(0.8rem,1.5vw,1rem)] font-normal text-white/90 uppercase tracking-widest m-0">
+                                <p className="text-[clamp(0.8rem,1.5vw,1rem)] font-normal text-white/90 uppercase tracking-widest m-0" style={{ fontFamily: 'Roboto, sans-serif' }}>
                                     {role}
                                 </p>
                             )}
@@ -257,9 +257,9 @@ const TeamSection: React.FC = () => {
                             className="w-full"
                         >
                             <div className="relative rounded-3xl overflow-hidden bg-gradient-to-br from-white/10 to-white/5 p-8 border border-white/20"
-                                 style={{ boxShadow: `0 25px 50px -12px rgba(${expandedMember.shadowColor || '101, 67, 33'}, 0.5)` }}>
-                                
-                                <button 
+                                style={{ boxShadow: `0 25px 50px -12px rgba(${expandedMember.shadowColor || '101, 67, 33'}, 0.5)` }}>
+
+                                <button
                                     onClick={() => setExpandedMemberId(null)}
                                     className="absolute top-6 right-6 z-20 text-white/60 hover:text-white transition-colors"
                                 >
@@ -335,26 +335,47 @@ const TeamSection: React.FC = () => {
         <section
             style={{
                 borderRadius: "20px",
-                background: `radial-gradient(ellipse 800px 600px at 50% 120%, rgba(218, 165, 32, 0.4) 0%, rgba(184, 134, 11, 0.3) 30%, transparent 70%), rgba(255, 255, 255, 0.05)`,
+                background: 'rgba(255, 255, 255, 0.05)',
                 backdropFilter: "blur(20px)",
                 border: "1px solid rgba(255, 255, 255, 0.1)",
                 minHeight: "100vh", padding: "40px 0", position: "relative",
-                overflow: "hidden", display: "flex", flexDirection: "column", alignItems: "center",
+                display: "flex", flexDirection: "column", alignItems: "center",
             }}
         >
-            <div className="z-50 mb-12 flex gap-4 bg-white/10 backdrop-blur-md p-2 rounded-full border border-white/20 relative">
+            {/* Top Left Gradient Blob */}
+            <div
+                className="absolute top-0 left-0 w-[800px] h-[800px] rounded-full pointer-events-none z-0"
+                style={{
+                    background: 'rgba(96, 62, 37, 0.60)',
+                    filter: 'blur(200px)',
+                    transform: 'translate(-30%, -30%)'
+                }}
+            />
+            {/* Bottom Right Gradient Blob */}
+            <div
+                className="absolute bottom-0 right-0 w-[800px] h-[800px] rounded-full pointer-events-none z-0"
+                style={{
+                    background: 'rgba(96, 62, 37, 0.60)',
+                    filter: 'blur(200px)',
+                    transform: 'translate(30%, 30%)'
+                }}
+            />
+            <div className="z-50 mb-12 flex items-center gap-6 justify-end w-full px-8">
                 <button
                     onClick={() => { setActiveCategory("All"); setExpandedMemberId(null); }}
-                    className={`px-3 py-1 md:px-6 md:py-2 rounded-full text-xs md:text-lg font-bold transition-all duration-300 ${activeCategory === "All" ? "bg-white text-black shadow-lg" : "text-white hover:bg-white/10"}`}
-                    style={{ fontFamily: 'Norwige, sans-serif' }}
+                    className={`text-lg md:text-xl font-normal transition-all duration-300 ${activeCategory === "All" ? "text-white" : "text-white/50 hover:text-white/80"}`}
+                    style={{ fontFamily: 'Roboto, sans-serif' }}
                 > ALL </button>
-                {categories.map((cat) => (
-                    <button
-                        key={cat}
-                        onClick={() => { setActiveCategory(cat); setExpandedMemberId(null); }}
-                        className={`px-3 py-1 md:px-6 md:py-2 rounded-full text-xs md:text-lg font-bold transition-all duration-300 ${activeCategory === cat ? "bg-white text-black shadow-lg" : "text-white hover:bg-white/10"}`}
-                        style={{ fontFamily: 'Norwige, sans-serif' }}
-                    > {cat.toUpperCase()} </button>
+                <span className="text-white/30">|</span>
+                {categories.map((cat, index) => (
+                    <React.Fragment key={cat}>
+                        <button
+                            onClick={() => { setActiveCategory(cat); setExpandedMemberId(null); }}
+                            className={`text-lg md:text-xl font-normal transition-all duration-300 ${activeCategory === cat ? "text-white" : "text-white/50 hover:text-white/80"}`}
+                            style={{ fontFamily: 'Roboto, sans-serif' }}
+                        > {cat.toUpperCase()} </button>
+                        {index < categories.length - 1 && <span className="text-white/30">|</span>}
+                    </React.Fragment>
                 ))}
             </div>
 
@@ -417,8 +438,8 @@ const TeamSection: React.FC = () => {
                 .scroll-left { animation: scrollLeft 60s linear infinite; }
                 .scroll-right { animation: scrollRight 60s linear infinite; }
                 .text-block { padding: 0 40px; }
-                h2 { font-family: 'sink', sans-serif; font-size: clamp(2rem, 5vw, 4.5rem); font-weight: 900; color: #F7F2E4; letter-spacing: 0.05em; white-space: nowrap; }
-                .category-button { writing-mode: vertical-rl; text-orientation: mixed; background: white; color: #3E2723; padding: 40px 20px; border-radius: 20px; border: none; font-size: clamp(1rem, 2.5vw, 1.8rem); font-weight: 900; font-family: 'sink', sans-serif; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); white-space: nowrap; height: 253px; display: flex; align-items: center; justify-content: center; letter-spacing: 0.1em; }
+                h2 { font-family: 'Roboto', sans-serif; font-size: clamp(2rem, 5vw, 4.5rem); font-weight: 400; color: #F7F2E4; letter-spacing: 0.05em; white-space: nowrap; }
+                .category-button { writing-mode: vertical-rl; text-orientation: mixed; background: #3B2114; color: #FFF4E3; padding: 40px 35px; border-radius: 10px; border: none; font-size: clamp(1rem, 2.5vw, 1.8rem); font-weight: 400; font-family: 'Roboto', sans-serif; transition: all 0.3s ease; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2); white-space: nowrap; height: 253px; display: flex; align-items: center; justify-content: center; letter-spacing: 0.1em; }
                 @keyframes scrollLeft { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
                 @keyframes scrollRight { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
                 @media (max-width: 768px) { .image-card { width: 240px !important; height: 135px !important; } .category-button { height: 135px; padding: 20px 10px; } }
