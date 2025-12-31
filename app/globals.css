@@ -220,13 +220,15 @@ html {
 }
 
 body {
-  background-color: #110808; /* This overrides the @apply bg-background */
+  background-color: #110808;
+  /* This overrides the @apply bg-background */
   overflow-x: hidden;
   scroll-behavior: smooth;
 }
 
 /* --- KEYFRAMES & ANIMATIONS --- */
 @keyframes float {
+
   0%,
   100% {
     transform: translateY(0);
@@ -278,6 +280,22 @@ body {
   }
 }
 
+@keyframes shimmer {
+  0% {
+    background-position: -200% 0;
+  }
+
+  100% {
+    background-position: 200% 0;
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s infinite;
+  background-size: 200% 100%;
+}
+
+
 /* --- COMPONENT STYLES --- */
 /* React-H5-Audio-Player */
 .rhap_container {
@@ -307,4 +325,3 @@ body {
 input[type="range"]::-webkit-slider-thumb {
   background: #302218;
 }
-
