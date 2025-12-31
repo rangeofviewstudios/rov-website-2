@@ -84,16 +84,16 @@ const Footer = () => {
             style={{ fontFamily: 'Roboto, sans-serif' }}
           >
             <li>
-              <a href="/sound" className="hover:text-gray-400 transition-colors duration-300">Sound</a>
+              <a href="/#services" className="hover:text-gray-400 transition-colors duration-300">Sound</a>
             </li>
             <li>
-              <a href="/web" className="hover:text-gray-400 transition-colors duration-300">Web Optimization</a>
+              <a href="/#services" className="hover:text-gray-400 transition-colors duration-300">Web Optimization</a>
             </li>
             <li>
-              <a href="/aeriel" className="hover:text-gray-400 transition-colors duration-300">Video Production</a>
+              <a href="/#services" className="hover:text-gray-400 transition-colors duration-300">Video Production</a>
             </li>
             <li>
-              <a href="/ai-automation" className="hover:text-gray-400 transition-colors duration-300">AI Integration</a>
+              <a href="/#services" className="hover:text-gray-400 transition-colors duration-300">AI Integration</a>
             </li>
           </ul>
         </div>

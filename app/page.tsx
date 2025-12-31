@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { createGlobalStyle } from "styled-components";
+import dynamic from "next/dynamic";
 import Loading from "@/components/Loading";
 import HeroWithAnimation from "@/components/HeroWithAnimation";
 import Services from "@/components/Services";
@@ -10,13 +11,22 @@ import MusicPlayer from "@/components/MusicPlayer";
 import Footer from "@/components/Footer";
 import CustomCursor from "@/components/CustomCursor";
 import Gallery from "@/components/Gallery";
-import DigiMag from "@/components/DigiMag";
 import TeamSection from "@/components/TeamSection";
-import Carousel from "@/components/Corousel";
 import Card from "@/components/Card";
 import DesignBreak from "@/components/DesignBreak";
 import { NavigationDock } from "@/components/NavDoc";
 import TestHero from "@/components/TestHero";
+
+// Lazy load heavy components to reduce initial memory usage
+const DigiMag = dynamic(() => import("@/components/DigiMag"), {
+  loading: () => <div className="min-h-[800px]" />,
+  ssr: false
+});
+
+const Carousel = dynamic(() => import("@/components/Corousel"), {
+  loading: () => <div className="min-h-[600px]" />,
+  ssr: false
+});
 
 // Global Styles for Custom Font
 const GlobalStyle = createGlobalStyle`
