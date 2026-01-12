@@ -5,6 +5,154 @@ import { User, Video, Headphones, Cpu, ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import StarBorder from "./StarBorder";
+import Image from "next/image";
+
+const darkenColor = (hex: string, percent: number): string => {
+  let color = hex.startsWith('#') ? hex.slice(1) : hex;
+  if (color.length === 3) {
+    color = color
+      .split('')
+      .map(c => c + c)
+      .join('');
+  }
+  const num = parseInt(color, 16);
+  let r = (num >> 16) & 0xff;
+  let g = (num >> 8) & 0xff;
+  let b = num & 0xff;
+  r = Math.max(0, Math.min(255, Math.floor(r * (1 - percent))));
+  g = Math.max(0, Math.min(255, Math.floor(g * (1 - percent))));
+  b = Math.max(0, Math.min(255, Math.floor(b * (1 - percent))));
+  return '#' + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1).toUpperCase();
+};
+
+const InteractiveFolderIcon: React.FC = () => {
+  const color = '#7F5230'; // Main folder color
+  const maxItems = 3;
+  const [open, setOpen] = useState(false);
+  const [paperOffsets, setPaperOffsets] = useState<{ x: number; y: number }[]>(
+    Array.from({ length: maxItems }, () => ({ x: 0, y: 0 }))
+  );
+
+  const folderBackColor = '#3B2114'; // Darker back color
+
+  const handleMouseEnter = () => {
+    setOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setOpen(false);
+    setPaperOffsets(Array.from({ length: maxItems }, () => ({ x: 0, y: 0 })));
+  };
+
+  const handlePaperMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+    if (!open) return;
+    const rect = e.currentTarget.getBoundingClientRect();
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const offsetX = (e.clientX - centerX) * 0.15;
+    const offsetY = (e.clientY - centerY) * 0.15;
+    setPaperOffsets(prev => {
+      const newOffsets = [...prev];
+      newOffsets[index] = { x: offsetX, y: offsetY };
+      return newOffsets;
+    });
+  };
+
+  const handlePaperMouseLeave = (index: number) => {
+    setPaperOffsets(prev => {
+      const newOffsets = [...prev];
+      newOffsets[index] = { x: 0, y: 0 };
+      return newOffsets;
+    });
+  };
+
+  const getOpenTransform = (index: number) => {
+    if (index === 0) return 'translate(-120%, -70%) rotate(-15deg)';
+    if (index === 1) return 'translate(10%, -70%) rotate(15deg)';
+    if (index === 2) return 'translate(-50%, -100%) rotate(5deg)';
+    return '';
+  };
+
+  const images = ['/rov_album_1.webp', '/rov_album_2.webp', '/rov_album_3.webp'];
+
+  return (
+    <div className="relative mb-12" style={{ transform: 'scale(2.5)' }}>
+      <div
+        className="group relative transition-all duration-200 ease-in cursor-pointer"
+        style={{
+          transform: open ? 'translateY(-8px)' : undefined
+        }}
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={handleMouseLeave}
+      >
+        <div
+          className="relative w-[100px] h-[80px] rounded-tl-0 rounded-tr-[10px] rounded-br-[10px] rounded-bl-[10px]"
+          style={{ backgroundColor: folderBackColor }}
+        >
+          <span
+            className="absolute z-0 bottom-[98%] left-0 w-[30px] h-[10px] rounded-tl-[5px] rounded-tr-[5px] rounded-bl-0 rounded-br-0"
+            style={{ background: 'linear-gradient(179deg, #3B2114 -9.53%, #7F5230 92.5%)' }}
+          ></span>
+
+          {images.map((src, i) => {
+            let sizeClasses = '';
+            if (i === 0) sizeClasses = 'w-[70%] h-[60%]';
+            if (i === 1) sizeClasses = 'w-[80%] h-[65%]';
+            if (i === 2) sizeClasses = 'w-[90%] h-[70%]';
+
+            const closedTransform = 'translate(-50%, 0%)';
+            const openTransform = open
+              ? `${getOpenTransform(i)} translate(${paperOffsets[i].x}px, ${paperOffsets[i].y}px)`
+              : closedTransform;
+
+            return (
+              <div
+                key={i}
+                onMouseMove={e => handlePaperMouseMove(e, i)}
+                onMouseLeave={() => handlePaperMouseLeave(i)}
+                className={`absolute bottom-[15%] left-1/2 transition-all duration-300 ease-in-out overflow-hidden ${!open ? 'opacity-80' : 'opacity-100 hover:scale-105'
+                  } ${sizeClasses}`}
+                style={{
+                  transform: openTransform,
+                  borderRadius: '8px',
+                  backgroundColor: '#fff',
+                  zIndex: open ? 20 + i : 20 - i,
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                }}
+              >
+                <Image
+                  src={src}
+                  alt={`ROV Album ${i + 1}`}
+                  fill
+                  className="object-cover"
+                />
+              </div>
+            );
+          })}
+
+          <div
+            className={`absolute z-30 w-full h-full origin-bottom transition-all duration-300 ease-in-out ${!open ? 'group-hover:[transform:skew(15deg)_scaleY(0.6)]' : ''
+              }`}
+            style={{
+              backgroundColor: color,
+              borderRadius: '5px 10px 10px 10px',
+              ...(open && { transform: 'skew(15deg) scaleY(0.6)' })
+            }}
+          ></div>
+          <div
+            className={`absolute z-30 w-full h-full origin-bottom transition-all duration-300 ease-in-out ${!open ? 'group-hover:[transform:skew(-15deg)_scaleY(0.6)]' : ''
+              }`}
+            style={{
+              backgroundColor: color,
+              borderRadius: '5px 10px 10px 10px',
+              ...(open && { transform: 'skew(-15deg) scaleY(0.6)' })
+            }}
+          ></div>
+        </div>
+      </div>
+    </div>
+  );
+};
 
 interface ServiceCardProps {
   id: string;
@@ -44,38 +192,8 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             minHeight: '500px'
           }}
         >
-          {/* Folder Icon with overlaid button */}
-          <div className="relative mb-12 transform scale-100 md:scale-150">
-            <svg width="280" height="200" viewBox="0 0 280 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <defs>
-                <linearGradient id="folderGradient" x1="140" y1="12" x2="140" y2="188" gradientUnits="userSpaceOnUse">
-                  <stop offset="-9.53%" stopColor="#3B2114" />
-                  <stop offset="92.5%" stopColor="#7F5230" />
-                </linearGradient>
-              </defs>
-              {/* Folder back tab - Gradient Fill */}
-              <path d="M20 40 L20 20 C20 15 23 12 28 12 L100 12 L120 32 L252 32 C257 32 260 35 260 40 L260 180 C260 185 257 188 252 188 L28 188 C23 188 20 185 20 180 Z" fill="url(#folderGradient)" />
-              {/* Folder main body - Solid Fill #7F5230 */}
-              <path d="M20 60 L20 180 C20 185 23 188 28 188 L252 188 C257 188 260 185 260 180 L260 70 C260 65 257 62 252 62 L120 62 L100 42 L28 42 C23 42 20 45 20 50 Z" fill="#7F5230" />
-            </svg>
-
-            {/* View More Button - Overlaid on folder */}
-            <div className="absolute top-[75%] left-1/2 transform -translate-x-1/2 -translate-y-1/2">
-              <button
-                className="px-6 py-2 rounded-full text-white/90 text-sm font-normal transition-all duration-300 whitespace-nowrap hover:bg-white/10 hover:border-white/50"
-                style={{
-                  fontFamily: 'Roboto, sans-serif',
-                  background: 'rgba(255, 244, 227, 0.10)',
-                  backdropFilter: 'blur(10px)',
-                  border: '1px solid rgba(255, 255, 255, 0.3)',
-                  boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-                  borderRadius: '30px'
-                }}
-              >
-                View More
-              </button>
-            </div>
-          </div>
+          {/* Interactive Folder Component */}
+          <InteractiveFolderIcon />
 
           {/* Service Title - Inside the card */}
           <h3
