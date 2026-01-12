@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback, useRef } from "react";
 import { User, Video, Headphones, Cpu, ExternalLink } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
@@ -26,14 +26,12 @@ const darkenColor = (hex: string, percent: number): string => {
 };
 
 const InteractiveFolderIcon: React.FC = () => {
-  const color = '#7F5230'; // Main folder color
   const maxItems = 3;
   const [open, setOpen] = useState(false);
   const [paperOffsets, setPaperOffsets] = useState<{ x: number; y: number }[]>(
     Array.from({ length: maxItems }, () => ({ x: 0, y: 0 }))
   );
-
-  const folderBackColor = '#3B2114'; // Darker back color
+  const rafRef = useRef<number | null>(null);
 
   const handleMouseEnter = () => {
     setOpen(true);
@@ -44,19 +42,26 @@ const InteractiveFolderIcon: React.FC = () => {
     setPaperOffsets(Array.from({ length: maxItems }, () => ({ x: 0, y: 0 })));
   };
 
-  const handlePaperMouseMove = (e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
+  const handlePaperMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement, MouseEvent>, index: number) => {
     if (!open) return;
-    const rect = e.currentTarget.getBoundingClientRect();
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const offsetX = (e.clientX - centerX) * 0.15;
-    const offsetY = (e.clientY - centerY) * 0.15;
-    setPaperOffsets(prev => {
-      const newOffsets = [...prev];
-      newOffsets[index] = { x: offsetX, y: offsetY };
-      return newOffsets;
+
+    // Throttle with RAF to prevent lag
+    if (rafRef.current !== null) return;
+
+    rafRef.current = requestAnimationFrame(() => {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const offsetX = (e.clientX - centerX) * 0.15;
+      const offsetY = (e.clientY - centerY) * 0.15;
+      setPaperOffsets(prev => {
+        const newOffsets = [...prev];
+        newOffsets[index] = { x: offsetX, y: offsetY };
+        return newOffsets;
+      });
+      rafRef.current = null;
     });
-  };
+  }, [open]);
 
   const handlePaperMouseLeave = (index: number) => {
     setPaperOffsets(prev => {
@@ -76,24 +81,32 @@ const InteractiveFolderIcon: React.FC = () => {
   const images = ['/rov_album_1.webp', '/rov_album_2.webp', '/rov_album_3.webp'];
 
   return (
-    <div className="relative mb-12" style={{ transform: 'scale(2.5)' }}>
+    <div className="relative mb-20" style={{ transform: 'scale(3.5)' }}>
       <div
-        className="group relative transition-all duration-200 ease-in cursor-pointer"
-        style={{
-          transform: open ? 'translateY(-8px)' : undefined
-        }}
+        className="group relative cursor-pointer"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
       >
-        <div
-          className="relative w-[100px] h-[80px] rounded-tl-0 rounded-tr-[10px] rounded-br-[10px] rounded-bl-[10px]"
-          style={{ backgroundColor: folderBackColor }}
-        >
-          <span
-            className="absolute z-0 bottom-[98%] left-0 w-[30px] h-[10px] rounded-tl-[5px] rounded-tr-[5px] rounded-bl-0 rounded-br-0"
-            style={{ background: 'linear-gradient(179deg, #3B2114 -9.53%, #7F5230 92.5%)' }}
-          ></span>
+        <div className="relative w-[100px] h-[80px]">
+          {/* Folder Back - always visible (darker, behind) */}
+          <div
+            className="absolute inset-0"
+            style={{
+              zIndex: 5,
+              pointerEvents: 'none',
+              transform: 'translate3d(0,0,0)'
+            }}
+          >
+            <Image
+              src="/folderback.svg"
+              alt="Folder Back"
+              fill
+              className="object-contain"
+              style={{ pointerEvents: 'none' }}
+            />
+          </div>
 
+          {/* Images that pop out */}
           {images.map((src, i) => {
             let sizeClasses = '';
             if (i === 0) sizeClasses = 'w-[70%] h-[60%]';
@@ -110,14 +123,15 @@ const InteractiveFolderIcon: React.FC = () => {
                 key={i}
                 onMouseMove={e => handlePaperMouseMove(e, i)}
                 onMouseLeave={() => handlePaperMouseLeave(i)}
-                className={`absolute bottom-[15%] left-1/2 transition-all duration-300 ease-in-out overflow-hidden ${!open ? 'opacity-80' : 'opacity-100 hover:scale-105'
+                className={`absolute bottom-[15%] left-1/2 transition-all duration-300 ease-in-out overflow-hidden ${!open ? 'opacity-0' : 'opacity-100 hover:scale-105'
                   } ${sizeClasses}`}
                 style={{
-                  transform: openTransform,
+                  transform: `${openTransform} translate3d(0,0,0)`,
                   borderRadius: '8px',
                   backgroundColor: '#fff',
                   zIndex: open ? 20 + i : 20 - i,
-                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)'
+                  boxShadow: '0 4px 12px rgba(0,0,0,0.3)',
+                  willChange: open ? 'transform, opacity' : 'auto'
                 }}
               >
                 <Image
@@ -130,24 +144,45 @@ const InteractiveFolderIcon: React.FC = () => {
             );
           })}
 
+          {/* View More Button - always visible */}
           <div
-            className={`absolute z-30 w-full h-full origin-bottom transition-all duration-300 ease-in-out ${!open ? 'group-hover:[transform:skew(15deg)_scaleY(0.6)]' : ''
-              }`}
-            style={{
-              backgroundColor: color,
-              borderRadius: '5px 10px 10px 10px',
-              ...(open && { transform: 'skew(15deg) scaleY(0.6)' })
-            }}
-          ></div>
+            className="absolute left-1/2 top-[65%] -translate-x-1/2 -translate-y-1/2"
+            style={{ zIndex: 35, pointerEvents: 'none' }}
+          >
+            <button
+              className="px-2 py-0.5 text-white font-light whitespace-nowrap"
+              style={{
+                borderRadius: '30px',
+                background: 'rgba(255, 244, 227, 0.10)',
+                border: '1px solid rgba(255, 244, 227, 0.3)',
+                fontFamily: 'Roboto, sans-serif',
+                fontSize: '7px',
+                fontWeight: '300',
+                letterSpacing: '0.2px',
+                pointerEvents: 'auto'
+              }}
+            >
+              View More
+            </button>
+          </div>
+
+          {/* Folder Front - opens on hover */}
           <div
-            className={`absolute z-30 w-full h-full origin-bottom transition-all duration-300 ease-in-out ${!open ? 'group-hover:[transform:skew(-15deg)_scaleY(0.6)]' : ''
-              }`}
+            className="absolute inset-0 z-30 origin-bottom transition-all duration-300 ease-in-out"
             style={{
-              backgroundColor: color,
-              borderRadius: '5px 10px 10px 10px',
-              ...(open && { transform: 'skew(-15deg) scaleY(0.6)' })
+              transform: open ? 'rotateX(45deg) translate3d(0,0,0)' : 'rotateX(0deg) translateY(8px) translate3d(0,0,0)',
+              transformStyle: 'preserve-3d',
+              willChange: 'transform'
             }}
-          ></div>
+          >
+            <Image
+              src="/folderfront.svg"
+              alt="Folder Front"
+              fill
+              className="object-contain"
+              style={{ pointerEvents: 'none' }}
+            />
+          </div>
         </div>
       </div>
     </div>
@@ -192,12 +227,12 @@ const ServiceCard: React.FC<ServiceCardProps> = ({
             minHeight: '500px'
           }}
         >
-          {/* Interactive Folder Component */}
+          {/* Interactive Fggbolder Component */}
           <InteractiveFolderIcon />
 
           {/* Service Title - Inside the card */}
           <h3
-            className="text-2xl md:text-3xl text-center font-normal"
+            className="text-2xl md:text-3xl text-center font-normal mt-8"
             style={{ fontFamily: 'Roboto, sans-serif', color: '#FFF4E3' }}
           >
             {title}
