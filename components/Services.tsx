@@ -72,9 +72,9 @@ const InteractiveFolderIcon: React.FC = () => {
   };
 
   const getOpenTransform = (index: number) => {
-    if (index === 0) return 'translate(-120%, -70%) rotate(-15deg)';
-    if (index === 1) return 'translate(10%, -70%) rotate(15deg)';
-    if (index === 2) return 'translate(-50%, -100%) rotate(5deg)';
+    if (index === 0) return 'translate(-110%, -60%) rotate(-15deg)';
+    if (index === 1) return 'translate(15%, -60%) rotate(15deg)';
+    if (index === 2) return 'translate(-50%, -80%) rotate(5deg)';
     return '';
   };
 
@@ -109,9 +109,9 @@ const InteractiveFolderIcon: React.FC = () => {
           {/* Images that pop out */}
           {images.map((src, i) => {
             let sizeClasses = '';
-            if (i === 0) sizeClasses = 'w-[70%] h-[60%]';
-            if (i === 1) sizeClasses = 'w-[80%] h-[65%]';
-            if (i === 2) sizeClasses = 'w-[90%] h-[70%]';
+            if (i === 0) sizeClasses = 'w-[50%] h-[45%]';
+            if (i === 1) sizeClasses = 'w-[55%] h-[48%]';
+            if (i === 2) sizeClasses = 'w-[60%] h-[50%]';
 
             const closedTransform = 'translate(-50%, 0%)';
             const openTransform = open
@@ -154,7 +154,7 @@ const InteractiveFolderIcon: React.FC = () => {
               style={{
                 borderRadius: '30px',
                 background: 'rgba(255, 244, 227, 0.10)',
-                border: '1px solid rgba(255, 244, 227, 0.3)',
+                border: '0.5px solid rgba(255, 244, 227, 0.3)',
                 fontFamily: 'Roboto, sans-serif',
                 fontSize: '7px',
                 fontWeight: '300',
@@ -170,7 +170,7 @@ const InteractiveFolderIcon: React.FC = () => {
           <div
             className="absolute inset-0 z-30 origin-bottom transition-all duration-300 ease-in-out"
             style={{
-              transform: open ? 'rotateX(45deg) translate3d(0,0,0)' : 'rotateX(0deg) translateY(8px) translate3d(0,0,0)',
+              transform: open ? 'rotateX(65deg) translate3d(0,0,0)' : 'rotateX(0deg) translateY(8px) translate3d(0,0,0)',
               transformStyle: 'preserve-3d',
               willChange: 'transform'
             }}
