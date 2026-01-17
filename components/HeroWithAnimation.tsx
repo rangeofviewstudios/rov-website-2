@@ -55,21 +55,14 @@ const StickyContainer = styled.div`
   overflow: hidden;
 `;
 
-const BackgroundImage = styled.div`
+const CanvasElement = styled.canvas`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url('/restaurant-bg.jpg');
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
+  object-fit: cover;
   z-index: 0;
-
-  @media (max-width: 768px) {
-    filter: brightness(0.6);
-  }
 `;
 
 const DimOverlay = styled.div<{ $opacity: number }>`
@@ -215,8 +208,71 @@ const Heading = styled.div`
   }
 `;
 
+function imageSequence(config: {
+  urls: string[],
+  canvas: HTMLCanvasElement,
+  container?: HTMLElement,
+  scrollTrigger?: any,
+  onUpdate?: () => void
+}) {
+  let playhead = { frame: 0 };
+  let ctx = config.canvas.getContext("2d");
+  let onUpdate = config.onUpdate;
+  let images: HTMLImageElement[];
+  let canvas = config.canvas;
+
+  const updateImage = function () {
+    const img = images[Math.round(playhead.frame)];
+    if (!img || !ctx) return;
+
+    // Use window dimensions if container not provided
+    const containerWidth = config.container ? config.container.clientWidth : window.innerWidth;
+    const containerHeight = config.container ? config.container.clientHeight : window.innerHeight;
+
+    // Calculate aspect ratios
+    const containerAspect = containerWidth / containerHeight;
+    const imageAspect = img.width > 0 ? img.width / img.height : 16 / 9;
+
+    let renderWidth, renderHeight, offsetX = 0, offsetY = 0;
+
+    if (imageAspect > containerAspect) {
+      // Image is wider than container - fit to height
+      renderHeight = containerHeight;
+      renderWidth = renderHeight * imageAspect;
+      offsetX = (containerWidth - renderWidth) / 2;
+    } else {
+      // Image is taller than container - fit to width
+      renderWidth = containerWidth;
+      renderHeight = renderWidth / imageAspect;
+      offsetY = (containerHeight - renderHeight) / 2;
+    }
+
+    // Clear and draw
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, offsetX, offsetY, renderWidth, renderHeight);
+
+    if (onUpdate) onUpdate();
+  };
+
+  images = config.urls.map((url, i) => {
+    let img = new Image();
+    img.src = url;
+    i || (img.onload = updateImage);
+    return img;
+  });
+
+  return gsap.to(playhead, {
+    frame: images.length - 1,
+    ease: "none",
+    onUpdate: updateImage,
+    scrollTrigger: config.scrollTrigger
+  });
+}
+
 const HeroWithAnimation: React.FC = () => {
   const sectionRef = useRef<HTMLDivElement>(null);
+  const stickyRef = useRef<HTMLDivElement>(null);
+  const canvasRef = useRef<HTMLCanvasElement>(null);
   const creativeRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<HTMLDivElement>(null);
 
@@ -229,14 +285,69 @@ const HeroWithAnimation: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(0);
 
+  // Resize handler for canvas
+  const [dimensions, setDimensions] = useState({
+    width: typeof window !== 'undefined' ? window.innerWidth : 0,
+    height: typeof window !== 'undefined' ? window.innerHeight : 0
+  });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setDimensions({
+        width: window.innerWidth,
+        height: window.innerHeight
+      });
+    };
+
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
   useEffect(() => {
     const section = sectionRef.current;
-    if (!section) return;
+    if (!section || !canvasRef.current || !stickyRef.current) return;
 
-    // Set initial state - no loading needed for static background
-    setIsLoading(false);
-    setLoadProgress(100);
+    // Setup Canvas
+    canvasRef.current.width = dimensions.width;
+    canvasRef.current.height = dimensions.height;
 
+    // Generate image URLs
+    const urls: string[] = [];
+    const frameCount = 651; // 0 to 651
+
+    for (let i = 0; i <= frameCount; i++) {
+      const numStr = String(i).padStart(5, '0');
+      urls.push(`/videoFrames/SpiralShotHorizontal60fpsV2_${numStr}.webp`);
+    }
+
+    // Preload Logic (Simulated for UX, GSAP loads images too)
+    let loadedCount = 0;
+    const totalFrames = urls.length;
+    urls.forEach(url => {
+      const img = new Image();
+      img.src = url;
+      img.onload = () => {
+        loadedCount++;
+        setLoadProgress(Math.round((loadedCount / totalFrames) * 100));
+        // Start showing after enough frames are loaded (e.g. 15%)
+        if (loadedCount > totalFrames * 0.15) setIsLoading(false);
+      };
+    });
+
+    // Image Sequence Animation
+    const sequence = imageSequence({
+      urls,
+      canvas: canvasRef.current,
+      container: stickyRef.current,
+      scrollTrigger: {
+        trigger: section,
+        start: 'top top',
+        end: 'bottom bottom',
+        scrub: 0.5,
+      }
+    });
+
+    // Text Animation Trigger
     ScrollTrigger.create({
       trigger: section,
       start: 'top top',
@@ -272,8 +383,9 @@ const HeroWithAnimation: React.FC = () => {
     // Cleanup
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      sequence.scrollTrigger?.kill();
     };
-  }, []);
+  }, [dimensions]);
 
   // Animate the changing word
   useEffect(() => {
@@ -302,8 +414,8 @@ const HeroWithAnimation: React.FC = () => {
         <ProgressNumber>{loadProgress}%</ProgressNumber>
       </LoadingOverlay>
 
-      <StickyContainer>
-        <BackgroundImage />
+      <StickyContainer ref={stickyRef}>
+        <CanvasElement ref={canvasRef} />
         <DimOverlay $opacity={dimOpacity} />
         <HeroOverlay $isVisible={showHero}>
           <Logo>
@@ -329,3 +441,4 @@ const HeroWithAnimation: React.FC = () => {
 };
 
 export default HeroWithAnimation;
+
