@@ -1,4 +1,4 @@
-"use client";
+"use client";  
 
 import { NavigationDock } from "@/components/NavDoc";
 import Footer from "@/components/Footer";
