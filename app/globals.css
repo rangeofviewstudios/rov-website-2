@@ -4,12 +4,12 @@
 @import "tw-animate-css";
 
 /* --- FONT DECLARATIONS --- */
-@font-face {
+/* @font-face {
   font-family: 'palmore';
   src: url('../public/font/palmore_light.ttf');
   font-weight: normal;
   font-style: normal;
-}
+} */
 
 @font-face {
   font-family: 'anton';
@@ -18,12 +18,12 @@
   font-style: normal;
 }
 
-@font-face {
+/* @font-face {
   font-family: 'impact';
   src: url('../public/font/impact.ttf');
   font-weight: normal;
   font-style: normal;
-}
+} */
 
 @font-face {
   font-family: 'futura';
@@ -32,40 +32,40 @@
   font-style: normal;
 }
 
-@font-face {
+/* @font-face {
   font-family: 'apricots';
   src: url('../public/font/Apricot-BF650c4a6357ce1.otf');
   font-weight: normal;
   font-style: normal;
-}
+} */
 
-@font-face {
+/* @font-face {
   font-family: 'pagaki';
   src: url('../public/font/pagkaki-regular.ttf');
   font-weight: normal;
   font-style: normal;
-}
+} */
 
-@font-face {
+/* @font-face {
   font-family: 'sink';
   src: url('../public/font/Sink.ttf');
   font-weight: normal;
   font-style: normal;
-}
+} */
 
-@font-face {
+/* @font-face {
   font-family: 'pluma';
   src: url('../public/font/Pluma.otf');
   font-weight: normal;
   font-style: normal;
-}
+} */
 
-@font-face {
+/* @font-face {
   font-family: 'Big Shoulders Display';
   src: url('../public/font/BigShoulders-VariableFont_opsz\,wght.ttf');
   font-weight: normal;
   font-style: normal;
-}
+} */
 
 @font-face {
   font-family: 'Boke Rough';
@@ -84,6 +84,13 @@
 @font-face {
   font-family: 'Norwige';
   src: url('../public/font/norwige-font-family-1750004186-0/Norwige-Italic-BF68175f3258945.otf');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Sedgwick Ave Display';
+  src: url('../public/font/Sedgwick_Ave_Display/SedgwickAveDisplay-Regular.ttf');
   font-weight: normal;
   font-style: normal;
 }

@@ -48,12 +48,16 @@ const InteractiveFolderIcon: React.FC = () => {
     // Throttle with RAF to prevent lag
     if (rafRef.current !== null) return;
 
+    // Capture values from the event before RAF (React events are pooled)
+    const rect = e.currentTarget.getBoundingClientRect();
+    const clientX = e.clientX;
+    const clientY = e.clientY;
+
     rafRef.current = requestAnimationFrame(() => {
-      const rect = e.currentTarget.getBoundingClientRect();
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
-      const offsetX = (e.clientX - centerX) * 0.15;
-      const offsetY = (e.clientY - centerY) * 0.15;
+      const offsetX = (clientX - centerX) * 0.15;
+      const offsetY = (clientY - centerY) * 0.15;
       setPaperOffsets(prev => {
         const newOffsets = [...prev];
         newOffsets[index] = { x: offsetX, y: offsetY };
@@ -280,7 +284,7 @@ export default function Services() {
       icon: <Video className="w-16 h-16 text-white/80" />,
       description: "Cinematic content & aerial media that captures attention and delivers your message.",
       position: "bottom-left" as const,
-      link: "/aeriel",
+      link: "/video-production",
     },
     {
       id: "ai",

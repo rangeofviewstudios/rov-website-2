@@ -55,13 +55,16 @@ const StickyContainer = styled.div`
   overflow: hidden;
 `;
 
-const Canvas = styled.canvas`
+const BackgroundImage = styled.div`
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  background-image: url('/restaurant-bg.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   z-index: 0;
 
   @media (max-width: 768px) {
@@ -213,7 +216,6 @@ const Heading = styled.div`
 `;
 
 const HeroWithAnimation: React.FC = () => {
-  const canvasRef = useRef<HTMLCanvasElement>(null);
   const sectionRef = useRef<HTMLDivElement>(null);
   const creativeRef = useRef<HTMLDivElement>(null);
   const wordRef = useRef<HTMLDivElement>(null);
@@ -228,149 +230,50 @@ const HeroWithAnimation: React.FC = () => {
   const [loadProgress, setLoadProgress] = useState(0);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
     const section = sectionRef.current;
-    if (!canvas || !section) return;
+    if (!section) return;
 
-    const context = canvas.getContext('2d');
-    if (!context) return;
+    // Set initial state - no loading needed for static background
+    setIsLoading(false);
+    setLoadProgress(100);
 
-    // Set canvas dimensions
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    ScrollTrigger.create({
+      trigger: section,
+      start: 'top top',
+      end: 'bottom bottom',
+      scrub: 0.5,
+      onUpdate: (self) => {
+        const progress = self.progress;
 
-    const totalFrames = 652;
-    // Optimization: Skip frames to reduce load time and memory usage
-    // Mobile: Every 3rd frame (~217 frames)
-    // Desktop: Every 2nd frame (~326 frames) - still high quality but much lighter
-    const isMobile = window.innerWidth < 768;
-    const stride = isMobile ? 3 : 2;
-
-    // Calculate actual frames to load based on stride
-    const currentFrame = (index: number) => {
-      return `/assets/SpiralShotHorizontalV2Frames/SpiralShotHorizontal60fpsV2_${index.toString().padStart(5, '0')}.webp`;
-    };
-
-    const images: HTMLImageElement[] = [];
-    const animation = {
-      frame: 0
-    };
-
-    let loadedCount = 0;
-    const framesToLoad: number[] = [];
-
-    // Calculate which frame indices to load
-    for (let i = 0; i < totalFrames; i += stride) {
-      framesToLoad.push(i);
-    }
-
-    const totalFramesToLoad = framesToLoad.length;
-
-    // Preload selected images
-    framesToLoad.forEach((frameIndex) => {
-      const img = new Image();
-      img.src = currentFrame(frameIndex);
-      img.onload = () => {
-        loadedCount++;
-        const progress = Math.round((loadedCount / totalFramesToLoad) * 100);
-        setLoadProgress(progress);
-
-        if (loadedCount === totalFramesToLoad) {
-          setIsLoading(false); // All images loaded
-          window.dispatchEvent(new Event("rov-site-loaded"));
-        }
-      };
-      images.push(img);
-    });
-
-    // Dispatch initial loading event
-    window.dispatchEvent(new Event("rov-site-loading"));
-
-    // Render function
-    function render() {
-      if (!context || !canvas) return;
-      context.clearRect(0, 0, canvas.width, canvas.height);
-      // Validating images[animation.frame] exists is crucial
-      if (images[animation.frame] && images[animation.frame].complete) {
-        // Draw image to fill canvas while maintaining aspect ratio
-        const img = images[animation.frame];
-        const imgAspect = img.width / img.height;
-        const canvasAspect = canvas.width / canvas.height;
-
-        let drawWidth, drawHeight, offsetX, offsetY;
-
-        if (canvasAspect > imgAspect) {
-          drawWidth = canvas.width;
-          drawHeight = canvas.width / imgAspect;
-          offsetX = 0;
-          offsetY = (canvas.height - drawHeight) / 2;
+        // Update words based on progress
+        if (progress < 0.2) {
+          setCurrentWord("Identity");
+          setDimOpacity(0);
+          setShowHero(true);
+        } else if (progress < 0.4) {
+          setCurrentWord("Systems");
+          setDimOpacity(0);
+          setShowHero(true);
+        } else if (progress < 0.6) {
+          setCurrentWord("Strategy");
+          setDimOpacity(0);
+          setShowHero(true);
         } else {
-          drawHeight = canvas.height;
-          drawWidth = canvas.height * imgAspect;
-          offsetX = (canvas.width - drawWidth) / 2;
-          offsetY = 0;
-        }
-
-        context.drawImage(img, offsetX, offsetY, drawWidth, drawHeight);
-      }
-    }
-
-    // Render the first frame immediately when all images are loaded
-    // This ensures the ring is visible when the loading overlay fades
-    if (!isLoading && images.length > 0) {
-      animation.frame = 0;
-      render();
-    }
-
-    // Only initialize GSAP after loading is complete
-    if (!isLoading) {
-      ScrollTrigger.create({
-        trigger: section,
-        start: 'top top',
-        end: 'bottom bottom',
-        scrub: 0.5, // slightly smoother scrub
-        onUpdate: (self) => {
-          const progress = self.progress;
-
-          // Map progress to the REDUCED number of frames
-          const frameIndex = Math.min(
-            Math.floor(progress * (totalFramesToLoad - 1)),
-            totalFramesToLoad - 1
-          );
-          animation.frame = frameIndex;
-          render();
-
-          // Update words based on progress
-          if (progress < 0.2) {
-            setCurrentWord("Identity");
-            setDimOpacity(0);
-            setShowHero(true);
-          } else if (progress < 0.4) {
-            setCurrentWord("Systems");
-            setDimOpacity(0);
-            setShowHero(true);
-          } else if (progress < 0.6) {
-            setCurrentWord("Strategy");
-            setDimOpacity(0);
-            setShowHero(true);
-          } else {
-            // Fade out
-            const fadeProgress = Math.min((progress - 0.6) / 0.4, 1);
-            setDimOpacity(fadeProgress);
-            if (progress > 0.95) {
-              setShowHero(false);
-            }
+          // Fade out
+          const fadeProgress = Math.min((progress - 0.6) / 0.4, 1);
+          setDimOpacity(fadeProgress);
+          if (progress > 0.95) {
+            setShowHero(false);
           }
         }
-      });
-    }
-
+      }
+    });
 
     // Cleanup
     return () => {
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
     };
-  }, [isLoading]); // Re-run effect when isLoading changes
+  }, []);
 
   // Animate the changing word
   useEffect(() => {
@@ -400,7 +303,7 @@ const HeroWithAnimation: React.FC = () => {
       </LoadingOverlay>
 
       <StickyContainer>
-        <Canvas ref={canvasRef} />
+        <BackgroundImage />
         <DimOverlay $opacity={dimOpacity} />
         <HeroOverlay $isVisible={showHero}>
           <Logo>
