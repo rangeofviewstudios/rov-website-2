@@ -2,6 +2,8 @@
 
 import { NavigationDock } from "@/components/NavDoc";
 import Footer from "@/components/Footer";
+import OurApproachSection from "@/components/Web-Dev/OurApproachSection";
+import FAQBottomSection from "@/components/Web-Dev/FAQBottomSection";
 
 export default function WebDevPage() {
     return (
@@ -144,6 +146,12 @@ export default function WebDevPage() {
                     </div>
                 </div>
             </section>
+
+            {/* Our Approach Section */}
+            <OurApproachSection />
+
+            {/* FAQ Section */}
+            <FAQBottomSection />
 
             {/* Navigation Dock */}
             <NavigationDock />

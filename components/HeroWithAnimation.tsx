@@ -315,6 +315,13 @@ const HeroWithAnimation: React.FC = () => {
       }
     }
 
+    // Render the first frame immediately when all images are loaded
+    // This ensures the ring is visible when the loading overlay fades
+    if (!isLoading && images.length > 0) {
+      animation.frame = 0;
+      render();
+    }
+
     // Only initialize GSAP after loading is complete
     if (!isLoading) {
       ScrollTrigger.create({
@@ -356,8 +363,6 @@ const HeroWithAnimation: React.FC = () => {
           }
         }
       });
-      // Initial render once loaded
-      render();
     }
 
 
