@@ -54,11 +54,12 @@ export default function OurApproachSection() {
   useEffect(() => {
     // Initialize Lenis smooth scrolling
     const lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.5,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      wheelMultiplier: 1,
+      wheelMultiplier: 1.1,
       touchMultiplier: 2,
+      lerp: 0.1,
     });
 
     function raf(time: number) {
@@ -74,6 +75,8 @@ export default function OurApproachSection() {
         transformStyle: "preserve-3d"
       });
     }
+
+    const hoverCleanups: (() => void)[] = [];
 
     // Set up scroll triggers for each card
     cardsRef.current.forEach((card, index) => {
@@ -97,144 +100,96 @@ export default function OurApproachSection() {
 
       ScrollTrigger.create({
         trigger: card,
-        start: "top center+=100",
-        end: "bottom center-=100",
-        onEnter: () => {
-          const title = card.querySelector('.step-title');
-          const texts = card.querySelectorAll('.step-text');
+        start: "top bottom",
+        end: "bottom top",
+        scrub: 1,
+        onUpdate: (self) => {
+          // Subtle lift as the card passes through the center
+          const progress = self.progress;
+          const center = Math.abs(progress - 0.5) * 2; // 1 at ends, 0 at center
+          const lift = (1 - center) * 60; // Max lift of 60 at center
 
-          // Float effect: lift the card and make it visible with new styling
           gsap.to(card, {
-            z: 100,
-            scale: 1.02,
-            boxShadow: "0 50px 100px rgba(0, 0, 0, 0.5)",
-            borderTop: "2px solid rgba(255, 255, 255, 0.14)",
-            borderBottom: "2px solid rgba(255, 255, 255, 0.14)",
-            borderLeft: "none",
-            borderRight: "none",
-            backgroundColor: "#1C1614",
-            duration: 0.6,
-            ease: "power2.out"
+            z: lift,
+            duration: 0.1,
+            overwrite: "auto"
           });
-
-          // Apply gradient to ALL titles when active
-          if (title) {
-            gsap.to(title, {
-              duration: 0.6,
-              ease: "power2.out",
-              onStart: () => {
-                (title as HTMLElement).style.background = "linear-gradient(132deg, #EA9A61 4.77%, #B16937 27.26%, #A64D2B 50.09%, #42201C 76.74%)";
-                (title as HTMLElement).style.webkitBackgroundClip = "text";
-                (title as HTMLElement).style.backgroundClip = "text";
-                (title as HTMLElement).style.webkitTextFillColor = "transparent";
-              }
-            });
-          }
-          if (texts) gsap.to(texts, { color: "#FFFFFF", duration: 0.6, ease: "power2.out" });
-        },
-        onLeave: () => {
-          const title = card.querySelector('.step-title');
-          const texts = card.querySelectorAll('.step-text');
-
-          // Return to invisible state
-          gsap.to(card, {
-            z: 0,
-            scale: 1,
-            boxShadow: "none",
-            borderTop: "none",
-            borderBottom: "none",
-            backgroundColor: "rgba(0, 0, 0, 0)",
-            duration: 0.6,
-            ease: "power2.out"
-          });
-
-          // Return all text colors to cream (remove gradient)
-          if (title) {
-            gsap.to(title, {
-              color: "#FFF4E3",
-              duration: 0.6,
-              ease: "power2.out",
-              onStart: () => {
-                (title as HTMLElement).style.background = "transparent";
-                (title as HTMLElement).style.webkitBackgroundClip = "unset";
-                (title as HTMLElement).style.backgroundClip = "unset";
-                (title as HTMLElement).style.webkitTextFillColor = "#FFF4E3";
-              }
-            });
-          }
-          if (texts) gsap.to(texts, { color: "#FFF4E3", duration: 0.6, ease: "power2.out" });
-        },
-        onEnterBack: () => {
-          const title = card.querySelector('.step-title');
-          const texts = card.querySelectorAll('.step-text');
-
-          // Float effect when scrolling back up
-          gsap.to(card, {
-            z: 100,
-            scale: 1.02,
-            boxShadow: "0 50px 100px rgba(0, 0, 0, 0.5)",
-            borderTop: "2px solid rgba(255, 255, 255, 0.14)",
-            borderBottom: "2px solid rgba(255, 255, 255, 0.14)",
-            borderLeft: "none",
-            borderRight: "none",
-            backgroundColor: "#1C1614",
-            duration: 0.6,
-            ease: "power2.out"
-          });
-
-          // Apply gradient to ALL titles when active
-          if (title) {
-            gsap.to(title, {
-              duration: 0.6,
-              ease: "power2.out",
-              onStart: () => {
-                (title as HTMLElement).style.background = "linear-gradient(132deg, #EA9A61 4.77%, #B16937 27.26%, #A64D2B 50.09%, #42201C 76.74%)";
-                (title as HTMLElement).style.webkitBackgroundClip = "text";
-                (title as HTMLElement).style.backgroundClip = "text";
-                (title as HTMLElement).style.webkitTextFillColor = "transparent";
-              }
-            });
-          }
-          if (texts) gsap.to(texts, { color: "#FFFFFF", duration: 0.6, ease: "power2.out" });
-        },
-        onLeaveBack: () => {
-          const title = card.querySelector('.step-title');
-          const texts = card.querySelectorAll('.step-text');
-
-          // Return to invisible state when scrolling back past
-          gsap.to(card, {
-            z: 0,
-            scale: 1,
-            boxShadow: "none",
-            borderTop: "none",
-            borderBottom: "none",
-            backgroundColor: "rgba(0, 0, 0, 0)",
-            duration: 0.6,
-            ease: "power2.out"
-          });
-
-          // Return all text colors to cream (remove gradient)
-          if (title) {
-            gsap.to(title, {
-              color: "#FFF4E3",
-              duration: 0.6,
-              ease: "power2.out",
-              onStart: () => {
-                (title as HTMLElement).style.background = "transparent";
-                (title as HTMLElement).style.webkitBackgroundClip = "unset";
-                (title as HTMLElement).style.backgroundClip = "unset";
-                (title as HTMLElement).style.webkitTextFillColor = "#FFF4E3";
-              }
-            });
-          }
-          if (texts) gsap.to(texts, { color: "#FFF4E3", duration: 0.6, ease: "power2.out" });
         }
+      });
+
+      // Hover effects for color change
+      const handleMouseEnter = () => {
+        const title = card.querySelector('.step-title');
+        const texts = card.querySelectorAll('.step-text');
+
+        gsap.to(card, {
+          backgroundColor: "#1C1614",
+          borderTop: "2px solid rgba(255, 255, 255, 0.14)",
+          borderBottom: "2px solid rgba(255, 255, 255, 0.14)",
+          boxShadow: "0 50px 100px rgba(0, 0, 0, 0.5)",
+          scale: 1.02,
+          duration: 0.4,
+          ease: "power2.out"
+        });
+
+        if (title) {
+          gsap.to(title, {
+            duration: 0.4,
+            ease: "power2.out",
+            onStart: () => {
+              (title as HTMLElement).style.background = "linear-gradient(132deg, #EA9A61 4.77%, #B16937 27.26%, #A64D2B 50.09%, #42201C 76.74%)";
+              (title as HTMLElement).style.webkitBackgroundClip = "text";
+              (title as HTMLElement).style.backgroundClip = "text";
+              (title as HTMLElement).style.webkitTextFillColor = "transparent";
+            }
+          });
+        }
+        if (texts) gsap.to(texts, { color: "#FFFFFF", duration: 0.4, ease: "power2.out" });
+      };
+
+      const handleMouseLeave = () => {
+        const title = card.querySelector('.step-title');
+        const texts = card.querySelectorAll('.step-text');
+
+        gsap.to(card, {
+          backgroundColor: "rgba(255, 255, 255, 0.03)",
+          borderTop: "none",
+          borderBottom: "none",
+          boxShadow: "none",
+          scale: 1,
+          duration: 0.4,
+          ease: "power2.out"
+        });
+
+        if (title) {
+          gsap.to(title, {
+            color: "#FFF4E3",
+            duration: 0.4,
+            ease: "power2.out",
+            onStart: () => {
+              (title as HTMLElement).style.background = "transparent";
+              (title as HTMLElement).style.webkitBackgroundClip = "unset";
+              (title as HTMLElement).style.backgroundClip = "unset";
+              (title as HTMLElement).style.webkitTextFillColor = "#FFF4E3";
+            }
+          });
+        }
+        if (texts) gsap.to(texts, { color: "#FFF4E3", duration: 0.4, ease: "power2.out" });
+      };
+
+      card.addEventListener('mouseenter', handleMouseEnter);
+      card.addEventListener('mouseleave', handleMouseLeave);
+
+      hoverCleanups.push(() => {
+        card.removeEventListener('mouseenter', handleMouseEnter);
+        card.removeEventListener('mouseleave', handleMouseLeave);
       });
     });
 
     return () => {
       lenis.destroy();
       ScrollTrigger.getAll().forEach(trigger => trigger.kill());
+      hoverCleanups.forEach(cleanup => cleanup());
     };
   }, []);
 
@@ -278,8 +233,8 @@ export default function OurApproachSection() {
               ref={(el) => { cardsRef.current[index] = el; }}
               className="relative rounded-3xl overflow-hidden transition-all duration-300"
               style={{
-                backgroundColor: "rgba(0, 0, 0, 0)",
-                border: "1px solid rgba(255, 244, 227, 0)",
+                backgroundColor: "rgba(255, 255, 255, 0.03)",
+                border: "1px solid rgba(255, 255, 255, 0.05)",
                 boxShadow: "none",
                 transformStyle: "preserve-3d",
                 backfaceVisibility: "hidden"

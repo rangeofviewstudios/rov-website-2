@@ -180,15 +180,35 @@ const Footer = () => {
         </div>
       </div>
 
-      {/* Atlanta Skyline Image - Positioned at bottom right, larger and extending beyond footer */}
+      {/* Skylines - Positioned at bottom right */}
       <div className="absolute -bottom-10 md:-bottom-12 right-0 w-full h-[120px] md:h-[350px] pointer-events-none" style={{ filter: 'drop-shadow(0 -10px 30px rgba(255, 255, 255, 0.1))' }}>
-        <Image
-          src="/atlskylinefooter.png"
-          alt="Atlanta Skyline"
-          fill
-          className="object-contain"
-          style={{ objectPosition: 'bottom right', transform: 'scale(1.2)' }}
-        />
+        {/* Atlanta Skyline */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-700 ease-in-out will-change-opacity transform-gpu ${isIndia ? 'opacity-0' : 'opacity-100'}`}
+        >
+          <Image
+            src="/atlskylinefooter.png"
+            alt="Atlanta Skyline"
+            fill
+            priority
+            className="object-contain"
+            style={{ objectPosition: 'bottom right', transform: 'scale(1.2)' }}
+          />
+        </div>
+
+        {/* Hyderabad Skyline - Shifted left for better visibility */}
+        <div
+          className={`absolute inset-0 transition-opacity duration-700 ease-in-out will-change-opacity transform-gpu ${isIndia ? 'opacity-100' : 'opacity-0'}`}
+        >
+          <Image
+            src="/hydskyline.PNG"
+            alt="Hyderabad Skyline"
+            fill
+            priority
+            className="object-contain"
+            style={{ objectPosition: 'bottom right', transform: 'scale(1.4) translateX(-40px)' }}
+          />
+        </div>
       </div>
     </footer>
   );
