@@ -16,6 +16,7 @@ import Card from "@/components/Card";
 import DesignBreak from "@/components/DesignBreak";
 import { NavigationDock } from "@/components/NavDoc";
 import TestHero from "@/components/TestHero";
+import ProjectStrip from "@/components/ProjectStrip";
 
 // Lazy load heavy components to reduce initial memory usage
 const DigiMag = dynamic(() => import("@/components/DigiMag"), {
@@ -133,9 +134,11 @@ export default function Home() {
           <Services />
         </section>
 
-        <ElevateSection />
+        <ProjectStrip />
 
         <DigiMag />
+
+        <ElevateSection />
 
         <TeamSection />
 

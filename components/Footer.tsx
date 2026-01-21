@@ -181,7 +181,7 @@ const Footer = () => {
       </div>
 
       {/* Skylines - Positioned at bottom right */}
-      <div className="absolute -bottom-10 md:-bottom-12 right-0 w-full h-[120px] md:h-[350px] pointer-events-none" style={{ filter: 'drop-shadow(0 -10px 30px rgba(255, 255, 255, 0.1))' }}>
+      <div className="absolute -bottom-10 md:-bottom-12 right-0 w-full h-[120px] md:h-[350px] pointer-events-none" style={{ filter: 'drop-shadow(0 -10px 50px rgba(255, 255, 255, 0.3))' }}>
         {/* Atlanta Skyline */}
         <div
           className={`absolute inset-0 transition-opacity duration-700 ease-in-out will-change-opacity transform-gpu ${isIndia ? 'opacity-0' : 'opacity-100'}`}
@@ -196,7 +196,7 @@ const Footer = () => {
           />
         </div>
 
-        {/* Hyderabad Skyline - Shifted left for better visibility */}
+        {/* Hyderabad Skyline - Enhanced visibility */}
         <div
           className={`absolute inset-0 transition-opacity duration-700 ease-in-out will-change-opacity transform-gpu ${isIndia ? 'opacity-100' : 'opacity-0'}`}
         >
@@ -206,7 +206,11 @@ const Footer = () => {
             fill
             priority
             className="object-contain"
-            style={{ objectPosition: 'bottom right', transform: 'scale(1.4) translateX(-40px)' }}
+            style={{
+              objectPosition: 'bottom right',
+              transform: 'scale(1.8) translateX(-40px)',
+              filter: 'brightness(1.25) contrast(1.15) saturate(1.1)'
+            }}
           />
         </div>
       </div>
