@@ -85,11 +85,24 @@ const InteractiveFolderIcon: React.FC = () => {
   const images = ['/rov_album_1.webp', '/rov_album_2.webp', '/rov_album_3.webp'];
 
   return (
-    <div className="relative mb-20" style={{ transform: 'scale(3.5)' }}>
+    <div className="relative mb-8 sm:mb-12 md:mb-20" style={{ transform: 'scale(1.5)', transformOrigin: 'center' }}>
+      <style jsx>{`
+        @media (min-width: 640px) {
+          .folder-container {
+            transform: scale(2.5);
+          }
+        }
+        @media (min-width: 1024px) {
+          .folder-container {
+            transform: scale(3.5);
+          }
+        }
+      `}</style>
       <div
-        className="group relative cursor-pointer"
+        className="group relative cursor-pointer folder-container"
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+        style={{ transform: 'scale(1.5)', transformOrigin: 'center' }}
       >
         <div className="relative w-[100px] h-[80px]">
           {/* Folder Back - always visible (darker, behind) */}
