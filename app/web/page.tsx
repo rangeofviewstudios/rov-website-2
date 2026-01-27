@@ -4,6 +4,8 @@ import { NavigationDock } from "@/components/NavDoc";
 import Footer from "@/components/Footer";
 import OurApproachSection from "@/components/Web-Dev/OurApproachSection";
 import FAQBottomSection from "@/components/Web-Dev/FAQBottomSection";
+import FeaturedWorksSection from "@/components/Web-Dev/FeaturedWorksSection";
+import HaveAnIdeaSection from "@/components/Web-Dev/HaveAnIdeaSection";
 
 export default function WebDevPage() {
     return (
@@ -146,6 +148,12 @@ export default function WebDevPage() {
                     </div>
                 </div>
             </section>
+
+            {/* Featured Works Section */}
+            <FeaturedWorksSection />
+
+            {/* Have an Idea Section */}
+            <HaveAnIdeaSection />
 
             {/* Our Approach Section */}
             <OurApproachSection />
