@@ -1,292 +1,200 @@
 "use client";
+
 import { NavigationDock } from "@/components/NavDoc";
 import Footer from "@/components/Footer";
-
+import OurApproachSection from "@/components/Web-Dev/OurApproachSection";
+import FAQBottomSection from "@/components/Web-Dev/FAQBottomSection";
+import ProjectStrip from "@/components/ProjectStrip";
+import { useState } from "react";
 
 export default function VideoProductionPage() {
+    const [activeCategory, setActiveCategory] = useState<string>("real-estate");
+
+    const categories = [
+        { id: "real-estate", label: "REAL ESTATE" },
+        { id: "misc", label: "MISC" },
+        { id: "creative", label: "CREATIVE PROJECTS" },
+        { id: "events", label: "EVENT PLANNING", loading: true },
+    ];
+
     return (
-        <main className="relative min-h-screen bg-black">
+        <main className="relative min-h-screen bg-black text-white">
             <NavigationDock />
 
-            {/* Hero Section with Background Image */}
-            <section
-                className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 lg:px-8"
-                style={{
-                    backgroundImage: `url('/casestudyheroimg.png')`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat"
-                }}
-            >
-                {/* Dark Overlay */}
-                <div className="absolute inset-0 bg-black/60" />
+            {/* Hero Section */}
+            <section className="relative min-h-screen flex flex-col justify-between px-6 md:px-12 lg:px-16 py-20 pt-32">
+                {/* Top Section - Headline and Tagline */}
+                <div className="flex flex-col lg:flex-row justify-between items-start lg:items-start gap-8 mb-20">
+                    {/* Left - Main Headline */}
+                    <div className="flex-1">
+                        <h1
+                            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-light leading-tight"
+                            style={{ fontFamily: 'Norwige, sans-serif', fontStyle: 'italic' }}
+                        >
+                            Turn moments into{" "}
+                            <span className="relative inline-flex items-center gap-3">
+                                <span
+                                    className="px-5 py-1 rounded-full font-medium"
+                                    style={{
+                                        background: 'linear-gradient(135deg, #8B6F47 0%, #6B5437 100%)',
+                                        fontFamily: 'Norwige, sans-serif',
+                                        fontStyle: 'normal'
+                                    }}
+                                >
+                                    powerful
+                                </span>
+                                {/* Decorative Circle */}
+                                <span
+                                    className="w-10 h-10 md:w-12 md:h-12 rounded-full border-[3px] border-white/80 inline-flex"
+                                    style={{ background: 'transparent' }}
+                                />
+                            </span>
+                            <br />
+                            visuals
+                        </h1>
+                    </div>
 
-                {/* Content */}
-                <div className="relative z-10 max-w-5xl mx-auto text-center">
-                    <h1 className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl xl:text-9xl font-bold leading-tight">
-                        <span
-                            className="block"
-                            style={{
-                                fontFamily: "Sedgwick Ave Display, sans-serif",
-                                color: "#C90000",
-                                textShadow: "4px 4px 8px rgba(0, 0, 0, 0.8)"
-                            }}
+                    {/* Right - Tagline */}
+                    <div className="lg:max-w-md">
+                        <p
+                            className="text-sm md:text-base leading-relaxed"
+                            style={{ fontFamily: 'Norwige, sans-serif', fontStyle: 'italic' }}
                         >
-                            Crafting The
-                        </span>
-                        <span
-                            className="block"
-                            style={{
-                                fontFamily: "Sedgwick Ave Display, sans-serif",
-                                color: "#FFD600",
-                                textShadow: "4px 4px 8px rgba(0, 0, 0, 0.8)"
-                            }}
-                        >
-                            Bando's
-                        </span>
-                        <span
-                            className="block"
-                            style={{
-                                fontFamily: "Sedgwick Ave Display, sans-serif",
-                                color: "#C90000",
-                                textShadow: "4px 4px 8px rgba(0, 0, 0, 0.8)"
-                            }}
-                        >
-                            Online
-                        </span>
-                        <span
-                            className="block"
-                            style={{
-                                fontFamily: "Sedgwick Ave Display, sans-serif",
-                                color: "#C90000",
-                                textShadow: "4px 4px 8px rgba(0, 0, 0, 0.8)"
-                            }}
-                        >
-                            Experience
-                        </span>
-                    </h1>
-                    {/* Arrow */}
-                    <div className="mt-8">
-                        <svg
-                            width="60"
-                            height="80"
-                            viewBox="0 0 60 80"
-                            fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            className="mx-auto"
-                        >
-                            <path
-                                d="M30 0 L30 60 M10 40 L30 60 L50 40"
-                                stroke="#FF4444"
-                                strokeWidth="4"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                            />
-                        </svg>
+                            We craft cinematic video content that brings stories to life and leaves a lasting impression.
+                        </p>
                     </div>
                 </div>
-            </section>
 
-            {/* Case Study Section */}
-            <section className="relative bg-black text-white py-16 px-6 md:px-12 lg:px-16">
-                <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8">
-                    {/* Sidebar Navigation */}
-                    <aside className="lg:sticky lg:top-24 lg:self-start w-full lg:w-48 flex-shrink-0">
-                        <nav className="bg-[#2A2A2A] rounded-2xl p-4 space-y-2">
-                            <button className="w-full text-left px-4 py-3 rounded-lg bg-[#C90000] text-white font-medium transition-all">
-                                Overview
-                            </button>
-                            <button className="w-full text-left px-4 py-3 rounded-lg hover:bg-[#3A3A3A] text-gray-300 transition-all">
-                                Research
-                            </button>
-                            <button className="w-full text-left px-4 py-3 rounded-lg hover:bg-[#3A3A3A] text-gray-300 transition-all">
-                                Design System
-                            </button>
-                            <button className="w-full text-left px-4 py-3 rounded-lg hover:bg-[#3A3A3A] text-gray-300 transition-all">
-                                Approach
-                            </button>
-                            <button className="w-full text-left px-4 py-3 rounded-lg hover:bg-[#3A3A3A] text-gray-300 transition-all">
-                                Result
-                            </button>
-                        </nav>
-                    </aside>
+                {/* Bottom Section - What We Capture */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-start">
+                    {/* Left - Categories */}
+                    <div>
+                        <h2
+                            className="text-5xl md:text-6xl lg:text-7xl font-light mb-12 leading-tight"
+                            style={{ fontFamily: 'Norwige, sans-serif', fontStyle: 'italic' }}
+                        >
+                            What We
+                            <br />
+                            Capture
+                        </h2>
 
-                    {/* Main Content */}
-                    <div className="flex-1 space-y-12">
-                        {/* Overview Section */}
-                        <div>
-                            <h2
-                                className="text-4xl md:text-5xl font-bold mb-6"
-                                style={{
-                                    fontFamily: 'Brush Script MT, cursive',
-                                    color: '#C90000'
-                                }}
-                            >
-                                Overview
-                            </h2>
-                            <p className="text-lg text-white leading-relaxed">
-                                A digital redesign project for The Bando, a bold Black history museum and fried chicken restaurant in West Atlanta, bringing their unapologetic brand energy into an online experience.
-                            </p>
-                        </div>
-
-                        {/* The Challenge Section */}
-                        <div className="border border-gray-700 rounded-3xl p-8 md:p-10 bg-black/60">
-                            <div className="flex flex-col md:flex-row gap-6 md:gap-12 items-start">
-                                <h3
-                                    className="text-4xl md:text-5xl font-bold whitespace-nowrap flex-shrink-0"
+                        {/* Category Pills - Custom Layout */}
+                        <div className="flex flex-col gap-4 max-w-lg">
+                            {/* First Row - REAL ESTATE and MISC */}
+                            <div className="flex gap-4">
+                                <button
+                                    onClick={() => setActiveCategory("real-estate")}
+                                    className={`
+                                        px-6 py-4 font-medium text-sm md:text-base
+                                        transition-all duration-300 ease-out
+                                        ${activeCategory === "real-estate"
+                                            ? 'bg-[#8B6F47] text-white opacity-100'
+                                            : 'text-gray-400'
+                                        }
+                                    `}
                                     style={{
-                                        background: 'linear-gradient(180deg, rgba(215, 108, 0, 1) 0%, rgba(149, 50, 0, 1) 100%)',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        backgroundClip: 'text'
+                                        fontFamily: 'Norwige, sans-serif',
+                                        borderRadius: '40px',
+                                        opacity: activeCategory === "real-estate" ? 1 : 0.6,
+                                        background: activeCategory === "real-estate" ? '#8B6F47' : 'rgba(59, 33, 20, 0.30)'
                                     }}
                                 >
-                                    The Challenge
-                                </h3>
-                                <p
-                                    className="text-base md:text-lg leading-relaxed"
+                                    REAL ESTATE
+                                </button>
+                                <button
+                                    onClick={() => setActiveCategory("misc")}
+                                    className={`
+                                        px-6 py-4 font-medium text-sm md:text-base
+                                        transition-all duration-300 ease-out
+                                        ${activeCategory === "misc"
+                                            ? 'bg-[#8B6F47] text-white opacity-100'
+                                            : 'text-gray-400'
+                                        }
+                                    `}
                                     style={{
-                                        background: 'linear-gradient(180deg, rgba(215, 108, 0, 1) 0%, rgba(149, 50, 0, 1) 100%)',
-                                        WebkitBackgroundClip: 'text',
-                                        WebkitTextFillColor: 'transparent',
-                                        backgroundClip: 'text'
+                                        fontFamily: 'Norwige, sans-serif',
+                                        borderRadius: '40px',
+                                        opacity: activeCategory === "misc" ? 1 : 0.6,
+                                        background: activeCategory === "misc" ? '#8B6F47' : 'rgba(59, 33, 20, 0.30)'
                                     }}
                                 >
-                                    The Bando's identity was powerful in person, but muted online. The site processed orders, but failed to capture the culture or keep people coming back.
-                                </p>
+                                    MISC
+                                </button>
                             </div>
-                        </div>
 
-                        {/* Competitor Analysis Section */}
-                        <div>
-                            <h3
-                                className="text-4xl md:text-5xl font-bold mb-4"
+                            {/* Second Row - CREATIVE PROJECTS */}
+                            <button
+                                onClick={() => setActiveCategory("creative")}
+                                className={`
+                                    px-6 py-4 font-medium text-sm md:text-base text-left
+                                    transition-all duration-300 ease-out
+                                    ${activeCategory === "creative"
+                                        ? 'bg-[#8B6F47] text-white opacity-100'
+                                        : 'text-gray-400'
+                                    }
+                                `}
                                 style={{
-                                    fontFamily: 'Brush Script MT, cursive',
-                                    color: '#C90000'
+                                    fontFamily: 'Norwige, sans-serif',
+                                    borderRadius: '40px',
+                                    opacity: activeCategory === "creative" ? 1 : 0.6,
+                                    background: activeCategory === "creative" ? '#8B6F47' : 'rgba(59, 33, 20, 0.30)'
                                 }}
                             >
-                                Competitor Analysis
-                            </h3>
-                            <p className="text-lg text-gray-300 mb-8 leading-relaxed">
-                                To define The Bando's digital direction, we studied two Atlanta brands known for loud, fast-selling experiences. But was that enough?
-                            </p>
+                                CREATIVE PROJECTS
+                            </button>
 
-                            {/* Competitor Logos */}
-                            <div className="flex flex-wrap gap-6 mb-8 justify-start">
-                                <div className="bg-white rounded-lg px-6 py-4 flex items-center justify-center min-w-[140px]">
-                                    <span className="text-black font-bold italic text-xl" style={{ fontFamily: 'Brush Script MT, cursive' }}>
-                                        Slutty Vegan
+                            {/* Third Row - EVENT PLANNING with loading icon */}
+                            <button
+                                onClick={() => setActiveCategory("events")}
+                                className={`
+                                    px-6 py-4 font-medium text-sm md:text-base text-left
+                                    transition-all duration-300 ease-out
+                                    ${activeCategory === "events"
+                                        ? 'bg-[#8B6F47] text-white opacity-100'
+                                        : 'text-gray-400'
+                                    }
+                                `}
+                                style={{
+                                    fontFamily: 'Norwige, sans-serif',
+                                    borderRadius: '40px',
+                                    opacity: activeCategory === "events" ? 1 : 0.6,
+                                    background: activeCategory === "events" ? '#8B6F47' : 'rgba(59, 33, 20, 0.30)'
+                                }}
+                            >
+                                <span className="flex items-center gap-3">
+                                    <span className="relative flex h-4 w-4">
+                                        <span className="animate-ping absolute inline-flex h-full w-full rounded-full border-2 border-white opacity-75"></span>
+                                        <span className="relative inline-flex rounded-full h-4 w-4 border-2 border-white"></span>
                                     </span>
-                                </div>
-                                <div className="bg-white rounded-lg px-6 py-4 flex items-center justify-center min-w-[140px]">
-                                    <span className="text-black font-bold text-sm tracking-wider">
-                                        URBAN WINGS
-                                    </span>
-                                </div>
-                                <div className="bg-white rounded-lg px-6 py-4 flex items-center justify-center min-w-[140px]">
-                                    <span className="text-red-600 font-bold text-xl" style={{ fontFamily: 'Impact, sans-serif' }}>
-                                        THE BANDO
-                                    </span>
-                                </div>
-                            </div>
+                                    EVENT PLANNING
+                                </span>
+                            </button>
+                        </div>
+                    </div>
 
-                            {/* Comparison Table */}
-                            <div className="overflow-x-auto">
-                                <table className="w-full border-collapse">
-                                    <thead>
-                                        <tr className="border-b border-gray-700">
-                                            <th className="text-left py-4 px-4 text-gray-400 font-normal"></th>
-                                            <th className="text-center py-4 px-4"></th>
-                                            <th className="text-center py-4 px-4"></th>
-                                            <th className="text-center py-4 px-4 bg-[#3A1A1A] rounded-t-lg"></th>
-                                        </tr>
-                                    </thead>
-                                    <tbody className="text-gray-300">
-                                        <tr className="border-b border-gray-800">
-                                            <td className="py-4 px-4">Speed & Conversion</td>
-                                            <td className="text-center py-4 px-4">
-                                                <div className="w-3 h-3 bg-white rounded-full mx-auto"></div>
-                                            </td>
-                                            <td className="text-center py-4 px-4">
-                                                <div className="w-3 h-3 bg-white rounded-full mx-auto"></div>
-                                            </td>
-                                            <td className="text-center py-4 px-4 bg-[#3A1A1A]">
-                                                <div className="w-3 h-3 bg-[#C90000] rounded-full mx-auto"></div>
-                                            </td>
-                                        </tr>
-                                        <tr className="border-b border-gray-800">
-                                            <td className="py-4 px-4">Visual Boldness</td>
-                                            <td className="text-center py-4 px-4">
-                                                <div className="w-3 h-3 bg-white rounded-full mx-auto"></div>
-                                            </td>
-                                            <td className="text-center py-4 px-4 text-2xl">×</td>
-                                            <td className="text-center py-4 px-4 bg-[#3A1A1A]">
-                                                <div className="w-3 h-3 bg-[#C90000] rounded-full mx-auto"></div>
-                                            </td>
-                                        </tr>
-                                        <tr className="border-b border-gray-800">
-                                            <td className="py-4 px-4">Brand Voice</td>
-                                            <td className="text-center py-4 px-4 text-2xl">×</td>
-                                            <td className="text-center py-4 px-4 text-2xl">×</td>
-                                            <td className="text-center py-4 px-4 bg-[#3A1A1A]">
-                                                <div className="w-3 h-3 bg-[#C90000] rounded-full mx-auto"></div>
-                                            </td>
-                                        </tr>
-                                        <tr className="border-b border-gray-800">
-                                            <td className="py-4 px-4">Cultural Identity</td>
-                                            <td className="text-center py-4 px-4 text-2xl">×</td>
-                                            <td className="text-center py-4 px-4 text-2xl">×</td>
-                                            <td className="text-center py-4 px-4 bg-[#3A1A1A]">
-                                                <div className="w-3 h-3 bg-[#C90000] rounded-full mx-auto"></div>
-                                            </td>
-                                        </tr>
-                                        <tr className="border-b border-gray-800">
-                                            <td className="py-4 px-4">Community Feel</td>
-                                            <td className="text-center py-4 px-4 text-2xl">×</td>
-                                            <td className="text-center py-4 px-4 text-2xl">×</td>
-                                            <td className="text-center py-4 px-4 bg-[#3A1A1A]">
-                                                <div className="w-3 h-3 bg-[#C90000] rounded-full mx-auto"></div>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td className="py-4 px-4">Memorability</td>
-                                            <td className="text-center py-4 px-4 text-2xl">×</td>
-                                            <td className="text-center py-4 px-4 text-2xl">×</td>
-                                            <td className="text-center py-4 px-4 bg-[#3A1A1A] rounded-b-lg">
-                                                <div className="w-3 h-3 bg-[#C90000] rounded-full mx-auto"></div>
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            {/* Arrow Indicator */}
-                            <div className="flex justify-center my-8">
-                                <svg width="40" height="60" viewBox="0 0 40 60" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M20 0 L20 45 M5 30 L20 45 L35 30" stroke="#C90000" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                            </div>
-
-                            {/* Insight Box */}
-                            <div className="border-2 border-gray-700 rounded-2xl p-6 bg-black/40">
-                                <div className="flex items-start gap-4">
-                                    <span
-                                        className="px-4 py-2 rounded-full text-sm font-bold text-white whitespace-nowrap"
-                                        style={{ backgroundColor: '#8B4513' }}
-                                    >
-                                        INSIGHT
-                                    </span>
-                                    <p className="text-gray-300 leading-relaxed">
-                                        Speed and usability are table stakes. Culture and personality are what make brands memorable.
-                                    </p>
-                                </div>
-                            </div>
+                    {/* Right - Video Showcase */}
+                    <div className="relative">
+                        <div
+                            className="relative w-full aspect-video rounded-3xl overflow-hidden group cursor-pointer"
+                            style={{
+                                background: 'linear-gradient(135deg, #4A4A4A 0%, #3A3A3A 100%)',
+                            }}
+                        >
+                            {/* Placeholder - Empty for now */}
+                            <div className="absolute inset-0" />
                         </div>
                     </div>
                 </div>
             </section>
 
+            {/* Project Strip CTA */}
+            <ProjectStrip />
+
+            {/* Our Approach Section */}
+            <OurApproachSection />
+
+            {/* FAQ Section */}
+            <FAQBottomSection />
 
             <Footer />
         </main>
