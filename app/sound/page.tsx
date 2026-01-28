@@ -1,4 +1,5 @@
 import MusicBanner from "@/components/sound_page/MusicBanner";
+import MusicPlayer from "@/components/sound_page/MusicPlayer";
 import FAQSection from "@/components/sound_page/AboutFaq";
 import AgencyIntro from "@/components/sound_page/AgencyIntro";
 import ArtistBreakthrough from "@/components/sound_page/ArtistBreakthrough";
@@ -24,35 +25,38 @@ export default function Page() {
       </OverlapSection>
 
       <OverlapSection index={3}>
-        <MixesSection />
+        <MusicPlayer />
       </OverlapSection>
 
       <OverlapSection index={4}>
-        <ArtistBreakthrough />
+        <MixesSection />
       </OverlapSection>
 
       <OverlapSection index={5}>
-        <Story />
+        <ArtistBreakthrough />
       </OverlapSection>
 
       <OverlapSection index={6}>
-        <AgencyIntro />
+        <Story />
       </OverlapSection>
 
       <OverlapSection index={7}>
+        <AgencyIntro />
+      </OverlapSection>
+
+      <OverlapSection index={8}>
         <Gallery />
       </OverlapSection>
 
-      <OverlapSection index={8} >
+      <OverlapSection index={9} >
         <FAQSection />
       </OverlapSection>
 
-      <OverlapSection index={9}>
+      <OverlapSection index={10}>
         <BookACall />
       </OverlapSection>
 
-      {/* Last section */}
-      <OverlapSection index={10} >
+      <OverlapSection index={11} >
         <Footer />
       </OverlapSection>
 
