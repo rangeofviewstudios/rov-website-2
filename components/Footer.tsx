@@ -192,7 +192,11 @@ const Footer = () => {
             fill
             priority
             className="object-contain"
-            style={{ objectPosition: 'bottom right', transform: 'scale(1.2)' }}
+            style={{
+              objectPosition: 'bottom right',
+              transform: 'scale(1.3)',
+              transformOrigin: 'bottom right'
+            }}
           />
         </div>
 
@@ -208,7 +212,8 @@ const Footer = () => {
             className="object-contain"
             style={{
               objectPosition: 'bottom right',
-              transform: 'scale(1.8) translateX(-40px)',
+              transform: 'scale(1.3)',
+              transformOrigin: 'bottom right',
               filter: 'brightness(1.25) contrast(1.15) saturate(1.1)'
             }}
           />
