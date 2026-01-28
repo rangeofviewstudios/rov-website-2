@@ -2,7 +2,7 @@
 
 import React, { useEffect, useMemo, useRef } from 'react';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from 'gsap/all';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -94,7 +94,7 @@ const TestHero: React.FC = () => {
     try {
       // @ts-ignore
       await document.fonts?.ready;
-    } catch {}
+    } catch { }
 
     // --- Text animation helpers ---
     const killTextTweens = () => {

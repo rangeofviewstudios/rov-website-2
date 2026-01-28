@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import TrueFocus from "./TrueFocus";
 import TiltedCard from "./TiltedCard";
 
@@ -135,25 +136,27 @@ const DigiMag = () => {
 
           {/* Glassy "View More" Button */}
           <div className="absolute -bottom-16 left-1/2 -translate-x-1/2 z-30">
-            <button
-              className="
-                group relative px-8 py-3 rounded-full 
-                bg-white/5 backdrop-blur-xl border border-white/10
-                text-white text-sm font-medium tracking-[0.2em]
-                transition-all duration-300 hover:bg-white/10 hover:border-white/20
-                flex items-center gap-3 overflow-hidden
-                shadow-[0_0_20px_rgba(0,0,0,0.5)]
-              "
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
-              VIEW MORE
-              <svg
-                width="12" height="12" viewBox="0 0 12 12" fill="none"
-                className="transition-transform duration-300 group-hover:translate-y-0.5"
+            <Link href="/ctrla">
+              <button
+                className="
+                  group relative px-8 py-3 rounded-full 
+                  bg-white/5 backdrop-blur-xl border border-white/10
+                  text-white text-sm font-medium tracking-[0.2em]
+                  transition-all duration-300 hover:bg-white/10 hover:border-white/20
+                  flex items-center gap-3 overflow-hidden
+                  shadow-[0_0_20px_rgba(0,0,0,0.5)]
+                "
               >
-                <path d="M1 4L6 9L11 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-            </button>
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer" />
+                VIEW MORE
+                <svg
+                  width="12" height="12" viewBox="0 0 12 12" fill="none"
+                  className="transition-transform duration-300 group-hover:translate-y-0.5"
+                >
+                  <path d="M1 4L6 9L11 4" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+              </button>
+            </Link>
           </div>
         </div>
       </div>

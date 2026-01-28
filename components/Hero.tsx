@@ -240,7 +240,7 @@ export default Hero;
 import React, { useEffect, useRef, useState } from 'react';
 import styled, { keyframes, createGlobalStyle } from 'styled-components';
 import { gsap } from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollTrigger } from 'gsap/all';
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger);
