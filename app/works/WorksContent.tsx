@@ -6,7 +6,7 @@ import Link from "next/link";
 import {
   ArrowUpRight, ExternalLink,
   UtensilsCrossed, Scissors, Globe, Bot, Users,
-  Feather, Monitor, ShoppingBag,
+  Feather, Monitor, ShoppingBag, Glasses,
   type LucideIcon,
 } from "lucide-react";
 import { NavigationDock } from "@/components/sections/NavDoc";
@@ -128,6 +128,17 @@ const projects: Project[] = [
     type: "external",
     accent: "#f6ad55",
     icon: ShoppingBag,
+  },
+  {
+    id: "wisdom-atl",
+    num: "09",
+    title: "Wisdom ATL",
+    tags: ["Eyewear", "E-commerce", "UX Design"],
+    description:
+      "Merged landing into shop, rebuilt the product grid and footer, and gave Wisdm's real-world collabs (Nike, SCAD, Drake, KingBach, Nordstrom) a real home online.",
+    href: "/casestudy/wisdom-atl",
+    type: "internal",
+    icon: Glasses,
   },
 ];
 
@@ -371,7 +382,7 @@ export default function WorksContent() {
           </motion.p>
         </div>
 
-        {/* Grid — all 8 projects, 3 columns on desktop */}
+        {/* Grid — all 9 projects, 3 columns on desktop */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
           {projects.map((p, i) => (
             <ProjectCard key={p.id} project={p} index={i} />

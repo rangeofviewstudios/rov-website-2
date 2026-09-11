@@ -269,6 +269,13 @@ const ViewProjectLink = styled(Link)`
 
 const caseStudies = [
   {
+    id: 'wisdom-atl',
+    title: 'Wisdom ATL',
+    description: 'A frame-by-frame e-commerce masterclass: how we merged the landing page into the shop, rebuilt the product grid and footer, and gave a fun Atlanta eyewear brand\'s real world collabs (Nike, SCAD, Drake, KingBach, Nordstrom) a real home online.',
+    image: '/casestudy/wisdom-atl/build/wisdmnewhero.png',
+    href: '/casestudy/wisdom-atl'
+  },
+  {
     id: 'bando',
     title: 'The Bando',
     description: 'Bold, unapologetically Atlanta. We transformed a Black history museum and fried chicken spot\'s digital presence to match their in-person energy, cutting bounce rate by 60%.',
