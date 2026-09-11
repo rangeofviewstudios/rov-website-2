@@ -1,27 +1,53 @@
 "use client";
 
 // ═══════════════════════════════════════════════════════
-// SPACE — ENGINE TRAIL
+// SPACE — ENGINE TRAILS
 //
-// A ribbon of additive gold behind the engine. A ring buffer of the last N
-// engine positions becomes a triangle strip in the ecliptic plane, wide and
-// bright at the head, thin and gone at the tail. Its opacity follows speed,
-// so a parked ship has no trail and a boosting one draws a comet. One mesh,
-// fifty-six vertices, updated in place.
+// Ribbons of additive gold behind the ship: a comet from the engine and two
+// fine threads from the wing tips. Each is a ring buffer of the last N
+// emitter positions turned into a triangle strip in the flight plane, wide
+// and bright at the head, thin and gone at the tail. Opacity follows speed,
+// so a parked ship has no trail and a boosting one draws a comet. Ribbons
+// taper in world space, so a tail passing under the chase camera stays a
+// thread instead of a billboarded slab. One mesh each, updated in place.
 // ═══════════════════════════════════════════════════════
 
 import { useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
-import { frame } from "../_state/useSpace";
+import { frame, useSpace } from "../_state/useSpace";
 import { FLIGHT } from "../_map/flight";
 
 const N = 28;
 const ENGINE_BACK = 2.9; // engine sprite sits this far behind the ship origin
+const WING_X = 2.4; // wing tip, either side of the hull
+const WING_BACK = 2.2;
+
+interface RibbonProps {
+  /** Emitter offset in ship space: +x is starboard, +z is behind. */
+  offset: [number, number, number];
+  /** Head half-width at rest and the extra it gains at full boost. */
+  width: [number, number];
+  /** Peak opacity at full boost. */
+  peak: number;
+  /** Colour at the head and at the tail. */
+  hot: [number, number, number];
+  cool: [number, number, number];
+}
 
 export default function Trail() {
+  return (
+    <>
+      <Ribbon offset={[0, 0, ENGINE_BACK]} width={[0.08, 0.18]} peak={0.6} hot={[1.0, 0.92, 0.62]} cool={[0.76, 0.6, 0.31]} />
+      <Ribbon offset={[-WING_X, -0.15, WING_BACK]} width={[0.035, 0.05]} peak={0.5} hot={[0.89, 0.76, 0.29]} cool={[0.89, 0.76, 0.29]} />
+      <Ribbon offset={[WING_X, -0.15, WING_BACK]} width={[0.035, 0.05]} peak={0.5} hot={[0.89, 0.76, 0.29]} cool={[0.89, 0.76, 0.29]} />
+    </>
+  );
+}
+
+function Ribbon({ offset, width, peak, hot, cool }: RibbonProps) {
   const mesh = useRef<THREE.Mesh>(null);
-  const points = useRef(Array.from({ length: N }, () => new THREE.Vector3(0, 0, 44 + ENGINE_BACK)));
+  const points = useRef(Array.from({ length: N }, () => new THREE.Vector3(0, 0, 44 + offset[2])));
   const lastPerp = useRef(new THREE.Vector3(1, 0, 0));
   const opacity = useRef(0);
 
@@ -52,7 +78,11 @@ export default function Trail() {
         transparent: true,
         depthWrite: false,
         blending: THREE.AdditiveBlending,
-        uniforms: { uOpacity: { value: 0 } },
+        uniforms: {
+          uOpacity: { value: 0 },
+          uHot: { value: new THREE.Vector3(...hot) },
+          uCool: { value: new THREE.Vector3(...cool) },
+        },
         vertexShader: /* glsl */ `
           attribute float aAlpha;
           varying float vAlpha;
@@ -63,14 +93,17 @@ export default function Trail() {
         `,
         fragmentShader: /* glsl */ `
           uniform float uOpacity;
+          uniform vec3 uHot;
+          uniform vec3 uCool;
           varying float vAlpha;
           void main() {
-            // Gold core cooling to amber at the tail.
-            vec3 col = mix(vec3(0.76, 0.60, 0.31), vec3(1.0, 0.92, 0.62), vAlpha);
+            // Hot at the head, cooling toward the tail.
+            vec3 col = mix(uCool, uHot, vAlpha);
             gl_FragColor = vec4(col, vAlpha * uOpacity);
           }
         `,
       }),
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
 
@@ -80,7 +113,10 @@ export default function Trail() {
 
   useFrame((_, dt) => {
     const h = frame.shipHeading;
-    engine.set(frame.shipPosition.x + Math.sin(h) * ENGINE_BACK, 0, frame.shipPosition.z + Math.cos(h) * ENGINE_BACK);
+    const c = Math.cos(h), sn = Math.sin(h);
+    const [ox, oy, oz] = offset;
+    // Ship space → world: rotate the offset by the heading (ship faces -z).
+    engine.set(frame.shipPosition.x + ox * c + oz * sn, frame.shipPosition.y + oy, frame.shipPosition.z - ox * sn + oz * c);
 
     // Advance the ring buffer only once the engine has moved a little, so a
     // slow ship draws a short trail rather than a bunched-up bright blob.
@@ -105,14 +141,18 @@ export default function Trail() {
       } else {
         perp.copy(lastPerp.current);
       }
-      const w = (0.14 + speedNorm * 0.36) * (1 - i / N);
+      const w = (width[0] + speedNorm * width[1]) * (1 - i / N);
       pos.setXYZ(i * 2, p.x + perp.x * w, p.y, p.z + perp.z * w);
       pos.setXYZ(i * 2 + 1, p.x - perp.x * w, p.y, p.z - perp.z * w);
     }
     pos.needsUpdate = true;
 
     // Fade with speed, eased so the trail blooms on boost instead of popping.
-    const want = Math.pow(speedNorm, 1.4) * 0.6;
+    // Nothing while descending or parked on a pad.
+    const s = useSpace.getState();
+    const grounded = !!(s.landingId || s.landedId);
+    if (grounded) for (const pt of pts) pt.copy(engine);
+    const want = grounded ? 0 : Math.pow(speedNorm, 1.4) * peak;
     opacity.current = THREE.MathUtils.lerp(opacity.current, want, 1 - Math.exp(-5 * dt));
     material.uniforms.uOpacity.value = opacity.current;
   });

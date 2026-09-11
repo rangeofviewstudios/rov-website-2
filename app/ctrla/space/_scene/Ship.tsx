@@ -3,7 +3,7 @@
 // ═══════════════════════════════════════════════════════
 // SPACE — THE SHIP
 //
-// Flight model, chase camera, docking, landing dive, FPS meter. Deliberately
+// Flight model, chase camera, docking, landing, liftoff, FPS meter. Deliberately
 // no physics engine: a ship in empty space is thrust, damping, and a
 // heading. Flight is planar (the ecliptic), which is what makes it
 // navigable instead of nauseating, and the camera lag + FOV stretch is what
@@ -16,6 +16,11 @@
 //              E docks now, W waves off
 //   no-clip    bodies push the ship out; you cannot fly through the sun
 //
+// Landing is its own mode: from the dock panel, "Land" hands the ship to a
+// scripted descent. It slides around the planet to sit above the pad, drops
+// through the atmosphere (heat, shake, retro burn), and settles on the pad
+// with its belly to the surface. Liftoff kicks it back into free flight.
+//
 // Everything per-frame lives in refs. React only hears about it when the
 // near/docked body changes.
 // ═══════════════════════════════════════════════════════
@@ -25,10 +30,8 @@ import * as THREE from "three";
 import { useFrame, useThree } from "@react-three/fiber";
 import { BODIES, bodyById, restPosition, type CelestialBody } from "../_map/map";
 import { FLIGHT, dockRange } from "../_map/flight";
+import { PAD_REST } from "../_map/pads";
 import { frame, useSpace } from "../_state/useSpace";
-import { Line2 } from "three/examples/jsm/lines/Line2.js";
-import { LineMaterial } from "three/examples/jsm/lines/LineMaterial.js";
-import { LineGeometry } from "three/examples/jsm/lines/LineGeometry.js";
 
 export { dockRange };
 
@@ -39,6 +42,8 @@ const ENVELOPE = 4; // × dock range
 const PARK_SPEED = 8; // cap at the ring
 const MAGNET_SPEED = 6; // must be under this to start the fill
 const MAGNET_TIME = 1.0; // seconds inside the ring before auto-dock
+const DESCENT_TIME = 4.6; // seconds from "Land" to touchdown
+const ASCEND_TIME = 1.4; // seconds of scripted climb after liftoff
 
 const wrapAngle = (a: number) => Math.atan2(Math.sin(a), Math.cos(a));
 
@@ -86,36 +91,24 @@ export default function Ship() {
   const wasDocked = useRef(false);
   const parkAngle = useRef(0);
   const parkRadius = useRef(0);
+  // ── landing state ──
+  const descent = useRef(0); // 0..1 progress from "Land" to touchdown
+  const descentR = useRef(0); // radius from the planet centre when descent began
+  const ascend = useRef(0); // seconds of scripted climb left after liftoff
+  const wasLanded = useRef(false);
+  const surfUp = useMemo(() => new THREE.Vector3(0, 1, 0), []);
+  const surfFwd = useMemo(() => new THREE.Vector3(0, 0, -1), []);
+  const surfRight = useMemo(() => new THREE.Vector3(), []);
+  const padN = useMemo(() => new THREE.Vector3(), []);
+  const qTarget = useMemo(() => new THREE.Quaternion(), []);
+  const mBasis = useMemo(() => new THREE.Matrix4(), []);
+  const eul = useMemo(() => new THREE.Euler(), []);
+  const camUp = useMemo(() => new THREE.Vector3(0, 1, 0), []);
   const camTarget = useMemo(() => new THREE.Vector3(), []);
   const lookTarget = useMemo(() => new THREE.Vector3(), []);
   const fwd = useMemo(() => new THREE.Vector3(), []);
   const tmp = useMemo(() => new THREE.Vector3(), []);
   const up = useMemo(() => new THREE.Vector3(0, 1, 0), []);
-
-  // ── engine trails ──
-  const TRAIL_LENGTH = 60;
-  const trailHistoryL = useRef<Float32Array>(new Float32Array(TRAIL_LENGTH * 3));
-  const trailHistoryR = useRef<Float32Array>(new Float32Array(TRAIL_LENGTH * 3));
-  const trailInited = useRef(false);
-
-  const trailLineL = useMemo(() => {
-    const geo = new LineGeometry();
-    geo.setPositions(new Float32Array(TRAIL_LENGTH * 3));
-    const mat = new LineMaterial({ color: 0xE3C24A, transparent: true, opacity: 0.7, linewidth: 3, worldUnits: true });
-    const line = new Line2(geo, mat);
-    line.frustumCulled = false;
-    line.computeLineDistances();
-    return line;
-  }, []);
-  const trailLineR = useMemo(() => {
-    const geo = new LineGeometry();
-    geo.setPositions(new Float32Array(TRAIL_LENGTH * 3));
-    const mat = new LineMaterial({ color: 0xE3C24A, transparent: true, opacity: 0.7, linewidth: 3, worldUnits: true });
-    const line = new Line2(geo, mat);
-    line.frustumCulled = false;
-    line.computeLineDistances();
-    return line;
-  }, []);
 
   // Engine glow texture: a soft radial gold dot, drawn once.
   const glowTex = useMemo(() => {
@@ -175,7 +168,15 @@ export default function Ship() {
     const state = useSpace.getState();
     const k = keys.current;
     const docked = !!state.dockedId;
-    const landing = state.landingId ? frame.bodyPositions.get(state.landingId) : null;
+    const groundId = state.landingId ?? state.landedId;
+    const padRec = groundId ? frame.pads.get(groundId) : null;
+    const groundCenter = groundId ? frame.bodyPositions.get(groundId) : null;
+    // Grounded: the scripted descent or parked on the pad. Flight input,
+    // the envelope, and no-clip all stand down.
+    const grounded = !!(groundId && padRec && groundCenter);
+    // Diving straight into a page from a dock ring (moons, the sun, the
+    // station): the old camera dive, kept for bodies without a pad.
+    const dive = state.enteringId && !state.landedId ? frame.bodyPositions.get(state.enteringId) : null;
 
     // ── nearest body, once, for the envelope, the ring, and no-clip ──
     let nearest: CelestialBody | null = null;
@@ -202,7 +203,7 @@ export default function Ship() {
 
     // ── autopilot: steer toward the target, dock on arrival ──
     const ap = state.autopilotId;
-    if (ap && !docked) {
+    if (ap && !docked && !grounded) {
       const target = frame.bodyPositions.get(ap);
       const body = bodyById(ap);
       if (target && body) {
@@ -227,7 +228,7 @@ export default function Ship() {
     let cap: number = boost ? MAX_SPEED_BOOST : MAX_SPEED;
     let inEnvelope = false;
     let heat = 0;
-    if (nearest && !docked) {
+    if (nearest && !docked && !grounded) {
       const dr = dockRange(nearest.size);
       const env = dr * ENVELOPE;
       const np = frame.bodyPositions.get(nearest.id)!;
@@ -248,8 +249,15 @@ export default function Ship() {
     frame.approachId = inEnvelope && nearest ? nearest.id : null;
 
     // ── flight model (planar + gentle vertical) ──
-    if (docked) {
+    if (docked || grounded) {
       thrust = 0;
+      yaw = 0;
+      boost = false;
+    }
+    // Liftoff climb: the ship throttles itself up and away from the pad.
+    if (ascend.current > 0) {
+      ascend.current -= dt;
+      thrust = 1;
       yaw = 0;
     }
     const speedNow = vel.current.length();
@@ -293,7 +301,57 @@ export default function Ship() {
       speed = eased;
     }
 
-    if (docked && state.dockedId) {
+    if (grounded && padRec && groundCenter && groundId) {
+      const body = bodyById(groundId)!;
+      padN.set(padRec.nx, padRec.ny, padRec.nz);
+      const padR = Math.hypot(padRec.x - groundCenter.x, padRec.y - groundCenter.y, padRec.z - groundCenter.z);
+      // Where the ship is, as a direction + radius from the planet's centre.
+      tmp.copy(pos.current).sub(groundCenter);
+      const rNow = Math.max(tmp.length(), 1e-3);
+      tmp.divideScalar(rNow);
+      if (state.landingId) {
+        if (descent.current === 0) {
+          descentR.current = rNow;
+          surfUp.copy(tmp);
+          surfFwd.copy(fwd);
+        }
+        descent.current = Math.min(1, descent.current + dt / DESCENT_TIME);
+        const u = descent.current;
+        // Slide around the globe to sit over the pad, then sink onto it.
+        // Direction converges fast; radius follows a fixed ease so touchdown
+        // lands exactly on time.
+        if (tmp.dot(padN) < -0.985) tmp.y += 0.1; // antipodal: pick a way round
+        tmp.lerp(padN, 1 - Math.exp(-2.6 * dt)).normalize();
+        const ease = u < 0.5 ? 4 * u * u * u : 1 - Math.pow(-2 * u + 2, 3) / 2;
+        const rGoal = THREE.MathUtils.lerp(Math.max(descentR.current, padR + body.size * 0.9), padR + PAD_REST, ease);
+        pos.current.copy(groundCenter).addScaledVector(tmp, rGoal);
+        // Atmosphere: heat peaks mid-descent, then the retro burn takes over.
+        heat = Math.sin(THREE.MathUtils.clamp(u / 0.75, 0, 1) * Math.PI) * 0.9;
+        if (u >= 1) {
+          descent.current = 0;
+          state.touchdown();
+        }
+      } else {
+        // Parked on the pad: ride the planet's rotation.
+        pos.current.copy(groundCenter).addScaledVector(padN, padR + PAD_REST);
+        tmp.copy(padN);
+      }
+      // Belly to the surface, nose along the last direction of travel.
+      surfUp.lerp(tmp, 1 - Math.exp(-4 * dt)).normalize();
+      surfFwd.addScaledVector(surfUp, -surfFwd.dot(surfUp));
+      if (surfFwd.lengthSq() < 1e-4) surfFwd.set(1, 0, 0).addScaledVector(surfUp, -surfUp.x);
+      surfFwd.normalize();
+      surfRight.crossVectors(surfUp, surfFwd).normalize();
+      // Ship model faces -z, so the basis z is -forward.
+      mBasis.makeBasis(surfRight, surfUp, tmp.copy(surfFwd).negate());
+      qTarget.setFromRotationMatrix(mBasis);
+      g.quaternion.slerp(qTarget, 1 - Math.exp(-5 * dt));
+      vel.current.set(0, 0, 0);
+      speed = 0;
+      heading.current = Math.atan2(-surfFwd.x, -surfFwd.z);
+      fwd.copy(surfFwd);
+      parkRadius.current = 0;
+    } else if (docked && state.dockedId) {
       // Parked orbit: circle the body slowly so the panel sits over a
       // moving planet, and hand control back cleanly on undock.
       const body = bodyById(state.dockedId)!;
@@ -317,7 +375,7 @@ export default function Ship() {
     }
 
     // ── no-clip: bodies push the ship out ──
-    if (!docked) {
+    if (!docked && !grounded && ascend.current <= 0) {
       for (const b of BODIES) {
         const p = frame.bodyPositions.get(b.id);
         if (!p) continue;
@@ -363,7 +421,25 @@ export default function Ship() {
     roll.current = THREE.MathUtils.lerp(roll.current, -yaw * (0.5 + (speed / MAX_SPEED_BOOST) * 0.25), 1 - Math.exp(-6 * dt));
 
     g.position.copy(pos.current);
-    g.rotation.set(0, heading.current, roll.current);
+    if (!grounded) {
+      if (ascend.current > 0) {
+        // Climbing out: roll from belly-down to level flight.
+        eul.set(0, heading.current, roll.current);
+        qTarget.setFromEuler(eul);
+        g.quaternion.slerp(qTarget, 1 - Math.exp(-3 * dt));
+      } else {
+        g.rotation.set(0, heading.current, roll.current);
+      }
+    }
+
+    // ── liftoff: the moment the pad lets go ──
+    if (wasLanded.current && !grounded) {
+      ascend.current = ASCEND_TIME;
+      vel.current.copy(surfUp).multiplyScalar(15).addScaledVector(surfFwd, 6);
+      magnetArmed.current = false;
+      descent.current = 0;
+    }
+    wasLanded.current = grounded;
     frame.shipPosition.x = pos.current.x;
     frame.shipPosition.y = pos.current.y;
     frame.shipPosition.z = pos.current.z;
@@ -371,60 +447,18 @@ export default function Ship() {
     frame.shipHeading = heading.current;
 
     if (engine.current) {
-      const s = 1.2 + thrust * (boost ? 3.2 : 2.0) + speed / MAX_SPEED;
+      const burn = state.landingId ? 0.9 * (1 - descent.current) : state.landedId ? 0 : thrust;
+      const s = 0.9 + burn * (boost ? 2.2 : 1.4) + speed / (MAX_SPEED * 1.5);
       engine.current.scale.set(s, s, 1);
-    }
-
-    // ── engine trails ──
-    // Two yellow lines from the wing tips trailing behind the ship
-    {
-      const h = heading.current;
-      const cosH = Math.cos(h);
-      const sinH = Math.sin(h);
-      // Wing tip offsets in local space (mirrored on X), then rotated by heading
-      const offsetX = 2.4; // wing tip X offset
-      const offsetZ = 2.2; // behind the hull center
-      // Left exhaust world position
-      const lx = pos.current.x + (-offsetX * cosH - offsetZ * -sinH);
-      const ly = pos.current.y - 0.15;
-      const lz = pos.current.z + (-offsetX * sinH + offsetZ * cosH);
-      // Right exhaust world position
-      const rx = pos.current.x + (offsetX * cosH - offsetZ * -sinH);
-      const ry = pos.current.y - 0.15;
-      const rz = pos.current.z + (offsetX * sinH + offsetZ * cosH);
-
-      const hL = trailHistoryL.current;
-      const hR = trailHistoryR.current;
-
-      if (!trailInited.current) {
-        // Fill entire trail with current position
-        for (let i = 0; i < TRAIL_LENGTH; i++) {
-          hL[i * 3] = lx; hL[i * 3 + 1] = ly; hL[i * 3 + 2] = lz;
-          hR[i * 3] = rx; hR[i * 3 + 1] = ry; hR[i * 3 + 2] = rz;
-        }
-        trailInited.current = true;
-      }
-
-      // Shift trail: move everything back one slot, newest at index 0
-      hL.copyWithin(3, 0, (TRAIL_LENGTH - 1) * 3);
-      hL[0] = lx; hL[1] = ly; hL[2] = lz;
-      hR.copyWithin(3, 0, (TRAIL_LENGTH - 1) * 3);
-      hR[0] = rx; hR[1] = ry; hR[2] = rz;
-
-      if (trailLineL) {
-        (trailLineL.geometry as LineGeometry).setPositions(Array.from(hL));
-        trailLineL.computeLineDistances();
-      }
-      if (trailLineR) {
-        (trailLineR.geometry as LineGeometry).setPositions(Array.from(hR));
-        trailLineR.computeLineDistances();
-      }
     }
 
     // ── docking: the ring, and the magnetic fill ──
     if (wasDocked.current && !docked) magnetArmed.current = false; // just undocked: leave the ring first
     wasDocked.current = docked;
-    if (!docked) {
+    if (grounded) {
+      state.setNear(null);
+      fill.current = 0;
+    } else if (!docked) {
       const inRing = nearest && nearestD < dockRange(nearest.size) ? nearest.id : null;
       state.setNear(inRing);
       if (!inRing) magnetArmed.current = true;
@@ -446,16 +480,40 @@ export default function Ship() {
     // ── camera ──
     const cam = camera as THREE.PerspectiveCamera;
     let wantFov: number;
-    if (landing && state.landingId) {
-      // Landing dive: fall toward the body from wherever the camera is,
-      // tightening the lens, until the HUD's colour wipe takes over.
-      const body = bodyById(state.landingId)!;
-      tmp.copy(camera.position).sub(landing).setY(0);
+    if (grounded) {
+      // Surface camera: behind and above the ship in the pad's own frame,
+      // so the terrain rises into view as the ship sinks. Once parked it
+      // drifts slowly round the ship.
+      if (state.landedId) {
+        const a = clock.elapsedTime * 0.12;
+        camTarget.copy(pos.current).addScaledVector(surfUp, 4.2).addScaledVector(surfFwd, -Math.cos(a) * 12).addScaledVector(surfRight, Math.sin(a) * 12);
+        wantFov = 44;
+      } else {
+        const u = descent.current;
+        camTarget.copy(pos.current).addScaledVector(surfUp, 5.5 + (1 - u) * 3).addScaledVector(surfFwd, -(13 + (1 - u) * 6));
+        wantFov = 50;
+      }
+      camera.position.lerp(camTarget, 1 - Math.exp(-3.2 * dt));
+      shake.current = THREE.MathUtils.lerp(shake.current, heat * 2.5, 1 - Math.exp(-9 * dt));
+      if (shake.current > 0.01) {
+        const t = clock.elapsedTime;
+        const a = shake.current * 0.16;
+        camera.position.addScaledVector(surfRight, Math.sin(t * 41) * a).addScaledVector(surfUp, Math.sin(t * 53 + 1.3) * a * 0.7);
+      }
+      camUp.lerp(surfUp, 1 - Math.exp(-4 * dt)).normalize();
+      camera.up.copy(camUp);
+      lookTarget.copy(pos.current).addScaledVector(surfUp, 0.8);
+      camera.lookAt(lookTarget);
+    } else if (dive && state.enteringId) {
+      // Page dive for pad-less stops: fall toward the body from wherever the
+      // camera is, tightening the lens, until the HUD's colour wipe takes over.
+      const body = bodyById(state.enteringId)!;
+      tmp.copy(camera.position).sub(dive).setY(0);
       if (tmp.lengthSq() < 1e-4) tmp.set(0, 0, 1);
       tmp.normalize();
-      camTarget.copy(landing).addScaledVector(tmp, body.size * 2.2).setY(body.size * 0.9);
+      camTarget.copy(dive).addScaledVector(tmp, body.size * 2.2).setY(body.size * 0.9);
       camera.position.lerp(camTarget, 1 - Math.exp(-2.4 * dt));
-      camera.lookAt(landing);
+      camera.lookAt(dive);
       wantFov = 36;
     } else {
       // Chase: lag behind, pull back and widen with speed.
@@ -477,7 +535,8 @@ export default function Ship() {
       // The camera rolls a beat behind the ship, so turns feel physical.
       camRoll.current = THREE.MathUtils.lerp(camRoll.current, roll.current * 0.35, 1 - Math.exp(-3.5 * dt));
       up.set(Math.sin(camRoll.current), Math.cos(camRoll.current), 0);
-      camera.up.copy(up);
+      camUp.lerp(up, 1 - Math.exp(-(ascend.current > 0 ? 2.5 : 12) * dt)).normalize();
+      camera.up.copy(camUp);
       camera.lookAt(lookTarget);
       wantFov = 55 + speedNorm * 17 + shake.current * 4;
     }
@@ -536,9 +595,6 @@ export default function Ship() {
       <pointLight position={[0, 2, 1]} intensity={0.6} distance={14} color="#E3C24A" />
     </group>
 
-    {/* Engine trails: two yellow lines in world space */}
-    <primitive object={trailLineL} />
-    <primitive object={trailLineR} />
   </>
   );
 }

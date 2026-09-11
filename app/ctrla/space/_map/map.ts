@@ -25,7 +25,14 @@ export interface CelestialBody {
   orbit: { radius: number; speed: number; phase: number };
   /** Visual radius in world units. Dock range derives from it. */
   size: number;
-  look: { palette: [string, string, string]; seed: number };
+  look: {
+    palette: [string, string, string];
+    seed: number;
+    /** Planets only: what the procedural terrain shader draws. */
+    terrain?: "ocean" | "rock" | "ice" | "volcanic";
+    /** Planets only: a tilted ring system. */
+    rings?: { tilt: number };
+  };
   stop: {
     headline: string;
     blurb: string;
@@ -64,7 +71,7 @@ export const BODIES: CelestialBody[] = [
     label: "Music",
     orbit: { radius: 62, speed: 0.007, phase: 0.6 },
     size: 6.4,
-    look: { palette: [NIGHT, "#A56A67", "#E0968F"], seed: 11 },
+    look: { palette: [NIGHT, "#A56A67", "#E0968F"], seed: 11, terrain: "ocean" },
     stop: {
       headline: "The Music Toolkit",
       blurb: "DAWs to distribution. What our engineers actually run, tested in real sessions.",
@@ -78,7 +85,7 @@ export const BODIES: CelestialBody[] = [
     label: "Development",
     orbit: { radius: 92, speed: 0.0055, phase: 2.4 },
     size: 7.2,
-    look: { palette: [NIGHT, "#8a7429", GOLD], seed: 22 },
+    look: { palette: [NIGHT, "#8a7429", GOLD], seed: 22, terrain: "rock", rings: { tilt: 0.42 } },
     stop: {
       headline: "The Dev Toolkit",
       blurb: "Framework to deploy, in the order you will meet them. We ship with all of it.",
@@ -92,7 +99,7 @@ export const BODIES: CelestialBody[] = [
     label: "Design",
     orbit: { radius: 124, speed: 0.00425, phase: 4.1 },
     size: 6.8,
-    look: { palette: [NIGHT, "#4E3D73", "#8E76B8"], seed: 33 },
+    look: { palette: [NIGHT, "#4E3D73", "#8E76B8"], seed: 33, terrain: "ice" },
     stop: {
       headline: "The Design Toolkit",
       blurb: "Interface, brand, 3D, and the bits in between. Picks that survived real clients.",
@@ -106,7 +113,7 @@ export const BODIES: CelestialBody[] = [
     label: "Video / Film",
     orbit: { radius: 156, speed: 0.0035, phase: 5.5 },
     size: 6.6,
-    look: { palette: [NIGHT, "#574191", "#8E76B8"], seed: 44 },
+    look: { palette: [NIGHT, "#574191", "#8E76B8"], seed: 44, terrain: "ocean", rings: { tilt: -0.3 } },
     stop: {
       headline: "The Film Toolkit",
       blurb: "Bodies, glass, lights, grip, and the room where the cut gets finished.",
@@ -120,7 +127,7 @@ export const BODIES: CelestialBody[] = [
     label: "ATL",
     orbit: { radius: 192, speed: 0.00275, phase: 1.4 },
     size: 7.6,
-    look: { palette: [NIGHT, "#90422C", "#EA9A61"], seed: 55 },
+    look: { palette: [NIGHT, "#90422C", "#EA9A61"], seed: 55, terrain: "volcanic" },
     stop: {
       headline: "The ATL Field Guide",
       blurb: "Where the city came from, what is on, where to start, and how to eat well on nothing.",

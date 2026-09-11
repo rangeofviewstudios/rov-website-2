@@ -17,6 +17,7 @@ import { BODIES, MAJOR_STOPS, bodyById, type CelestialBody } from "./_map/map";
 import { HOME_LINE } from "./_map/narration";
 import { routeFor } from "./_map/routes";
 import { FLIGHT } from "./_map/flight";
+import { hasPad } from "./_map/pads";
 import { frame, useSpace } from "./_state/useSpace";
 import { track } from "./_state/track";
 import { readProfile } from "@/lib/ctrla/profile";
@@ -32,6 +33,8 @@ export default function Hud() {
   const dockedId = useSpace((s) => s.dockedId);
   const autopilotId = useSpace((s) => s.autopilotId);
   const landingId = useSpace((s) => s.landingId);
+  const landedId = useSpace((s) => s.landedId);
+  const enteringId = useSpace((s) => s.enteringId);
   const photo = useSpace((s) => s.photo);
   const visited = useSpace((s) => s.visited);
   const introSeen = useSpace((s) => s.introSeen);
@@ -45,6 +48,8 @@ export default function Hud() {
   const near = nearId ? bodyById(nearId) : null;
   const docked = dockedId ? bodyById(dockedId) : null;
   const landing = landingId ? bodyById(landingId) : null;
+  const landed = landedId ? bodyById(landedId) : null;
+  const entering = enteringId ? bodyById(enteringId) : null;
   const waypointId = route[step] ?? null;
 
   // ── flag the document while the ship is up ──
@@ -74,12 +79,18 @@ export default function Hud() {
     if (b && HOME_LINE[b.id]) setHome(b);
   }, []);
 
-  // ── keys the HUD owns: E dock, Esc close, M map, P photo, H guide ──
+  // ── keys the HUD owns: E dock, Enter/W/Esc on the pad, Esc close, M map, P photo, H guide ──
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       const s = useSpace.getState();
-      if (s.landingId) return;
+      if (s.landingId || s.enteringId) return;
       const k = e.key.toLowerCase();
+      if (s.landedId) {
+        // On the pad: Enter opens the page, W or Esc lifts off.
+        if (k === "enter") s.enter(s.landedId);
+        else if (k === "w" || k === "escape") s.liftoff();
+        return;
+      }
       if (k === "e" && s.nearId && !s.dockedId && s.introSeen) s.dock(s.nearId);
       else if (k === "escape") {
         if (s.photo) s.togglePhoto(false);
@@ -122,7 +133,7 @@ export default function Hud() {
       if (!el) return;
       const w = frame.waypoint;
       const s = useSpace.getState();
-      if (!w.visible || w.onScreen || s.dockedId || s.mapOpen || s.photo) {
+      if (!w.visible || w.onScreen || s.dockedId || s.landingId || s.landedId || s.mapOpen || s.photo) {
         if (el.style.display !== "none") el.style.display = "none";
         return;
       }
@@ -149,13 +160,14 @@ export default function Hud() {
     return () => cancelAnimationFrame(raf);
   }, []);
 
-  // ── landing: the dive runs in the scene; here the wipe, then the page ──
+  // ── entering: the dive or the pad shot runs in the scene; here the wipe,
+  //    then the page ──
   useEffect(() => {
-    if (!landing) return;
-    track("space_enter", { body: landing.id, via: "ship" });
-    const t = setTimeout(() => router.push(landing.stop.href), 1000);
+    if (!entering) return;
+    track("space_enter", { body: entering.id, via: "ship" });
+    const t = setTimeout(() => router.push(entering.stop.href), 1000);
     return () => clearTimeout(t);
-  }, [landing, router]);
+  }, [entering, router]);
 
   // ── photo mode: copy a deep link to the nearest stop ──
   const [photoAt, setPhotoAt] = useState<CelestialBody | null>(null);
@@ -184,6 +196,7 @@ export default function Hud() {
   }, [photo]);
 
   const fly = (b: CelestialBody) => {
+    if (useSpace.getState().landedId) useSpace.getState().liftoff();
     useSpace.getState().setAutopilot(b.id);
     useSpace.getState().toggleMap(false);
   };
@@ -350,11 +363,37 @@ export default function Hud() {
         </div>
       )}
 
-      {/* Dock panel */}
-      {docked && !landing && <DockPanel body={docked} onClose={() => useSpace.getState().undock()} onEnter={(b) => useSpace.getState().land(b.id)} />}
+      {/* Dock panel: planets offer the landing, everything else opens straight in */}
+      {docked && !entering && (
+        <DockPanel
+          body={docked}
+          verb={hasPad(docked) ? "Land" : "Enter"}
+          onClose={() => useSpace.getState().undock()}
+          onEnter={(b) => (hasPad(b) ? useSpace.getState().land(b.id) : useSpace.getState().enter(b.id))}
+        />
+      )}
 
-      {/* Landing wipe, in the planet's own colour */}
-      {landing && <div aria-hidden className="ctrla-space-landing" style={{ background: landing.look.palette[1] }} />}
+      {/* Descent readout */}
+      {landing && (
+        <div className="ctrla-space-prompt">
+          Descending to <strong>{landing.label}</strong>
+        </div>
+      )}
+
+      {/* Surface panel, once the ship is on the pad */}
+      {landed && !entering && (
+        <DockPanel
+          body={landed}
+          kicker={`Landed · ${landed.label}`}
+          verb="Enter"
+          closeLabel="Lift off"
+          onClose={() => useSpace.getState().liftoff()}
+          onEnter={(b) => useSpace.getState().enter(b.id)}
+        />
+      )}
+
+      {/* Page wipe, in the body's own colour */}
+      {entering && <div aria-hidden className="ctrla-space-landing" style={{ background: entering.look.palette[1] }} />}
 
       {/* Star map overlay */}
       {mapOpen && (

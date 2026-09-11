@@ -33,8 +33,12 @@ interface SpaceState {
   fps: number;
   /** Current render scale (device pixel ratio the canvas draws at). */
   quality: number;
-  /** Body the camera is diving toward before the page opens, or null. */
+  /** Planet the ship is descending onto, or null. */
   landingId: string | null;
+  /** Planet the ship is parked on the pad of, or null. */
+  landedId: string | null;
+  /** Body whose page is opening (colour wipe running), or null. */
+  enteringId: string | null;
   /** Photo mode: HUD hidden, gold frame on. P key. */
   photo: boolean;
   /** The suggested line through the system, as body ids. */
@@ -52,7 +56,14 @@ interface SpaceState {
   toggleMap: (open?: boolean) => void;
   setFps: (fps: number) => void;
   setQuality: (quality: number) => void;
+  /** Start the descent to a planet's pad. */
   land: (id: string) => void;
+  /** The ship has settled on the pad: surface panel opens. */
+  touchdown: () => void;
+  /** Leave the pad and hand control back. */
+  liftoff: () => void;
+  /** Open the body's page: wipe, then route. */
+  enter: (id: string) => void;
   togglePhoto: (on?: boolean) => void;
   setRoute: (ids: string[]) => void;
   toggleGuide: (hidden?: boolean) => void;
@@ -83,6 +94,8 @@ export const useSpace = create<SpaceState>((set, get) => ({
   fps: 0,
   quality: 1,
   landingId: null,
+  landedId: null,
+  enteringId: null,
   photo: false,
   route: [],
   step: 0,
@@ -120,7 +133,13 @@ export const useSpace = create<SpaceState>((set, get) => ({
   toggleMap: (open) => set((s) => ({ mapOpen: open ?? !s.mapOpen })),
   setFps: (fps) => set({ fps }),
   setQuality: (quality) => set({ quality }),
-  land: (id) => set({ landingId: id, photo: false }),
+  land: (id) => {
+    set({ landingId: id, dockedId: null, autopilotId: null, photo: false });
+    track("space_land", { body: id });
+  },
+  touchdown: () => set((s) => ({ landedId: s.landingId, landingId: null })),
+  liftoff: () => set({ landedId: null }),
+  enter: (id) => set({ enteringId: id, photo: false }),
   togglePhoto: (on) => set((s) => ({ photo: on ?? !s.photo })),
   setRoute: (ids) => {
     // Keep credit for stops already charted on this device.
@@ -138,6 +157,8 @@ export const useSpace = create<SpaceState>((set, get) => ({
 export const frame = {
   /** Live world position of every body, keyed by id. Bodies write, ship reads. */
   bodyPositions: new Map<string, Vector3>(),
+  /** Live world position + outward normal of every planet's landing pad. */
+  pads: new Map<string, { x: number; y: number; z: number; nx: number; ny: number; nz: number }>(),
   /** Ship world position, written by the flight controller. */
   shipPosition: { x: 0, y: 0, z: 0 },
   /** Current ship speed in world units/s, for the HUD and camera FOV. */

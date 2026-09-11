@@ -25,19 +25,25 @@ export default function DockPanel({
   onClose,
   onEnter,
   closeLabel = "Keep flying",
+  verb = "Enter",
+  kicker,
 }: {
   body: CelestialBody;
   onClose: () => void;
   /** Ship mode: intercept Enter for the landing dive. The map just links. */
   onEnter?: (body: CelestialBody) => void;
   closeLabel?: string;
+  /** The primary verb: "Enter" by default, "Land" at a planet's dock ring. */
+  verb?: string;
+  /** Overrides the kind · label kicker, e.g. "Landed · Music". */
+  kicker?: string;
 }) {
   const script = NARRATION[body.stop.narrationKey];
   return (
     <div className="ctrla-space-dock" role="dialog" aria-label={body.stop.headline}>
       <div className="ctrla-space-dock-inner">
         <span className="ctrla-space-kicker">
-          {KIND_LABEL[body.kind]} · {body.label}
+          {kicker ?? `${KIND_LABEL[body.kind]} · ${body.label}`}
         </span>
         <h2
           style={{
@@ -78,7 +84,7 @@ export default function DockPanel({
               }
             }}
           >
-            Enter <span aria-hidden>→</span>
+            {verb} <span aria-hidden>→</span>
           </Link>
           <button type="button" onClick={onClose} className="ctrla-space-ghost">
             {closeLabel}
