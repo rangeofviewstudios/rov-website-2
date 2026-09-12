@@ -11,7 +11,7 @@ import { motion, useInView } from "framer-motion";
 import { CONSULT_BOOKING_URL, checkoutHref } from "@/data/soundPricing";
 import CalBookButton from "@/components/sound/CalBookButton";
 import { useEffectiveRole } from "@/components/music/IntakeContext";
-import SessionPhoto, { SESSION } from "@/components/sound/SessionPhoto";
+import SessionPhoto, { PhotoCredit, SESSION } from "@/components/sound/SessionPhoto";
 
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
@@ -33,8 +33,8 @@ export default function ClosingCTA() {
       style={{ padding: "clamp(70px, 11vw, 130px) clamp(16px, 5vw, 60px)" }}
     >
       {/* The last frame of the session, dimmed to a memory behind the ask. */}
-      <div className="absolute inset-0">
-        <SessionPhoto frame={SESSION.profile} sizes="100vw" fade={false} className="opacity-40" />
+      <div className="group absolute inset-0">
+        <SessionPhoto frame={SESSION.profile} sizes="100vw" fade={false} credit={false} className="opacity-40" />
         <div
           aria-hidden
           className="absolute inset-0"
@@ -43,6 +43,7 @@ export default function ClosingCTA() {
               "linear-gradient(180deg, #000 0%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.55) 70%, #000 100%)",
           }}
         />
+        <PhotoCredit className="bottom-4 right-4 sm:opacity-100 sm:translate-y-0 sm:scale-100" />
       </div>
       <div
         aria-hidden

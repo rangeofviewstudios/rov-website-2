@@ -41,7 +41,7 @@ function ValueAccordion() {
         initial={{ opacity: 0, y: 30 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={spring}
-        className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl lg:order-2 lg:sticky lg:top-24"
+        className="group relative aspect-[4/5] w-full overflow-hidden rounded-2xl lg:order-2 lg:sticky lg:top-24"
       >
         <SessionPhoto frame={SESSION.midPhrase} sizes="(min-width: 1024px) 40vw, 100vw" />
       </motion.div>
