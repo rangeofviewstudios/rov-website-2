@@ -3,6 +3,7 @@
 import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import {
   ArrowUpRight, ExternalLink,
   UtensilsCrossed, Scissors, Globe, Bot, Users,
@@ -24,6 +25,8 @@ type InternalProject = {
   href: string;
   type: "internal";
   icon: LucideIcon;
+  /** Cover frame shown on the card. Same capture the case study hub uses. */
+  cover: string;
 };
 
 type ExternalProject = {
@@ -47,9 +50,10 @@ const projects: Project[] = [
     title: "The Bando",
     tags: ["Restaurant", "Next.js", "UX Design"],
     description:
-      "Bold, unapologetically Atlanta. Cut bounce rate by 60% and increased online ordering page views 689x.",
+      "Loud in person, quiet online. We turned the site up to match the walls, and bounce rate fell 60%.",
     href: "/casestudy/bando",
     type: "internal",
+    cover: "/casestudy/Evertriedcrack.webp",
     icon: UtensilsCrossed,
   },
   {
@@ -58,9 +62,10 @@ const projects: Project[] = [
     title: "Aysegul Ikna",
     tags: ["Fashion", "E-commerce", "Brand Identity"],
     description:
-      "Luxury that justifies the price tag. Elevated design drove 30% sales growth for this sustainable fashion brand.",
+      "The clothes cost what they are worth. The site did not say so. Hand-coded store, 30% more monthly sales.",
     href: "/casestudy/ikna",
     type: "internal",
+    cover: "/casestudy/iknacasestudy.webp",
     icon: Scissors,
   },
   {
@@ -69,9 +74,10 @@ const projects: Project[] = [
     title: "DKM Corp",
     tags: ["Corporate", "Brand Identity", "Global"],
     description:
-      "Brand identity and digital infrastructure spanning India, Australia, the US, and Dubai.",
+      "Four countries, one firm, no site that said so. Brand and digital hub for India, Australia, the US, and Dubai.",
     href: "/casestudy/dkm",
     type: "internal",
+    cover: "/casestudy/dubaiskyline.webp",
     icon: Globe,
   },
   {
@@ -80,9 +86,10 @@ const projects: Project[] = [
     title: "Pursue Networking",
     tags: ["SaaS", "AI", "Platform"],
     description:
-      "AI-powered LinkedIn copilot. Built the platform, brand, and pipeline for 500+ active professionals.",
+      "LinkedIn outreach was busywork. We gave it a copilot. Product, brand, and pipeline for 500+ professionals.",
     href: "/casestudy/pursue-networking",
     type: "internal",
+    cover: "/casestudy/Pursue/pursuecover.webp",
     icon: Bot,
   },
   {
@@ -91,9 +98,10 @@ const projects: Project[] = [
     title: "Atlanta Tech Meetup",
     tags: ["Community", "Events", "Hand-coded"],
     description:
-      "Hand-built community site. 100% hand-coded, serving 500+ builders across 50+ events.",
+      "The vibe is the product, so we hand-built it. 0% generated, 500+ builders, 50+ events.",
     href: "/casestudy/atlanta-tech-meetup",
     type: "internal",
+    cover: "/casestudy/atm/atm1.webp",
     icon: Users,
   },
   {
@@ -135,9 +143,10 @@ const projects: Project[] = [
     title: "Wisdom ATL",
     tags: ["Eyewear", "E-commerce", "UX Design"],
     description:
-      "Merged landing into shop, rebuilt the product grid and footer, and gave Wisdm's real-world collabs (Nike, SCAD, Drake, KingBach, Nordstrom) a real home online.",
+      "We turned Wisdom into a machine, and made it weirder on purpose. An eyewear brand rebuilt frame by frame.",
     href: "/casestudy/wisdom-atl",
     type: "internal",
+    cover: "/casestudy/wisdom-atl/build/wisdmnewhero.png",
     icon: Glasses,
   },
 ];
@@ -165,7 +174,20 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
             : `radial-gradient(ellipse 60% 60% at 25% 25%, ${(project as ExternalProject).accent}18 0%, transparent 65%), #090909`,
         }}
       />
-      {/* Category icon — centered, large, ghost opacity */}
+      {/* Cover frame for case studies; slow zoom on hover */}
+      {isInternal && (
+        <div className="absolute inset-0 overflow-hidden transition-transform duration-700 ease-out group-hover:scale-[1.04]">
+          <Image
+            src={(project as InternalProject).cover}
+            alt=""
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            style={{ objectFit: "cover", objectPosition: "center top" }}
+          />
+        </div>
+      )}
+      {/* Category icon for external builds: centered, large, ghost opacity */}
+      {!isInternal && (
       <div
         aria-hidden
         className="absolute inset-0 flex items-center justify-center pointer-events-none select-none transition-transform duration-700 ease-out group-hover:scale-110"
@@ -183,18 +205,9 @@ function ProjectCard({ project, index }: { project: Project; index: number }) {
           }}
         />
       </div>
-      {/* Subtle grid lines */}
-      {isInternal && (
-        <div
-          aria-hidden
-          className="absolute inset-0 pointer-events-none opacity-[0.03]"
-          style={{
-            backgroundImage: "linear-gradient(rgba(255,255,255,0.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.5) 1px, transparent 1px)",
-            backgroundSize: "40px 40px",
-          }}
-        />
       )}
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent" />
+      {/* Photos need a heavier scrim so the title and tags stay legible */}
+      <div className={`absolute inset-0 bg-gradient-to-t ${isInternal ? "from-black via-black/65 to-black/20" : "from-black/90 via-black/20 to-transparent"}`} />
 
       {/* Top row */}
       <div className="absolute top-4 left-4 right-4 flex items-center justify-between">
@@ -378,7 +391,7 @@ export default function WorksContent() {
             className="mt-6 max-w-[52ch] text-white/50 leading-[1.7]"
             style={{ fontSize: "clamp(1rem, 1.5vw, 1.1rem)" }}
           >
-            Every site, brand, and experience we&apos;ve shipped — from deep case studies to quick-turn builds.
+            Every site, brand, and experience we&apos;ve shipped, from deep case studies to quick-turn builds.
           </motion.p>
         </div>
 

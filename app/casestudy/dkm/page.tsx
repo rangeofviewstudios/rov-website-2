@@ -10,14 +10,14 @@ export const metadata: Metadata = {
     alternates: { canonical: "https://www.rovstudios.com/casestudy/dkm" },
     openGraph: {
         title: "DKM Corp Case Study | Range of View Studios",
-        description: "Scaling global operations. 100% execution across four primary markets.",
+        description: "Four countries. One firm. No site that said so. Brand identity and a digital hub for a growth partner in India, Australia, the US, and Dubai.",
         url: "https://www.rovstudios.com/casestudy/dkm",
         images: [{ url: "/og/og-dkm.webp", width: 1200, height: 630, alt: "DKM Corp case study by ROV Studios" }],
     },
     twitter: {
         card: "summary_large_image",
         title: "DKM Corp Case Study | Range of View Studios",
-        description: "Scaling global operations. 100% execution across four primary markets.",
+        description: "Four countries. One firm. No site that said so. Brand identity and a digital hub for a growth partner in India, Australia, the US, and Dubai.",
         images: ["/og/og-dkm.webp"],
     },
 };

@@ -10,14 +10,14 @@ export const metadata: Metadata = {
     alternates: { canonical: "https://www.rovstudios.com/casestudy/bando" },
     openGraph: {
         title: "The Bando Case Study | Range of View Studios",
-        description: "Bold, unapologetically Atlanta. We cut bounce rate by 60% with a culturally-driven redesign.",
+        description: "The Bando is loud in person. Online, it whispered. We turned the website up to match the walls, and bounce rate fell 60%.",
         url: "https://www.rovstudios.com/casestudy/bando",
         images: [{ url: "/og/og-bando.webp", width: 1200, height: 630, alt: "The Bando website redesign by ROV Studios" }],
     },
     twitter: {
         card: "summary_large_image",
         title: "The Bando Case Study | Range of View Studios",
-        description: "Bold, unapologetically Atlanta. We cut bounce rate by 60% with a culturally-driven redesign.",
+        description: "The Bando is loud in person. Online, it whispered. We turned the website up to match the walls, and bounce rate fell 60%.",
         images: ["/og/og-bando.webp"],
     },
 };

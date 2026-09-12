@@ -271,42 +271,42 @@ const caseStudies = [
   {
     id: 'wisdom-atl',
     title: 'Wisdom ATL',
-    description: 'A frame-by-frame e-commerce masterclass: how we merged the landing page into the shop, rebuilt the product grid and footer, and gave a fun Atlanta eyewear brand\'s real world collabs (Nike, SCAD, Drake, KingBach, Nordstrom) a real home online.',
+    description: 'We turned Wisdom into a machine, and made it weirder on purpose. An Atlanta eyewear brand with Nike, SCAD and Nordstrom in its history, and a website that showed none of it. Rebuilt frame by frame.',
     image: '/casestudy/wisdom-atl/build/wisdmnewhero.png',
     href: '/casestudy/wisdom-atl'
   },
   {
     id: 'bando',
     title: 'The Bando',
-    description: 'Bold, unapologetically Atlanta. We transformed a Black history museum and fried chicken spot\'s digital presence to match their in-person energy, cutting bounce rate by 60%.',
+    description: 'The Bando is loud in person. Online, it whispered. We turned the website up to match the graffiti walls, and bounce rate fell 60%.',
     image: '/casestudy/Evertriedcrack.webp',
     href: '/casestudy/bando'
   },
   {
     id: 'ikna',
     title: 'Aysegul Ikna',
-    description: 'Luxury that justifies the price tag. We built a sophisticated digital home for a sustainable fashion brand at Ponce City Market, driving 30% sales growth through elevated design and seamless e-commerce.',
+    description: 'The clothes cost what they are worth. The site did not say so. A hand-coded store for a Ponce City Market fashion brand, and 30% more monthly sales.',
     image: '/casestudy/iknacasestudy.webp',
     href: '/casestudy/ikna'
   },
   {
     id: 'dkm',
     title: 'DKM Corp',
-    description: 'Scaling Global Operations. A comprehensive brand identity and digital infrastructure project for a private growth and operations partner spanning India, Australia, the US, and Dubai.',
+    description: 'Four countries. One firm. No site that said so. Brand identity and a digital hub for a growth partner running operations in India, Australia, the US, and Dubai.',
     image: '/casestudy/dubaiskyline.webp',
     href: '/casestudy/dkm'
   },
   {
     id: 'pursue-networking',
     title: 'Pursue Networking',
-    description: "An AI-powered LinkedIn copilot that turns B2B networking into revenue. We built the platform, the brand, and the pipeline that now drives 500+ active professionals.",
+    description: "LinkedIn outreach was busywork. We gave it a copilot. Product, brand, and pipeline built from zero, now serving 500+ sales professionals.",
     image: '/casestudy/Pursue/pursuecover.webp',
     href: '/casestudy/pursue-networking'
   },
   {
     id: 'atlanta-tech-meetup',
     title: 'Atlanta Tech Meetup',
-    description: "The vibe is the product. Hand-built community site for Atlanta's monthly tech meetup. 100% hand-coded, 0% AI-generated, serving a community of 500+ builders across 50+ events.",
+    description: "The vibe is the product. So we hand-built it. A home for Atlanta's monthly tech meetup: 500+ builders, 50+ events, 0% generated.",
     image: '/casestudy/atm/atm1.webp',
     href: '/casestudy/atlanta-tech-meetup'
   }
@@ -359,8 +359,8 @@ export default function CaseStudyContent() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
           >
-            Explore how we help brands elevate their digital presence through
-            strategic design and technical excellence.
+            Six stories, told the way we actually worked them: the calls we made up front,
+            the frames we marked up by hand, and the receipt at the end.
           </Subtitle>
         </HeaderSection>
 
