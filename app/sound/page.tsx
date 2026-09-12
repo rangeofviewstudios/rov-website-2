@@ -15,6 +15,7 @@ import { soundFaqItems } from "@/data/faq";
 import { VideoSchema } from "@/components/schema/VideoSchema";
 import { ServiceSchema } from "@/components/schema/ServiceSchema";
 import { BreadcrumbSchema } from "@/components/schema/BreadcrumbSchema";
+import { SESSION } from "@/components/sound/SessionPhoto";
 import { FAQPageSchema } from "@/components/schema/FAQPageSchema";
 
 // rovmusic.com is served from this same app via a host rewrite (see middleware.ts).
@@ -182,6 +183,8 @@ export default function Page() {
                 line="That is what your record could sound like. Here is what it costs."
                 sub="Produced, written, mixed, and mastered here. Every rate below is published in full. You leave every session with your stems and whatever we mixed that day."
                 link={{ label: "Hear all six records, named and linked", href: "/credits" }}
+                photo={SESSION.street}
+                layout="bleed"
             />
 
             {/* 04 — Two-path fork (record vs send stems) */}
@@ -210,6 +213,7 @@ export default function Page() {
                 line="A mix makes one song better. This is what makes a catalogue worth something."
                 sub="Most artists are not short a mix. They are short the artwork, the video, the release page, the splits, and the metadata that stops a song landing on a duplicate profile. Nobody sells that, so nobody buys it, and it is the reason good records disappear."
                 link={{ label: "See the whole path we run, capture to release", href: "/toolkit" }}
+                photo={SESSION.eyesClosed}
             />
 
             {/* 08 — Whatever's missing: the full-service claim, shown as
@@ -241,6 +245,7 @@ export default function Page() {
                 line="We will tell you when the answer is not us."
                 sub="Sometimes a record needs a re-record rather than a mix, or a room bigger than ours. Saying so costs us the invoice and saves you three of them."
                 link={{ label: "How every Atlanta studio compares, including the ones we are not", href: "/atlanta-studios" }}
+                photo={SESSION.knit}
             />
 
             {/* 12 — Testimonials (speed and process, i.e. objections) */}

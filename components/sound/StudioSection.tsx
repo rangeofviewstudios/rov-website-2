@@ -1,59 +1,11 @@
 "use client";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import { useRef, useState } from "react";
-import Image from "next/image";
+import SessionPhoto, { SESSION } from "@/components/sound/SessionPhoto";
 import { BOOKING_URL, CAL_LINKS } from "@/data/soundPricing";
 import CalBookButton from "@/components/sound/CalBookButton";
 
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
-
-// A still from the session, not a loop. Photos replaced the three studio
-// clips because the clips were generic room b-roll; these are real artists at
-// a real session, which is the proof the section is meant to carry.
-function SessionPhoto({ src, alt, label, subtitle, delay, parentInView, className, sizes, priority }: {
-  src: string;
-  alt: string;
-  label: string;
-  subtitle: string;
-  delay: number;
-  parentInView: boolean;
-  className?: string;
-  sizes: string;
-  priority?: boolean;
-}) {
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 30 }}
-      animate={parentInView ? { opacity: 1, y: 0 } : {}}
-      transition={{ ...spring, delay }}
-      className={`relative rounded-2xl overflow-hidden group ${className ?? ""}`}
-    >
-      <Image
-        src={src}
-        alt={alt}
-        fill
-        sizes={sizes}
-        priority={priority}
-        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-      />
-      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
-      <div className="absolute bottom-5 left-5">
-        <span
-          className="text-white/40 text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.25em] block mb-1"
-          style={{ fontFamily: BODY_FONT }}
-        >
-          {label}
-        </span>
-        <span
-          className="text-white text-lg md:text-xl font-bold italic"
-          style={{ fontFamily: HEADING_FONT }}
-        >
-          {subtitle}
-        </span>
-      </div>
-    </motion.div>
-  );
-}
 
 const HEADING_FONT = "Norwige, sans-serif";
 const BODY_FONT = "'Roboto', sans-serif";
@@ -76,44 +28,25 @@ const valueProps = [
   },
 ];
 
-// One night, one session, three artists. The wide shot anchors the row so the
-// portraits read as details of the same evening rather than five stock tiles.
-const SESSION_PHOTOS = [
-  { src: "/soundpage/session-04.webp", alt: "An artist alone at a microphone on a lamp-lit street at dusk", label: "The session", subtitle: "One mic, one night", className: "aspect-[3/2] md:col-span-4 md:aspect-auto md:min-h-[26rem]", sizes: "(min-width: 768px) 60vw, 100vw" },
-  { src: "/soundpage/session-03.webp", alt: "A vocalist in a knit shirt singing into a condenser microphone at night", label: "Take one", subtitle: "Finding the key", className: "aspect-[4/5] md:col-span-2 md:aspect-auto", sizes: "(min-width: 768px) 30vw, 100vw" },
-  { src: "/soundpage/session-05.webp", alt: "A vocalist with eyes closed singing into a microphone, lit by warm light", label: "Take two", subtitle: "Eyes closed", className: "aspect-[4/5] md:col-span-2", sizes: "(min-width: 768px) 30vw, 100vw" },
-  { src: "/soundpage/session-01.webp", alt: "A vocalist in a beanie, in profile, singing into a microphone", label: "Take three", subtitle: "Into the mic", className: "aspect-[4/5] md:col-span-2", sizes: "(min-width: 768px) 30vw, 100vw" },
-  { src: "/soundpage/session-02.webp", alt: "A vocalist in a beanie holding the mic stand, mid-phrase", label: "Last take", subtitle: "Getting it right", className: "aspect-[4/5] md:col-span-2", sizes: "(min-width: 768px) 30vw, 100vw" },
-];
-
-function StudioVisuals() {
-  const ref = useRef<HTMLDivElement>(null);
-  const inView = useInView(ref, { once: true, margin: "-80px" });
-
-  return (
-    <div ref={ref} className="max-w-7xl mx-auto mb-16 md:mb-24">
-      {/* Six-column mosaic: wide shot + one portrait on top, three portraits below */}
-      <div className="grid grid-cols-1 md:grid-cols-6 gap-3 md:gap-4">
-        {SESSION_PHOTOS.map((photo, i) => (
-          <SessionPhoto
-            key={photo.src}
-            {...photo}
-            delay={i * 0.1}
-            parentInView={inView}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
 function ValueAccordion() {
   const [active, setActive] = useState(0);
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <div ref={ref} className="max-w-7xl mx-auto mb-16 md:mb-24">
+    <div ref={ref} className="max-w-7xl mx-auto mb-16 md:mb-24 grid grid-cols-1 lg:grid-cols-[1.35fr_1fr] gap-10 lg:gap-16 items-start">
+      {/* The room, in use. Replaces the old b-roll strip; one real frame
+          beside the list says more than three loops of an empty desk did. */}
+      <motion.div
+        initial={{ opacity: 0, y: 30 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={spring}
+        className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl lg:order-2 lg:sticky lg:top-24"
+      >
+        <SessionPhoto frame={SESSION.midPhrase} sizes="(min-width: 1024px) 40vw, 100vw" />
+      </motion.div>
+
+      <div className="lg:order-1">
       {/* Section label */}
       <motion.span
         initial={{ opacity: 0, x: -20 }}
@@ -231,6 +164,7 @@ function ValueAccordion() {
         })}
       </div>
     </div>
+    </div>
   );
 }
 
@@ -263,7 +197,7 @@ function RecordingRates() {
         className="text-white text-3xl md:text-4xl lg:text-5xl font-bold italic mb-3"
         style={{ fontFamily: HEADING_FONT }}
       >
-        Cheapest finished song in the city.
+        Published rates, stems in hand.
       </motion.h3>
       <motion.p
         initial={{ opacity: 0, y: 10 }}
@@ -272,7 +206,7 @@ function RecordingRates() {
         className="text-white/40 text-sm md:text-base mb-10 max-w-xl"
         style={{ fontFamily: BODY_FONT }}
       >
-        Other rooms charge you for the hour, then bill mixing separately. Here, one rate and you leave finished.
+        You book the hour and leave with your files and whatever we mixed. The full mix and master is a separate line, and both numbers are on this page.
       </motion.p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
@@ -338,7 +272,7 @@ function RecordingRates() {
             $75/hr, stems included
           </span>
           <ul className="flex-1 space-y-2 mb-6">
-            {["Four hours in the room, your lowest rate", "Your stems plus whatever we mixed in the session", "48-hour turnaround", "Usually two to three finished songs"].map((f) => (
+            {["Four hours in the room, your lowest rate", "Your stems plus whatever we mixed in the session", "48-hour turnaround", "Usually two to three songs tracked"].map((f) => (
               <li key={f} className="flex items-start gap-2 text-white/50 text-sm" style={{ fontFamily: BODY_FONT }}>
                 <span className="text-[#EA9A61] mt-0.5 shrink-0">&#10003;</span>
                 {f}
@@ -468,9 +402,6 @@ export default function StudioSection() {
 
       {/* ── Recording Rates ── */}
       <RecordingRates />
-
-      {/* ── Studio Visuals ── */}
-      <StudioVisuals />
 
       {/* ── Value Props Accordion ── */}
       <ValueAccordion />
