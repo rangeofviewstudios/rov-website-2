@@ -18,6 +18,7 @@ import Bodies from "./Bodies";
 import Ship from "./Ship";
 import Trail from "./Trail";
 import Waypoint from "./Waypoint";
+import Signals from "./Signal";
 import { frame, useSpace } from "../_state/useSpace";
 
 // ── Quality governor ───────────────────────────────────
@@ -163,6 +164,7 @@ export default function Scene() {
       <Ship />
       <Trail />
       <Waypoint />
+      <Signals />
     </Canvas>
   );
 }

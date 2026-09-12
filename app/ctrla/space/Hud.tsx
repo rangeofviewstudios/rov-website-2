@@ -18,6 +18,8 @@ import { HOME_LINE } from "./_map/narration";
 import { routeFor } from "./_map/routes";
 import { FLIGHT } from "./_map/flight";
 import { hasPad } from "./_map/pads";
+import { nextRank, rankFor } from "./_map/ranks";
+import { SIGNALS } from "./_map/signals";
 import { frame, useSpace } from "./_state/useSpace";
 import { track } from "./_state/track";
 import { readProfile } from "@/lib/ctrla/profile";
@@ -26,6 +28,11 @@ import { ed } from "../_components/editorial";
 import DockPanel from "./DockPanel";
 import StarMap from "./StarMap";
 import Guide from "./Guide";
+import PilotLog from "./PilotLog";
+
+/** How far out the radio meter starts to register an unfound signal. */
+const RADIO_RANGE = 110;
+const TOAST_MS = 3600;
 
 export default function Hud() {
   const router = useRouter();
@@ -44,6 +51,13 @@ export default function Hud() {
   const route = useSpace((s) => s.route);
   const step = useSpace((s) => s.step);
   const guideHidden = useSpace((s) => s.guideHidden);
+  const xp = useSpace((s) => s.xp);
+  const logOpen = useSpace((s) => s.logOpen);
+  const toasts = useSpace((s) => s.toasts);
+  const signalsFound = useSpace((s) => s.signals.length);
+  const rank = rankFor(xp);
+  const next = nextRank(xp);
+  const rankPct = next ? Math.round(((xp - rank.xp) / (next.xp - rank.xp)) * 100) : 100;
 
   const near = nearId ? bodyById(nearId) : null;
   const docked = dockedId ? bodyById(dockedId) : null;
@@ -94,8 +108,12 @@ export default function Hud() {
       if (k === "e" && s.nearId && !s.dockedId && s.introSeen) s.dock(s.nearId);
       else if (k === "escape") {
         if (s.photo) s.togglePhoto(false);
+        else if (s.logOpen) s.toggleLog(false);
         else if (s.mapOpen) s.toggleMap(false);
         else if (s.dockedId) s.undock();
+      } else if (k === "l" && s.introSeen && !s.photo) {
+        if (!s.logOpen) s.toggleMap(false);
+        s.toggleLog();
       } else if (k === "m" && s.introSeen && !s.photo) s.toggleMap();
       else if (k === "p" && s.introSeen && !s.dockedId && !s.mapOpen) s.togglePhoto();
       else if (k === "h" && s.introSeen) s.toggleGuide();
@@ -108,6 +126,7 @@ export default function Hud() {
   const [dists, setDists] = useState<Record<string, number>>({});
   const [speed, setSpeed] = useState(0);
   const [fill, setFill] = useState(0);
+  const [radio, setRadio] = useState(0);
   useEffect(() => {
     const id = setInterval(() => {
       const out: Record<string, number> = {};
@@ -118,9 +137,22 @@ export default function Hud() {
       setDists(out);
       setSpeed(frame.shipSpeed);
       setFill(frame.dockFill);
+      // Radio: 0 out of range, 1 on top of the beacon. Eased so the last
+      // stretch feels like it is pulling you in.
+      const d = frame.signalNear.dist;
+      const r = d < RADIO_RANGE ? Math.pow(1 - d / RADIO_RANGE, 1.5) : 0;
+      setRadio(Math.round(r * 100) / 100);
     }, 125);
     return () => clearInterval(id);
   }, []);
+
+  // ── toasts: show the head of the queue, then shift it ──
+  const toast = toasts[0] ?? null;
+  useEffect(() => {
+    if (!toast) return;
+    const t = setTimeout(() => useSpace.getState().shiftToast(), TOAST_MS);
+    return () => clearTimeout(t);
+  }, [toast]);
 
   // ── waypoint arrow: positioned every frame from the scene's projection,
   //    written straight to the element so React never sees 60Hz ──
@@ -228,6 +260,29 @@ export default function Hud() {
         </span>
       </div>
 
+      {/* Rank badge: the door to the pilot log */}
+      {introSeen && !photo && (
+        <button type="button" className="ctrla-space-rank" onClick={() => useSpace.getState().toggleLog()} aria-label="Open the pilot log" data-open={logOpen}>
+          <span className="ctrla-space-rank-title" style={{ color: rank.trim }}>
+            {rank.title}
+          </span>
+          <span className="ctrla-space-kicker" style={{ opacity: 0.75 }}>
+            {xp} XP{next ? ` · ${next.xp - xp} to ${next.title}` : ""} · <kbd style={{ marginRight: 0 }}>L</kbd>
+          </span>
+          <span className="ctrla-space-xpbar" aria-hidden>
+            <i style={{ width: `${rankPct}%`, background: rank.trim }} />
+          </span>
+        </button>
+      )}
+
+      {/* A beat: mission, rank, signal */}
+      {toast && !photo && (
+        <div key={toast.key} className="ctrla-space-toast ctrla-space-beat" data-kind={toast.kind} role="status">
+          <span className="ctrla-space-beat-title">{toast.title}</span>
+          {toast.sub && <span className="ctrla-space-beat-sub">{toast.sub}</span>}
+        </div>
+      )}
+
       {/* Waypoint arrow, off-screen only */}
       <div ref={arrowRef} className="ctrla-space-arrow" aria-hidden>
         <svg viewBox="0 0 24 24" fill="none" stroke={ed.gold} strokeWidth={2.2} strokeLinecap="round" strokeLinejoin="round">
@@ -289,6 +344,16 @@ export default function Hud() {
 
       {/* Speed + fps + render scale, small, bottom-right */}
       <div className="ctrla-space-meter">
+        {signalsFound < SIGNALS.length && (
+          <span className="ctrla-space-radio" data-hot={radio > 0.55} title="Radio: something is out there">
+            <span style={{ opacity: 0.6 }}>radio</span>
+            <span className="ctrla-space-radio-bars" aria-hidden>
+              {[0.12, 0.3, 0.5, 0.7, 0.88].map((th) => (
+                <i key={th} data-on={radio >= th} />
+              ))}
+            </span>
+          </span>
+        )}
         <span>{Math.round(speed)} u/s</span>
         <span style={{ opacity: 0.6 }}>{fps} fps</span>
         <span style={{ opacity: 0.6 }}>{quality}×</span>
@@ -322,7 +387,7 @@ export default function Hud() {
             </h1>
             <div style={{ display: "flex", gap: 14, alignItems: "flex-start", maxWidth: 520, marginBottom: 18 }}>
               <VueBust pose="showing" size={44} mood="alert" style={{ border: `1px solid ${ed.amber}`, marginTop: 2 }} />
-              <p style={{ fontFamily: ed.serif, fontStyle: "italic", fontSize: "clamp(16px,1.8vw,22px)", lineHeight: 1.4, color: ed.ink, margin: 0 }}>
+              <p style={{ fontFamily: ed.body, fontSize: "clamp(15px,1.5vw,18px)", lineHeight: 1.55, color: ed.ink, margin: 0 }}>
                 {home
                   ? HOME_LINE[home.id]
                   : "Everything in this volume is out here somewhere. I will draw you a line through it once you tell me what you make. Nothing to win. Just look around."}
@@ -341,6 +406,7 @@ export default function Hud() {
               <span><kbd>E</kbd> dock</span>
               <span><kbd>M</kbd> map</span>
               <span><kbd>P</kbd> photo</span>
+              <span><kbd>L</kbd> pilot log</span>
               <span><kbd>H</kbd> quiet Vue</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
@@ -394,6 +460,9 @@ export default function Hud() {
 
       {/* Page wipe, in the body's own colour */}
       {entering && <div aria-hidden className="ctrla-space-landing" style={{ background: entering.look.palette[1] }} />}
+
+      {/* Pilot log */}
+      {logOpen && <PilotLog onClose={() => useSpace.getState().toggleLog(false)} />}
 
       {/* Star map overlay */}
       {mapOpen && (

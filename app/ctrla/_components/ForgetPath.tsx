@@ -15,12 +15,18 @@ export default function ForgetPath() {
 
   const forget = async () => {
     try {
-      await fetch("/api/ctrla/path", { method: "DELETE" });
+      await Promise.all([fetch("/api/ctrla/path", { method: "DELETE" }), fetch("/api/ctrla/space", { method: "DELETE" })]);
     } catch {
       /* the device copy still clears */
     }
     clearProgress();
     clearProfile();
+    // The pilot log from /ctrla/space, same device-copy rule.
+    for (const k of ["xp", "boost", "visited", "landed", "signals", "missions", "trim", "charted", "intro"]) {
+      try {
+        localStorage.removeItem(`ctrla-space-${k}`);
+      } catch {}
+    }
     setArm(false);
     setDone(true);
   };

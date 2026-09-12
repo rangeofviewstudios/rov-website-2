@@ -19,6 +19,7 @@ import { ed } from "../_components/editorial";
 import StarMap from "./StarMap";
 import Hud from "./Hud";
 import { track } from "./_state/track";
+import { useSpaceSync } from "./_state/sync";
 
 const Scene = dynamic(() => import("./_scene/Scene"), {
   ssr: false,
@@ -46,6 +47,9 @@ function canFly(): boolean {
 
 export default function SpaceClient() {
   const [mode, setMode] = useState<Mode>("deciding");
+  // The pilot log follows the account in both modes: the star map counts
+  // a click-through as a visit too.
+  useSpaceSync();
   useEffect(() => {
     const next = canFly() ? "ship" : "map";
     setMode(next);

@@ -31,6 +31,7 @@ import { useFrame, useThree } from "@react-three/fiber";
 import { BODIES, bodyById, restPosition, type CelestialBody } from "../_map/map";
 import { FLIGHT, dockRange } from "../_map/flight";
 import { PAD_REST } from "../_map/pads";
+import { RANKS } from "../_map/ranks";
 import { frame, useSpace } from "../_state/useSpace";
 
 export { dockRange };
@@ -67,11 +68,25 @@ function spawn(): { pos: THREE.Vector3; heading: number } {
   return { pos, heading };
 }
 
+/** Ship-space engine offset, shared with the trail so the ribbon starts at the nozzles. */
+export const ENGINE_Z = 3.5;
+
 export default function Ship() {
   const group = useRef<THREE.Group>(null);
   const engine = useRef<THREE.Sprite>(null);
   const hullRef = useRef<THREE.Mesh>(null);
+  const navL = useRef<THREE.Mesh>(null);
+  const navR = useRef<THREE.Mesh>(null);
+  const beacon = useRef<THREE.Mesh>(null);
+  const coreL = useRef<THREE.Mesh>(null);
+  const coreR = useRef<THREE.Mesh>(null);
+  const boostAcc = useRef(0);
   const { camera } = useThree();
+  // The trim colour is the one piece of React state the ship reads: it
+  // changes when the pilot picks a new one in the log, which is rare, and
+  // R3F pushes the new colour into the materials on that render.
+  const trimId = useSpace((s) => s.trim);
+  const trim = RANKS.find((r) => r.id === trimId)?.trim ?? RANKS[0].trim;
 
   // ── frame state ──
   // The ship manages its own physics state locally. It only writes out to
@@ -110,15 +125,16 @@ export default function Ship() {
   const tmp = useMemo(() => new THREE.Vector3(), []);
   const up = useMemo(() => new THREE.Vector3(0, 1, 0), []);
 
-  // Engine glow texture: a soft radial gold dot, drawn once.
+  // Engine glow texture: a soft radial white dot, drawn once. White so the
+  // sprite's colour (the trim) is what tints it.
   const glowTex = useMemo(() => {
     const c = document.createElement("canvas");
     c.width = c.height = 64;
     const ctx = c.getContext("2d")!;
     const g = ctx.createRadialGradient(32, 32, 0, 32, 32, 32);
-    g.addColorStop(0, "rgba(227,194,74,1)");
-    g.addColorStop(0.4, "rgba(227,194,74,0.55)");
-    g.addColorStop(1, "rgba(227,194,74,0)");
+    g.addColorStop(0, "rgba(255,255,255,1)");
+    g.addColorStop(0.4, "rgba(255,255,255,0.55)");
+    g.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = g;
     ctx.fillRect(0, 0, 64, 64);
     return new THREE.CanvasTexture(c);
@@ -446,10 +462,33 @@ export default function Ship() {
     frame.shipSpeed = speed;
     frame.shipHeading = heading.current;
 
+    const burn = state.landingId ? 0.9 * (1 - descent.current) : state.landedId ? 0 : thrust;
     if (engine.current) {
-      const burn = state.landingId ? 0.9 * (1 - descent.current) : state.landedId ? 0 : thrust;
       const s = 0.9 + burn * (boost ? 2.2 : 1.4) + speed / (MAX_SPEED * 1.5);
       engine.current.scale.set(s, s, 1);
+    }
+    // Nozzle cores brighten with the burn; boost pushes them past white.
+    const coreGlow = 0.6 + burn * (boosting ? 3.2 : 1.6);
+    for (const c of [coreL.current, coreR.current]) {
+      if (c) (c.material as THREE.MeshStandardMaterial).emissiveIntensity = coreGlow;
+    }
+    // Nav lights: aviation convention, red port / green starboard, a slow
+    // double-blink. The beacon on the fin strobes faster.
+    {
+      const t = clock.elapsedTime;
+      const cyc = t % 2.0;
+      const nav = cyc < 0.12 || (cyc > 0.3 && cyc < 0.42) ? 3.5 : 0.35;
+      if (navL.current) (navL.current.material as THREE.MeshStandardMaterial).emissiveIntensity = nav;
+      if (navR.current) (navR.current.material as THREE.MeshStandardMaterial).emissiveIntensity = nav;
+      const strobe = (t * 1.6) % 1 < 0.08 ? 4 : 0.5;
+      if (beacon.current) (beacon.current.material as THREE.MeshStandardMaterial).emissiveIntensity = strobe;
+    }
+    // Boost time feeds Full Throttle. Batched to the store twice a second so
+    // the 60Hz path never touches React.
+    if (boosting) boostAcc.current += dt;
+    if (boostAcc.current > 0 && (!boosting || boostAcc.current >= 0.5)) {
+      state.addBoostTime(boostAcc.current);
+      boostAcc.current = 0;
     }
 
     // ── docking: the ring, and the magnetic fill ──
@@ -561,40 +600,115 @@ export default function Ship() {
     }
   });
 
+  // ── the ship ──
+  // Nose toward -z. Three-part fuselage (paper-white nose and body, night
+  // tail) with a glass canopy, a dorsal fin, swept wings with winglets, and
+  // twin nozzles. Every accent (spine stripe, wing edges, fin tip, nozzle
+  // cores, engine glow) wears the trim colour, so a rank-up reads on the
+  // ship itself and not just in the log. Still low-poly and flat-shaded on
+  // purpose: it has to sit in the same world as the procedural planets.
+  const PAPER = "#F0E6E0";
+  const NIGHT = "#24123A";
+  const STEEL = "#3A2A4A";
   return (
-  <>
     <group ref={group}>
-      {/* Hull: a low-poly dart, nose toward -z. Paper white like the helmet. */}
-      <mesh ref={hullRef} rotation={[-Math.PI / 2, 0, 0]}>
-        <coneGeometry args={[1.15, 5.2, 6]} />
-        <meshStandardMaterial color="#F0E6E0" flatShading roughness={0.6} />
+      {/* Nose cone */}
+      <mesh position={[0, 0, -2.5]} rotation={[-Math.PI / 2, 0, 0]}>
+        <coneGeometry args={[0.92, 2.6, 8]} />
+        <meshStandardMaterial color={PAPER} flatShading roughness={0.55} />
       </mesh>
-      {/* Canopy */}
-      <mesh position={[0, 0.55, -0.4]} scale={[0.55, 0.42, 0.9]}>
-        <sphereGeometry args={[1, 10, 8]} />
-        <meshStandardMaterial color="#24123A" roughness={0.25} metalness={0.4} />
+      {/* Mid fuselage: the piece that glows on reentry */}
+      <mesh ref={hullRef} position={[0, 0, 0.1]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[0.92, 1.06, 2.6, 8]} />
+        <meshStandardMaterial color={PAPER} flatShading roughness={0.55} />
       </mesh>
-      {/* Wings, swept back, night with a gold edge */}
+      {/* Tail taper, night, into the nozzle block */}
+      <mesh position={[0, 0, 2.15]} rotation={[Math.PI / 2, 0, 0]}>
+        <cylinderGeometry args={[1.06, 0.62, 1.5, 8]} />
+        <meshStandardMaterial color={NIGHT} flatShading roughness={0.65} />
+      </mesh>
+      {/* Spine stripe, trim */}
+      <mesh position={[0, 0.98, 0.35]}>
+        <boxGeometry args={[0.16, 0.05, 3.6]} />
+        <meshStandardMaterial color={trim} emissive={trim} emissiveIntensity={0.7} />
+      </mesh>
+      {/* Canopy: dark glass with a paper frame line */}
+      <mesh position={[0, 0.72, -0.85]} scale={[0.52, 0.42, 1.15]}>
+        <sphereGeometry args={[1, 12, 8]} />
+        <meshStandardMaterial color="#1A0F2E" roughness={0.15} metalness={0.6} />
+      </mesh>
+      <mesh position={[0, 0.66, -0.85]} rotation={[Math.PI / 2, 0, 0]} scale={[0.56, 1.2, 1]}>
+        <torusGeometry args={[1, 0.04, 6, 24]} />
+        <meshStandardMaterial color={PAPER} roughness={0.5} />
+      </mesh>
+      {/* Dorsal fin with a trim tip and the strobe beacon */}
+      <group position={[0, 0.95, 2.05]} rotation={[0.18, 0, 0]}>
+        <mesh>
+          <boxGeometry args={[0.1, 1.1, 1.3]} />
+          <meshStandardMaterial color={NIGHT} flatShading roughness={0.7} />
+        </mesh>
+        <mesh position={[0, 0.58, -0.1]}>
+          <boxGeometry args={[0.13, 0.14, 1.0]} />
+          <meshStandardMaterial color={trim} emissive={trim} emissiveIntensity={0.7} />
+        </mesh>
+        <mesh ref={beacon} position={[0, 0.7, -0.45]}>
+          <sphereGeometry args={[0.1, 8, 6]} />
+          <meshStandardMaterial color="#FFFFFF" emissive="#FFFFFF" emissiveIntensity={0.5} />
+        </mesh>
+      </group>
+      {/* Wings: swept, night, trim leading edge, winglet, nav light */}
       {[-1, 1].map((side) => (
-        <group key={side} position={[side * 1.1, -0.15, 1.1]} rotation={[0, side * -0.35, side * 0.12]}>
+        <group key={side} position={[side * 1.15, -0.12, 1.0]} rotation={[0, side * -0.38, side * 0.1]}>
           <mesh>
-            <boxGeometry args={[2.6, 0.16, 1.4]} />
-            <meshStandardMaterial color="#24123A" flatShading roughness={0.7} />
+            <boxGeometry args={[2.9, 0.14, 1.7]} />
+            <meshStandardMaterial color={NIGHT} flatShading roughness={0.7} />
           </mesh>
-          <mesh position={[side * 1.32, 0, 0]}>
-            <boxGeometry args={[0.12, 0.2, 1.4]} />
-            <meshStandardMaterial color="#E3C24A" emissive="#E3C24A" emissiveIntensity={0.6} />
+          {/* Paper panel on the wing root so it reads as the same craft as the hull */}
+          <mesh position={[side * -0.6, 0.08, 0.15]}>
+            <boxGeometry args={[1.2, 0.02, 1.1]} />
+            <meshStandardMaterial color={PAPER} flatShading roughness={0.55} />
+          </mesh>
+          {/* Leading edge, trim */}
+          <mesh position={[0, 0, -0.84]}>
+            <boxGeometry args={[2.9, 0.16, 0.08]} />
+            <meshStandardMaterial color={trim} emissive={trim} emissiveIntensity={0.55} />
+          </mesh>
+          {/* Wingtip edge, trim */}
+          <mesh position={[side * 1.47, 0, 0]}>
+            <boxGeometry args={[0.12, 0.2, 1.7]} />
+            <meshStandardMaterial color={trim} emissive={trim} emissiveIntensity={0.6} />
+          </mesh>
+          {/* Winglet */}
+          <mesh position={[side * 1.42, 0.32, 0.25]} rotation={[0, 0, side * 0.15]}>
+            <boxGeometry args={[0.08, 0.55, 1.0]} />
+            <meshStandardMaterial color={NIGHT} flatShading roughness={0.7} />
+          </mesh>
+          {/* Nav light: red port, green starboard */}
+          <mesh ref={side < 0 ? navL : navR} position={[side * 1.5, 0.62, 0.0]}>
+            <sphereGeometry args={[0.11, 8, 6]} />
+            <meshStandardMaterial color={side < 0 ? "#FF3B3B" : "#3BFF7A"} emissive={side < 0 ? "#FF3B3B" : "#3BFF7A"} emissiveIntensity={0.4} />
           </mesh>
         </group>
       ))}
-      {/* Engine glow */}
-      <sprite ref={engine} position={[0, 0, 2.9]}>
-        <spriteMaterial map={glowTex} transparent blending={THREE.AdditiveBlending} depthWrite={false} />
+      {/* Twin nozzles with trim-lit cores */}
+      {[-1, 1].map((side) => (
+        <group key={side} position={[side * 0.42, -0.05, 3.05]}>
+          <mesh rotation={[Math.PI / 2, 0, 0]}>
+            <cylinderGeometry args={[0.3, 0.38, 0.8, 10]} />
+            <meshStandardMaterial color={STEEL} roughness={0.4} metalness={0.7} flatShading />
+          </mesh>
+          <mesh ref={side < 0 ? coreL : coreR} position={[0, 0, 0.41]}>
+            <circleGeometry args={[0.24, 12]} />
+            <meshStandardMaterial color={trim} emissive={trim} emissiveIntensity={0.8} side={THREE.DoubleSide} />
+          </mesh>
+        </group>
+      ))}
+      {/* Engine glow, trim-tinted */}
+      <sprite ref={engine} position={[0, 0, ENGINE_Z]}>
+        <spriteMaterial map={glowTex} color={trim} transparent blending={THREE.AdditiveBlending} depthWrite={false} />
       </sprite>
       {/* A small local light so the hull reads even far from the sun. */}
-      <pointLight position={[0, 2, 1]} intensity={0.6} distance={14} color="#E3C24A" />
+      <pointLight position={[0, 2, 1]} intensity={0.6} distance={14} color={trim} />
     </group>
-
-  </>
   );
 }

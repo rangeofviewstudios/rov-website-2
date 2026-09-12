@@ -65,7 +65,7 @@ export default function DockPanel({
         {script && (
           <div style={{ display: "flex", gap: 14, alignItems: "flex-start", maxWidth: 520, marginBottom: 30 }}>
             <VueBust pose="pointing" size={44} mood="alert" style={{ border: `1px solid ${ed.amber}`, marginTop: 2 }} />
-            <p style={{ fontFamily: ed.serif, fontStyle: "italic", fontSize: "clamp(16px,1.7vw,21px)", lineHeight: 1.4, color: ed.ink, margin: 0 }}>
+            <p style={{ fontFamily: ed.body, fontSize: "clamp(15px,1.4vw,17px)", lineHeight: 1.55, color: ed.ink, margin: 0 }}>
               {script.arrive}
             </p>
           </div>

@@ -33,6 +33,8 @@ export const LINES = {
   complete: "That is your line charted. The rest of the sky is yours.",
   quizDone: "Got it. Drawing your line.",
   hidden: "Press H if you want me back.",
+  radio: "Radio is picking something up. Not on any map. Follow the bars.",
+  firstMission: "That is one off the board. Press L, I keep the log.",
 } as const;
 
 /** Why this stop, for the "Why this stop?" reply. One line each. */

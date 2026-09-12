@@ -12,16 +12,26 @@
 // thread instead of a billboarded slab. One mesh each, updated in place.
 // ═══════════════════════════════════════════════════════
 
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import * as THREE from "three";
 import { useFrame } from "@react-three/fiber";
 import { frame, useSpace } from "../_state/useSpace";
 import { FLIGHT } from "../_map/flight";
+import { RANKS } from "../_map/ranks";
+import { ENGINE_Z } from "./Ship";
 
 const N = 28;
-const ENGINE_BACK = 2.9; // engine sprite sits this far behind the ship origin
-const WING_X = 2.4; // wing tip, either side of the hull
-const WING_BACK = 2.2;
+const ENGINE_BACK = ENGINE_Z; // the nozzles sit this far behind the ship origin
+const WING_X = 2.6; // wing tip, either side of the hull
+const WING_BACK = 2.0;
+
+type RGB = [number, number, number];
+const rgb = (hex: string): RGB => {
+  const c = new THREE.Color(hex);
+  return [c.r, c.g, c.b];
+};
+/** Push a colour toward white for the hot head of the ribbon. */
+const heat = ([r, g, b]: RGB, k: number): RGB => [r + (1 - r) * k, g + (1 - g) * k, b + (1 - b) * k];
 
 interface RibbonProps {
   /** Emitter offset in ship space: +x is starboard, +z is behind. */
@@ -36,9 +46,15 @@ interface RibbonProps {
 }
 
 export default function Trail() {
+  // The engine comet wears the trim; the wing threads stay gold.
+  const trimId = useSpace((s) => s.trim);
+  const trim = RANKS.find((r) => r.id === trimId)?.trim ?? RANKS[0].trim;
+  const base = rgb(trim);
+  const hot = heat(base, 0.55);
+  const cool: RGB = [base[0] * 0.75, base[1] * 0.75, base[2] * 0.75];
   return (
     <>
-      <Ribbon offset={[0, 0, ENGINE_BACK]} width={[0.08, 0.18]} peak={0.6} hot={[1.0, 0.92, 0.62]} cool={[0.76, 0.6, 0.31]} />
+      <Ribbon offset={[0, 0, ENGINE_BACK]} width={[0.1, 0.22]} peak={0.65} hot={hot} cool={cool} />
       <Ribbon offset={[-WING_X, -0.15, WING_BACK]} width={[0.035, 0.05]} peak={0.5} hot={[0.89, 0.76, 0.29]} cool={[0.89, 0.76, 0.29]} />
       <Ribbon offset={[WING_X, -0.15, WING_BACK]} width={[0.035, 0.05]} peak={0.5} hot={[0.89, 0.76, 0.29]} cool={[0.89, 0.76, 0.29]} />
     </>
@@ -106,6 +122,12 @@ function Ribbon({ offset, width, peak, hot, cool }: RibbonProps) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     []
   );
+
+  // Colour props change only when the pilot picks a new trim.
+  useEffect(() => {
+    material.uniforms.uHot.value.set(...hot);
+    material.uniforms.uCool.value.set(...cool);
+  }, [material, hot, cool]);
 
   const engine = useMemo(() => new THREE.Vector3(), []);
   const dir = useMemo(() => new THREE.Vector3(), []);

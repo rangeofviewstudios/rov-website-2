@@ -56,7 +56,7 @@ export default function StarMap({
           <span className="ctrla-space-kicker">CTRL·A · Space · the map</span>
           <div style={{ display: "flex", gap: 14, alignItems: "flex-start", maxWidth: 560, marginTop: 14 }}>
             <VueBust pose="showing" size={42} mood="focused" style={{ border: `1px solid ${ed.amber}` }} />
-            <p style={{ fontFamily: ed.serif, fontStyle: "italic", fontSize: "clamp(17px,2.2vw,24px)", lineHeight: 1.35, color: ed.ink, margin: 0 }}>
+            <p style={{ fontFamily: ed.body, fontSize: "clamp(15px,1.6vw,18px)", lineHeight: 1.55, color: ed.ink, margin: 0 }}>
               The ship needs a bigger cockpit. Here is the map. Tap a planet, or open this on a computer and fly it.
             </p>
           </div>

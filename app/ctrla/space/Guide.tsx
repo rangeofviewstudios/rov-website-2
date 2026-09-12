@@ -196,6 +196,8 @@ export default function Guide() {
       }
       if (frame.boosted) once("boost", { text: LINES.firstBoost, pose: "showing", ttl: 2500 });
       if (frame.edged) once("edge", { text: LINES.edge, pose: "pointing", ttl: 5000 });
+      if (frame.signalNear.dist < 70) once("radio", { text: LINES.radio, pose: "pointing", ttl: 6000 });
+      if (s.completedMissions.length > 0) once("firstMission", { text: LINES.firstMission, pose: "showing", ttl: 6000 });
 
       const ap = frame.approachId;
       if (ap && ap !== lastApproach && !s.autopilotId) {
