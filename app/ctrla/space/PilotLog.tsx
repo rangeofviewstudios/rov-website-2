@@ -121,7 +121,7 @@ export default function PilotLog({ onClose }: { onClose: () => void }) {
                 return (
                   <li key={s.id} data-done={got}>
                     <strong>{got ? s.label : "Unknown signal"}</strong>
-                    <em>{got ? s.lore : "Watch the radio meter. It fills as you close in."}</em>
+                    <em>{got ? s.lore : "Follow the radio bars."}</em>
                   </li>
                 );
               })}

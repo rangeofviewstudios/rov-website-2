@@ -210,11 +210,12 @@ export default function Ship() {
     // ── input ──
     // WASD = forward / brake / turn left / turn right
     // Up/Down arrows = gentle vertical rise/descend
-    let thrust = k.has("w") ? 1 : 0;
-    const brakeInput = k.has("s") || k.has(" ");
-    let yaw = (k.has("a") ? 1 : 0) - (k.has("d") ? 1 : 0);
+    const tc = frame.touch;
+    let thrust = Math.max(k.has("w") ? 1 : 0, tc.thrust);
+    const brakeInput = k.has("s") || k.has(" ") || tc.brake;
+    let yaw = THREE.MathUtils.clamp((k.has("a") ? 1 : 0) - (k.has("d") ? 1 : 0) + tc.yaw, -1, 1);
     const verticalInput = (k.has("arrowup") ? 1 : 0) - (k.has("arrowdown") ? 1 : 0);
-    let boost = k.has("shift");
+    let boost = k.has("shift") || tc.boost;
     const manualYaw = yaw !== 0;
 
     // ── autopilot: steer toward the target, dock on arrival ──

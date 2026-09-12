@@ -6626,6 +6626,116 @@ html[data-ctrla-photo] .ctrla-space-rank { display: none; }
 .ctrla-space-trim[data-on="true"] { color: #F0E6E0; }
 .ctrla-space-trim:disabled { cursor: default; opacity: 0.45; }
 .ctrla-space-trim:disabled i { border-style: dashed; }
+
+/* ── Touch controls + phone layout ────────────────────────────────────── */
+.ctrla-space { touch-action: none; overscroll-behavior: none; -webkit-user-select: none; user-select: none; }
+.ctrla-space-mob { display: none; }
+@media (pointer: coarse), (max-width: 760px) {
+  .ctrla-space-desk { display: none !important; }
+  .ctrla-space-mob { display: inline-flex; }
+}
+.ctrla-space-touch {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 0;
+  z-index: 6;
+  pointer-events: none;
+}
+.ctrla-space-stick {
+  position: absolute;
+  left: 22px;
+  bottom: 96px;
+  width: 128px;
+  height: 128px;
+  border-radius: 999px;
+  border: 1px solid rgba(240, 230, 224, 0.28);
+  background: rgba(15, 8, 32, 0.45);
+  pointer-events: auto;
+  touch-action: none;
+  display: grid;
+  place-items: center;
+}
+.ctrla-space-stick[data-busy="true"] { opacity: 0.35; pointer-events: none; }
+.ctrla-space-knob {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: rgba(227, 194, 74, 0.9);
+  box-shadow: 0 0 0 2px #0F0820;
+  will-change: transform;
+}
+.ctrla-space-touch-btns {
+  position: absolute;
+  right: 22px;
+  bottom: 96px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: flex-end;
+  pointer-events: auto;
+}
+.ctrla-space-touch-btn {
+  width: 84px;
+  height: 84px;
+  border-radius: 999px;
+  border: 1px solid rgba(227, 194, 74, 0.6);
+  background: rgba(15, 8, 32, 0.6);
+  color: #E3C24A;
+  font-family: 'Neue Montreal', 'Helvetica Neue', Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  touch-action: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.ctrla-space-touch-btn:active { background: rgba(227, 194, 74, 0.25); }
+.ctrla-space-touch-btn[data-primary] { background: #E3C24A; color: #0F0820; }
+.ctrla-space-mob-btn {
+  pointer-events: auto;
+  padding: 6px 10px;
+  border: 1px solid rgba(227, 194, 74, 0.5);
+  background: rgba(15, 8, 32, 0.6);
+  color: #E3C24A;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+}
+
+@media (max-width: 760px) {
+  .ctrla-space-masthead { top: 70px; }
+  .ctrla-space-rank { top: 92px; }
+  .ctrla-space-rank-title { font-size: 13px; }
+  .ctrla-space-xpbar { width: 120px; }
+  .ctrla-space-meter { top: 90px; gap: 10px; pointer-events: none; align-items: center; }
+  .ctrla-space-meter > * { pointer-events: auto; }
+  .ctrla-space-chips {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    transform: none;
+    overflow-x: auto;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+  .ctrla-space-chips::-webkit-scrollbar { display: none; }
+  .ctrla-space-chip { flex-shrink: 0; }
+  .ctrla-space-prompt { bottom: 236px; font-size: 11px; max-width: 92vw; }
+  .ctrla-space-guide { left: 12px; right: 12px; bottom: auto; top: 150px; align-items: flex-start; }
+  .ctrla-space-vue { display: none; }
+  .ctrla-space-bubble { margin-bottom: 0; max-width: 100%; }
+  .ctrla-space-bubble::after { display: none; }
+  .ctrla-space-guide[data-peek="true"] { display: none; }
+  .ctrla-space-beat { top: 150px; }
+  .ctrla-space-arrow { display: none !important; }
+  .ctrla-space-dock { align-items: start; }
+  .ctrla-space-dock-inner { padding: 84px 18px 120px; width: 100vw; max-height: 100dvh; overflow-y: auto; border-left: 0; }
+  .ctrla-space-log { max-height: 100dvh; }
+  .ctrla-space-log-grid { gap: 22px; }
+  .ctrla-space-keys { gap: 8px 16px; margin-bottom: 22px; }
+}
 @keyframes ctrla-space-rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
 @keyframes ctrla-space-fade { from { opacity: 0; } to { opacity: 1; } }
 @media (prefers-reduced-motion: reduce) {

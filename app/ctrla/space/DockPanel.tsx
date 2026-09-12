@@ -24,7 +24,7 @@ export default function DockPanel({
   body,
   onClose,
   onEnter,
-  closeLabel = "Keep flying",
+  closeLabel = "Fly",
   verb = "Enter",
   kicker,
 }: {
@@ -89,11 +89,6 @@ export default function DockPanel({
           <button type="button" onClick={onClose} className="ctrla-space-ghost">
             {closeLabel}
           </button>
-          {script && (
-            <span className="ctrla-space-kicker" style={{ opacity: 0.8 }}>
-              {script.nudge}
-            </span>
-          )}
         </div>
       </div>
     </div>

@@ -29,6 +29,7 @@ import DockPanel from "./DockPanel";
 import StarMap from "./StarMap";
 import Guide from "./Guide";
 import PilotLog from "./PilotLog";
+import Touch from "./Touch";
 
 /** How far out the radio meter starts to register an unfound signal. */
 const RADIO_RANGE = 110;
@@ -255,8 +256,8 @@ export default function Hud() {
       <div className="ctrla-space-masthead">
         <span className="ctrla-space-kicker">CTRL·A · Space</span>
         <span className="ctrla-space-kicker" style={{ opacity: 0.7 }}>
-          {route.length ? `${Math.min(step, route.length)} / ${route.length} on your line · ` : ""}
-          {visited.length} / {BODIES.length} charted
+          {route.length ? `Line ${Math.min(step, route.length)}/${route.length} · ` : ""}
+          {visited.length}/{BODIES.length}
         </span>
       </div>
 
@@ -267,7 +268,8 @@ export default function Hud() {
             {rank.title}
           </span>
           <span className="ctrla-space-kicker" style={{ opacity: 0.75 }}>
-            {xp} XP{next ? ` · ${next.xp - xp} to ${next.title}` : ""} · <kbd style={{ marginRight: 0 }}>L</kbd>
+            {xp} XP{next ? ` · ${next.xp - xp} to ${next.title}` : ""} · <kbd className="ctrla-space-desk" style={{ marginRight: 0 }}>L</kbd>
+            <span className="ctrla-space-mob">log</span>
           </span>
           <span className="ctrla-space-xpbar" aria-hidden>
             <i style={{ width: `${rankPct}%`, background: rank.trim }} />
@@ -322,15 +324,7 @@ export default function Hud() {
       {/* Dock prompt, with the magnetic fill */}
       {introSeen && near && !docked && (
         <div className="ctrla-space-prompt">
-          {fill > 0 ? (
-            <>
-              Docking at <strong>{near.label}</strong> · <kbd>E</kbd> now · <kbd>W</kbd> wave off
-            </>
-          ) : (
-            <>
-              <kbd>E</kbd> Dock at <strong>{near.label}</strong> · or hold still
-            </>
-          )}
+          <kbd className="ctrla-space-desk">E</kbd> Dock · <strong>{near.label}</strong>
           <span className="ctrla-space-fill" aria-hidden>
             <i style={{ width: `${Math.round(fill * 100)}%` }} />
           </span>
@@ -338,7 +332,7 @@ export default function Hud() {
       )}
       {introSeen && autopilotId && !near && !docked && (
         <div className="ctrla-space-prompt" style={{ opacity: 0.85 }}>
-          Autopilot <span aria-hidden>→</span> <strong>{bodyById(autopilotId)?.label}</strong> · any key to take over
+          Autopilot · <strong>{bodyById(autopilotId)?.label}</strong>
         </div>
       )}
 
@@ -346,7 +340,6 @@ export default function Hud() {
       <div className="ctrla-space-meter">
         {signalsFound < SIGNALS.length && (
           <span className="ctrla-space-radio" data-hot={radio > 0.55} title="Radio: something is out there">
-            <span style={{ opacity: 0.6 }}>radio</span>
             <span className="ctrla-space-radio-bars" aria-hidden>
               {[0.12, 0.3, 0.5, 0.7, 0.88].map((th) => (
                 <i key={th} data-on={radio >= th} />
@@ -354,17 +347,19 @@ export default function Hud() {
             </span>
           </span>
         )}
-        <span>{Math.round(speed)} u/s</span>
-        <span style={{ opacity: 0.6 }}>{fps} fps</span>
-        <span style={{ opacity: 0.6 }}>{quality}×</span>
-        <span style={{ opacity: 0.6 }}>
+        <span>{Math.round(speed)}</span>
+        <span className="ctrla-space-desk" style={{ opacity: 0.6 }}>{fps} fps · {quality}×</span>
+        <span className="ctrla-space-desk" style={{ opacity: 0.6 }}>
           <kbd style={{ marginRight: 4 }}>P</kbd>photo
         </span>
-        <span style={{ opacity: 0.6 }}>
+        <span className="ctrla-space-desk" style={{ opacity: 0.6 }}>
           <kbd style={{ marginRight: 4 }}>H</kbd>
           {guideHidden ? "vue" : "quiet"}
         </span>
       </div>
+
+      {/* Touch stick + buttons, coarse pointers only */}
+      <Touch />
 
       {/* Vue, the guide */}
       <Guide />
@@ -381,7 +376,7 @@ export default function Hud() {
       {!introSeen && (
         <div className="ctrla-space-dock">
           <div className="ctrla-space-dock-inner">
-            <span className="ctrla-space-kicker">CTRL·A · Space · Vol. 01</span>
+            <span className="ctrla-space-kicker">CTRL·A · Space</span>
             <h1 style={{ fontFamily: ed.grotesque, fontWeight: 800, fontSize: "clamp(34px,5vw,68px)", letterSpacing: "-0.03em", lineHeight: 0.92, color: ed.ink, margin: "14px 0 18px" }}>
               Take the ship.
             </h1>
@@ -390,24 +385,27 @@ export default function Hud() {
               <p style={{ fontFamily: ed.body, fontSize: "clamp(15px,1.5vw,18px)", lineHeight: 1.55, color: ed.ink, margin: 0 }}>
                 {home
                   ? HOME_LINE[home.id]
-                  : "Everything in this volume is out here somewhere. I will draw you a line through it once you tell me what you make. Nothing to win. Just look around."}
+                  : "The whole volume, in orbit. Tell me what you make and I will draw your line."}
               </p>
             </div>
             {route.length > 0 && (
               <p className="ctrla-space-kicker" style={{ margin: "0 0 22px", opacity: 0.85 }}>
-                Your line · {route.map((id, i) => `${String(i + 1).padStart(2, "0")} ${bodyById(id)?.label ?? id}`).join(" · ")}
+                {route.map((id) => bodyById(id)?.label ?? id).join(" → ")}
               </p>
             )}
-            <div className="ctrla-space-keys">
+            <div className="ctrla-space-keys ctrla-space-desk">
               <span><kbd>W</kbd> thrust</span>
               <span><kbd>A</kbd><kbd>D</kbd> turn</span>
-              <span><kbd>Space</kbd> brake</span>
               <span><kbd>Shift</kbd> boost</span>
               <span><kbd>E</kbd> dock</span>
               <span><kbd>M</kbd> map</span>
+              <span><kbd>L</kbd> log</span>
               <span><kbd>P</kbd> photo</span>
-              <span><kbd>L</kbd> pilot log</span>
-              <span><kbd>H</kbd> quiet Vue</span>
+            </div>
+            <div className="ctrla-space-keys ctrla-space-mob">
+              <span>Stick · steer, push up to fly</span>
+              <span>Hold · boost</span>
+              <span>Tap a stop · autopilot</span>
             </div>
             <div style={{ display: "flex", alignItems: "center", gap: 22, flexWrap: "wrap" }}>
               {home ? (
@@ -416,7 +414,7 @@ export default function Hud() {
                     Fly to {home.label} <span aria-hidden>→</span>
                   </button>
                   <button type="button" className="ctrla-space-ghost" onClick={() => useSpace.getState().dismissIntro()}>
-                    Just fly
+                    Free fly
                   </button>
                 </>
               ) : (
@@ -442,7 +440,7 @@ export default function Hud() {
       {/* Descent readout */}
       {landing && (
         <div className="ctrla-space-prompt">
-          Descending to <strong>{landing.label}</strong>
+          Landing · <strong>{landing.label}</strong>
         </div>
       )}
 
@@ -469,7 +467,7 @@ export default function Hud() {
         <div className="ctrla-space-dock" onClick={() => useSpace.getState().toggleMap(false)}>
           <div className="ctrla-space-map-wrap" onClick={(e) => e.stopPropagation()}>
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 8 }}>
-              <span className="ctrla-space-kicker">The map · click a stop to fly there</span>
+              <span className="ctrla-space-kicker">Map · tap a stop</span>
               <button type="button" className="ctrla-space-ghost" onClick={() => useSpace.getState().toggleMap(false)}>
                 Close <kbd>Esc</kbd>
               </button>

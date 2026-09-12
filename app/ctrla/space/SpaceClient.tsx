@@ -6,11 +6,12 @@
 // Decides, before a single byte of three.js is requested, whether this
 // visitor gets the ship or the map:
 //
-//   ship  desktop pointer, ≥1024px, WebGL available, no reduced-motion
-//   map   everyone else
+//   ship  WebGL available, no reduced-motion (phones included: Touch.tsx
+//         gives them a stick, Scene.tsx drops the render cost)
+//   map   no WebGL, reduced motion, or ?map
 //
-// The 3D scene is a dynamic ssr:false import behind that decision, so phones
-// and fallbacks never download it, and the magazine bundle never contains it.
+// The 3D scene is a dynamic ssr:false import behind that decision, so
+// fallbacks never download it, and the magazine bundle never contains it.
 // ═══════════════════════════════════════════════════════
 
 import { useEffect, useState } from "react";
@@ -25,7 +26,7 @@ const Scene = dynamic(() => import("./_scene/Scene"), {
   ssr: false,
   loading: () => (
     <div style={{ position: "fixed", inset: 0, background: ed.void, display: "grid", placeItems: "center" }}>
-      <span className="ctrla-space-kicker">Warming the engines</span>
+      <span className="ctrla-space-kicker">Loading</span>
     </div>
   ),
 });
@@ -34,15 +35,14 @@ type Mode = "deciding" | "ship" | "map";
 
 function canFly(): boolean {
   if (typeof window === "undefined") return false;
-  const fine = window.matchMedia("(pointer: fine)").matches;
-  const wide = window.innerWidth >= 1024;
+  if (new URLSearchParams(window.location.search).has("map")) return false;
   const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   let gl = false;
   try {
     const c = document.createElement("canvas");
     gl = !!(c.getContext("webgl2") || c.getContext("webgl"));
   } catch {}
-  return fine && wide && gl && !still;
+  return gl && !still;
 }
 
 export default function SpaceClient() {

@@ -43,6 +43,7 @@ export default function Guide() {
   const route = useSpace((s) => s.route);
   const step = useSpace((s) => s.step);
   const photo = useSpace((s) => s.photo);
+  const overlay = useSpace((s) => s.mapOpen || s.logOpen);
 
   const [bubble, setBubble] = useState<Bubble | null>(null);
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -227,7 +228,7 @@ export default function Guide() {
     }
   }, [hidden]);
 
-  if (!introSeen || hidden || photo) return null;
+  if (!introSeen || hidden || photo || overlay) return null;
 
   // With nothing to say she peeks: helmet above the bottom edge, the rest
   // below it. A click brings her up with the current offer.

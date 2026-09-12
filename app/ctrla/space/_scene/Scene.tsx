@@ -140,7 +140,10 @@ export default function Scene() {
   // headless tests. Everyone else starts at min(device, 1.5) and the governor
   // takes it from there. 2× with 4× MSAA on a retina laptop is most of why a
   // scene this small can drop under 60.
-  const lite = useMemo(() => typeof window !== "undefined" && new URLSearchParams(window.location.search).has("lite"), []);
+  // Phones: dpr 1, no MSAA. A 3× retina phone at full scale is nine times
+  // the pixels of a laptop at 1×, and the scene is pixel-bound.
+  const coarse = useMemo(() => typeof window !== "undefined" && window.matchMedia("(pointer: coarse)").matches, []);
+  const lite = useMemo(() => coarse || (typeof window !== "undefined" && new URLSearchParams(window.location.search).has("lite")), [coarse]);
   const cap = useMemo(() => (lite ? 1 : Math.min(typeof window !== "undefined" ? window.devicePixelRatio || 1 : 1, 1.5)), [lite]);
 
   return (

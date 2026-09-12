@@ -418,4 +418,6 @@ export const frame = {
   waypoint: { x: 0, y: 0, visible: false, onScreen: false, angle: 0 },
   /** Nearest undiscovered signal: distance, for the HUD's radio meter. */
   signalNear: { id: null as string | null, dist: Infinity },
+  /** Touch input, written by Touch.tsx, merged with the keys by the ship. */
+  touch: { yaw: 0, thrust: 0, boost: false, brake: false },
 };
