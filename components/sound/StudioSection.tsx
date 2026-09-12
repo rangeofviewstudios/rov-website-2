@@ -1,52 +1,41 @@
 "use client";
 import { AnimatePresence, motion, useInView } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import Image from "next/image";
 import { BOOKING_URL, CAL_LINKS } from "@/data/soundPricing";
 import CalBookButton from "@/components/sound/CalBookButton";
 
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 
-function StudioClip({ src, label, subtitle, delay, parentInView }: {
+// A still from the session, not a loop. Photos replaced the three studio
+// clips because the clips were generic room b-roll; these are real artists at
+// a real session, which is the proof the section is meant to carry.
+function SessionPhoto({ src, alt, label, subtitle, delay, parentInView, className, sizes, priority }: {
   src: string;
+  alt: string;
   label: string;
   subtitle: string;
   delay: number;
   parentInView: boolean;
+  className?: string;
+  sizes: string;
+  priority?: boolean;
 }) {
-  const videoRef = useRef<HTMLVideoElement>(null);
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(wrapperRef, { margin: "-80px" });
-
-  // Pause video when offscreen to free the decoder on mobile
-  useEffect(() => {
-    const video = videoRef.current;
-    if (!video) return;
-    if (inView) {
-      video.play().catch(() => {});
-    } else {
-      video.pause();
-    }
-  }, [inView]);
-
   return (
     <motion.div
-      ref={wrapperRef}
       initial={{ opacity: 0, y: 30 }}
       animate={parentInView ? { opacity: 1, y: 0 } : {}}
       transition={{ ...spring, delay }}
-      className="relative aspect-[4/5] rounded-2xl overflow-hidden group"
+      className={`relative rounded-2xl overflow-hidden group ${className ?? ""}`}
     >
-      <video
-        ref={videoRef}
-        loop
-        muted
-        playsInline
-        preload="metadata"
-        poster="/thumbnails/studiothumbnail.webp"
-        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-[1.03]"
-      >
-        <source src={src} type="video/mp4" />
-      </video>
+      <Image
+        src={src}
+        alt={alt}
+        fill
+        sizes={sizes}
+        priority={priority}
+        className="object-cover transition-transform duration-700 group-hover:scale-[1.03]"
+      />
       <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent pointer-events-none" />
       <div className="absolute bottom-5 left-5">
         <span
@@ -72,8 +61,8 @@ const BODY_FONT = "'Roboto', sans-serif";
 const valueProps = [
   {
     label: "Professional Mixing & Mastering in Atlanta",
-    detail: "Every recording session at our Atlanta studio includes professional mixing and mastering. No upsells, no hidden fees. Your vocals are balanced, cleaned, and enhanced with creative effects, then mastered to hit streaming-ready loudness for Spotify, Apple Music, and every major platform. You walk out with a release-ready record.",
-    tag: "All-in-one",
+    detail: "Record in our Atlanta studio and leave with your labeled stems and whatever we mixed during the session. When you are ready, we finish it: vocals balanced, cleaned, and enhanced, then mastered to streaming loudness for Spotify, Apple Music, and every major platform. Mix and master from $58 a song, first one $50.",
+    tag: "Record, then finish",
   },
   {
     label: "Industry-Standard Recording Equipment",
@@ -81,10 +70,20 @@ const valueProps = [
     tag: "Pro gear",
   },
   {
-    label: "One Rate, Mixed and Mastered",
-    detail: "Most studios charge for the hour, then send a separate bill to mix and master. Every session here includes the full mix and master, so your finished song costs less than piecing it together anywhere else. Same pro gear, radio-ready results, no surprise invoices.",
-    tag: "Best value",
+    label: "Published Rates, No Quote Call",
+    detail: "$80 an hour, $160 for two hours, $300 for four. Every number is on the pricing page before you book, and the mix and master is a separate line you can see in full. Same pro gear, radio-ready results, no surprise invoices.",
+    tag: "No surprises",
   },
+];
+
+// One night, one session, three artists. The wide shot anchors the row so the
+// portraits read as details of the same evening rather than five stock tiles.
+const SESSION_PHOTOS = [
+  { src: "/soundpage/session-04.webp", alt: "An artist alone at a microphone on a lamp-lit street at dusk", label: "The session", subtitle: "One mic, one night", className: "aspect-[3/2] md:col-span-4 md:aspect-auto md:min-h-[26rem]", sizes: "(min-width: 768px) 60vw, 100vw" },
+  { src: "/soundpage/session-03.webp", alt: "A vocalist in a knit shirt singing into a condenser microphone at night", label: "Take one", subtitle: "Finding the key", className: "aspect-[4/5] md:col-span-2 md:aspect-auto", sizes: "(min-width: 768px) 30vw, 100vw" },
+  { src: "/soundpage/session-05.webp", alt: "A vocalist with eyes closed singing into a microphone, lit by warm light", label: "Take two", subtitle: "Eyes closed", className: "aspect-[4/5] md:col-span-2", sizes: "(min-width: 768px) 30vw, 100vw" },
+  { src: "/soundpage/session-01.webp", alt: "A vocalist in a beanie, in profile, singing into a microphone", label: "Take three", subtitle: "Into the mic", className: "aspect-[4/5] md:col-span-2", sizes: "(min-width: 768px) 30vw, 100vw" },
+  { src: "/soundpage/session-02.webp", alt: "A vocalist in a beanie holding the mic stand, mid-phrase", label: "Last take", subtitle: "Getting it right", className: "aspect-[4/5] md:col-span-2", sizes: "(min-width: 768px) 30vw, 100vw" },
 ];
 
 function StudioVisuals() {
@@ -93,18 +92,12 @@ function StudioVisuals() {
 
   return (
     <div ref={ref} className="max-w-7xl mx-auto mb-16 md:mb-24">
-      {/* Three equal video cards */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-3 md:gap-4">
-        {[
-          { src: "/soundpage/studio1.mp4", label: "Studio Session", subtitle: "Where records are made" },
-          { src: "/soundpage/stu2.mp4", label: "The Booth", subtitle: "Step inside" },
-          { src: "/soundpage/stu3.mp4", label: "Behind the Mix", subtitle: "Craft in action" },
-        ].map((clip, i) => (
-          <StudioClip
-            key={clip.src}
-            src={clip.src}
-            label={clip.label}
-            subtitle={clip.subtitle}
+      {/* Six-column mosaic: wide shot + one portrait on top, three portraits below */}
+      <div className="grid grid-cols-1 md:grid-cols-6 gap-3 md:gap-4">
+        {SESSION_PHOTOS.map((photo, i) => (
+          <SessionPhoto
+            key={photo.src}
+            {...photo}
             delay={i * 0.1}
             parentInView={inView}
           />
@@ -345,7 +338,7 @@ function RecordingRates() {
             $75/hr, stems included
           </span>
           <ul className="flex-1 space-y-2 mb-6">
-            {["Four hours in the room, your lowest rate", "Full mix and master on everything tracked", "48-hour turnaround", "Usually two to three finished songs"].map((f) => (
+            {["Four hours in the room, your lowest rate", "Your stems plus whatever we mixed in the session", "48-hour turnaround", "Usually two to three finished songs"].map((f) => (
               <li key={f} className="flex items-start gap-2 text-white/50 text-sm" style={{ fontFamily: BODY_FONT }}>
                 <span className="text-[#EA9A61] mt-0.5 shrink-0">&#10003;</span>
                 {f}
@@ -353,7 +346,7 @@ function RecordingRates() {
             ))}
           </ul>
           <p className="text-white/55 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
-            Elsewhere, four hours of room time alone runs <span className="text-white/70 not-italic">$300+</span>, then a separate <span className="text-white/70 not-italic">$150+</span> mix and a <span className="text-white/70 not-italic">$75</span> master per song.
+            Atlanta rooms average around <span className="text-white/70 not-italic">$102 an hour</span> on rental marketplaces, so four hours elsewhere usually runs <span className="text-white/70 not-italic">$400+</span> before anyone touches a mix.
           </p>
           <CalBookButton
             calLink={CAL_LINKS.finishedSingle}
@@ -437,7 +430,7 @@ export default function StudioSection() {
               style={{ fontFamily: BODY_FONT }}
             >
               We don&apos;t just mix files from a laptop. Artists record in our Atlanta studio, stand behind real mics,
-              and walk out with professionally mixed and mastered records, ready for Spotify, Apple Music, and every streaming platform.
+              and walk out with their stems the same day. Add the mix and master and the record is ready for Spotify, Apple Music, and every streaming platform.
             </p>
             <CalBookButton
               calLink={CAL_LINKS.hourlySession}

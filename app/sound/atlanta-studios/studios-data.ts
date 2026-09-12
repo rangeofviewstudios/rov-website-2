@@ -112,7 +112,7 @@ export const tiers: StudioTier[] = [
                 name: "Range of View Music",
                 location: "Atlanta",
                 bestFor:
-                    "Independent artists making a first serious release, with mix and master included in every recording rate",
+                    "Independent artists making a first serious release, with every rate published and stems included in every session",
                 detail:
                     "Mixing, mastering, and studio time, plus cover art, video, and the release backend if you need them. 48-hour first pass on mixes. Rates are published in full below because the point is that you should not have to ask.",
                 trackRecord:

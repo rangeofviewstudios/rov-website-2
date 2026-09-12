@@ -8,7 +8,7 @@ author: "Ayush Basu"
 authorRole: "Founder & audio engineer"
 authorUrl: "https://www.rovmusic.com/authors#ayush-basu"
 date: "2026-08-16"
-dateModified: "2026-08-16"
+dateModified: "2026-09-11"
 category: "Sound Engineering"
 tags: ["mixing", "mastering", "Atlanta", "recording studio", "pricing", "independent artists"]
 featured: true
@@ -51,18 +51,18 @@ We publish ours because the whole point is that you should not have to ask.
 **Mixing and mastering, stems sent to us:**
 
 - First song, $50
-- Single song after that, $65
-- 3 songs, $165, which works out at $55 a song
-- 6 songs, $270, which works out at $45 a song
-- 12 songs, $480, which works out at $40 a song
+- Single song after that, $100
+- 3 songs, $250, which works out at $83 a song
+- 6 songs, $400, which works out at $67 a song
+- 12 songs, $700, which works out at $58 a song
 
-**Studio time in Atlanta, mix and master included at every rate:**
+**Studio time in Atlanta, stems included at every rate:**
 
-- Hourly, $65
-- 2 hour block, $120, which works out at $60 an hour
-- 4 hour block, $200, which works out at $50 an hour
+- Hourly, $80
+- 2 hour block, $160
+- 4 hour block, $300, which works out at $75 an hour
 
-The "mix and master included" part is the bit worth reading twice. At most studios, hourly time buys you the room and the recording. The mix is a separate line item afterward. Ours is not, which is why comparing our hourly rate directly against a cheaper hourly rate elsewhere is usually comparing two different products.
+The "stems included" part is the bit worth reading twice. At many studios, hourly time buys you the room, and getting your session files out afterward is a negotiation. Here you leave with your labeled stems and whatever we mixed during the session, the same day. The full mix and master is a separate, published line, so you can see exactly what a finished song costs before you book.
 
 ## Where first records actually lose money
 
@@ -99,11 +99,11 @@ We put together [an honest comparison of Atlanta studios](https://www.rovmusic.c
 
 ### How much does it cost to mix a song in Atlanta?
 
-Roughly $40 to $200 a song depending on the studio and how many songs you bring. Independent engineers and small studios sit around $40 to $75, established studios around $100 to $400, and specialist mastering houses considerably higher. Our published rate is $50 for a first song, $65 for a single song after that, and down to $40 a song on a twelve song pack.
+Roughly $40 to $200 a song depending on the studio and how many songs you bring. Independent engineers and small studios sit around $40 to $75, established studios around $100 to $400, and specialist mastering houses considerably higher. Our published rate is $50 for a first song, $100 for a single song after that, and down to $58 a song on a twelve song pack.
 
 ### How much is studio time in Atlanta?
 
-Studio rental marketplaces list Atlanta rooms averaging around $102 an hour, with budget listings closer to $35 to $55. Our studio time is $65 an hour with mix and master included, or $200 for a four hour block, which works out at $50 an hour.
+Studio rental marketplaces list Atlanta rooms averaging around $102 an hour, with budget listings closer to $35 to $55. Our studio time is $80 an hour with your stems included, or $300 for a four hour block, which works out at $75 an hour.
 
 ### Why do Atlanta recording studios not list their prices?
 
@@ -115,7 +115,7 @@ Usually, because you are not paying for the room. Mixing and mastering are remot
 
 ### How many songs should I mix at once?
 
-If you have them ready, batching is meaningfully cheaper almost everywhere, ours included: $65 for a single song against $40 a song across twelve. But only batch songs that are genuinely finished. Paying a lower per song rate on tracks that still need writing is not a saving.
+If you have them ready, batching is meaningfully cheaper almost everywhere, ours included: $100 for a single song against $58 a song across twelve. But only batch songs that are genuinely finished. Paying a lower per song rate on tracks that still need writing is not a saving.
 
 ### What do I need to send to get a song mixed?
 

@@ -8,7 +8,7 @@ author: "Ayush Basu"
 authorRole: "Founder & audio engineer"
 authorUrl: "https://www.rovmusic.com/authors#ayush-basu"
 date: "2026-08-20"
-dateModified: "2026-08-20"
+dateModified: "2026-09-11"
 category: "Sound Engineering"
 tags: ["recording studio", "Atlanta", "first session", "recording", "independent artists"]
 featured: true
@@ -64,7 +64,7 @@ This varies enormously between studios, and it is worth asking before you book.
 
 At most rooms, hourly time buys the room and the recording. The mix is billed separately afterward, which is where a first budget often gets a surprise.
 
-At ours, mix and master are included at every recording rate. It is $65 an hour, or $200 for a four hour block, which works out at $50 an hour, and you leave with a record that is ready to upload rather than a folder of raw takes. The [full rate card is published](https://www.rovmusic.com/pricing), and we compared how the [Atlanta studios stack up](https://www.rovmusic.com/atlanta-studios) if you want to see where everyone sits.
+At ours, you leave with your labeled stems and whatever we mixed during the session. It is $80 an hour, or $300 for a four hour block, which works out at $75 an hour. A full mix and master afterward is a separate, published price, so there is no surprise later. The [full rate card is published](https://www.rovmusic.com/pricing), and we compared how the [Atlanta studios stack up](https://www.rovmusic.com/atlanta-studios) if you want to see where everyone sits.
 
 ## After the session
 
@@ -88,7 +88,7 @@ Realistically two to three hours for a first session, including setup and multip
 
 ### How much does studio time cost in Atlanta?
 
-Atlanta rooms average around $102 an hour on rental marketplaces, with budget listings closer to $35 to $55. Ours is $65 an hour with mix and master included, or $200 for a four hour block. Always ask whether mixing is included in the hourly rate, because at most studios it is billed separately.
+Atlanta rooms average around $102 an hour on rental marketplaces, with budget listings closer to $35 to $55. Ours is $80 an hour with stems included, or $300 for a four hour block. Always ask what you leave with, because at many studios your own session files are not a given.
 
 ### Do I need to be able to sing in tune to record?
 

@@ -85,15 +85,15 @@ export const aiAutomationFaqItems: FaqItem[] = [
 export const soundFaqItems: FaqItem[] = [
     {
         question: "How much do you charge for mixing and mastering?",
-        answer: "Your first mix is $50, so you can hear the work before committing to anything. After that a single song is $65, or you can prepay a pack and bring the rate down: 3 songs for $165 ($55 each), 6 for $270 ($45 each), or 12 for $480 ($40 each). Packs never expire. Mastering is always included and every song comes with 2 revisions. Full trackouts (beat stems plus vocals) are quoted on the number of stems, so send us your project details for an exact number."
+        answer: "Your first mix is $50, so you can hear the work before committing to anything. After that a single song is $100, or you can prepay a pack and bring the rate down: 3 songs for $250 ($83 each), 6 for $400 ($67 each), or 12 for $700 ($58 each). Packs never expire. Mastering is always included and every song comes with 2 revisions. Full trackouts (beat stems plus vocals) are quoted on the number of stems, so send us your project details for an exact number."
     },
     {
         question: "How much does it cost to record at your Atlanta studio?",
-        answer: "Studio time is $65 an hour, and every rate includes the full mix and master. Book a block and it drops: 2 hours is $120, 4 hours is $200, which works out to $50 an hour. Most rooms in Atlanta charge you $75 to $120 an hour and then bill mixing separately, so a finished song here usually costs less than the room time alone somewhere else. Students may be eligible for additional discounts, so get in touch before booking."
+        answer: "Studio time is $80 an hour. You leave with your labeled stems and whatever we mixed during the session. Book a block and it drops: 2 hours is $160, 4 hours is $300, which works out to $75 an hour. A full mix and master afterward is priced separately, from $58 a song in a pack. Atlanta rooms average around $102 an hour for the room alone. Students may be eligible for additional discounts, so get in touch before booking."
     },
     {
         question: "How long does it take to get my song mixed and mastered?",
-        answer: "48 hours from the time we receive your properly labeled stems and any notes. If you're recording with us in-house, your song is mixed and mastered within 48 hours of the session too. If you're on a tight schedule for a rollout, tell us and we'll plan the timeline with you."
+        answer: "48 hours from the time we receive your properly labeled stems and any notes. If you record with us and add a mix and master, it is back within 48 hours of the session too. If you're on a tight schedule for a rollout, tell us and we'll plan the timeline with you."
     },
     {
         question: "What do you need from me to mix my track properly?",

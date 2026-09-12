@@ -180,7 +180,7 @@ export default function Page() {
             <ActBreak
                 act="Act two · the song"
                 line="That is what your record could sound like. Here is what it costs."
-                sub="Produced, written, mixed, and mastered here. Every rate below is published in full, and mix and master are included in every recording hour."
+                sub="Produced, written, mixed, and mastered here. Every rate below is published in full. You leave every session with your stems and whatever we mixed that day."
                 link={{ label: "Hear all six records, named and linked", href: "/credits" }}
             />
 

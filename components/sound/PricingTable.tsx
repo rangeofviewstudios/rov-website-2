@@ -56,8 +56,8 @@ const MIXING: Row[] = [
 
 const RECORDING: Row[] = [
   { key: "rec_hour", name: "Hourly", note: "Room, engineer, and every stem from the session.", calLink: CAL_LINKS.hourlySession },
-  { key: "rec_2hr", name: "2-hour block", note: "Enough for one song, start to finished.", calLink: CAL_LINKS.hourlySession },
-  { key: "rec_4hr", name: "4-hour block", note: "Usually two to three finished songs. Our lowest hourly rate.", featured: true, tag: "Best value", calLink: CAL_LINKS.finishedSingle },
+  { key: "rec_2hr", name: "2-hour block", note: "Enough to track one song and leave with the stems.", calLink: CAL_LINKS.hourlySession },
+  { key: "rec_4hr", name: "4-hour block", note: "Usually two to three songs tracked. Our lowest hourly rate.", featured: true, tag: "Best value", calLink: CAL_LINKS.finishedSingle },
 ];
 
 const CREATIVE: Row[] = [
@@ -80,7 +80,7 @@ export default function PricingTable() {
       <Section
         eyebrow="Recording"
         title="Come to the room"
-        blurb="Every rate below includes the full mix and master. Most rooms in Atlanta charge you for the hour and then bill mixing separately. You leave here finished."
+        blurb="You leave with your labeled stems and whatever we mixed during the session. A full mix and master afterward is priced above, so you only pay for it when you want it."
         rows={RECORDING}
         anchor="recording"
         footnote="Students may be eligible for additional discounts. Get in touch."

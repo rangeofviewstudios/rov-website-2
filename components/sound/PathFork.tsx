@@ -18,9 +18,9 @@ const artistPaths = [
     icon: Mic,
     kicker: "Come to the studio",
     title: "Record with us",
-    body: "Book the room and an engineer. Track your song, walk out mixed and mastered the same week. One rate covers all of it.",
-    price: "From $50/hr",
-    sub: "Mix & master included",
+    body: "Book the room and an engineer. Track your song and leave with your stems and whatever we mixed in the session. Add a full mix and master the same week.",
+    price: "From $75/hr",
+    sub: "Stems included",
     cta: "See recording rates",
   },
   {

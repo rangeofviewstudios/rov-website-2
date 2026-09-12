@@ -27,7 +27,7 @@ export type Role = "artist" | "manager" | "other";
 const STORAGE_KEY = "rovmusic:intake";
 // Bumped when the shape changes, so stale profiles are dropped rather than
 // half-read into a newer UI.
-const SCHEMA_VERSION = 2;
+const SCHEMA_VERSION = 3;
 
 export interface AuditResult {
   /** Keys of the readiness items they said they already have. */
@@ -43,6 +43,11 @@ export interface RosterProfile {
   stage: string;
 }
 
+/** The three yes/no answers from the landing popup, keyed by question key. */
+export interface GateResult {
+  answers: Record<string, boolean>;
+}
+
 export interface EstimateResult {
   need: string;
   songs: string;
@@ -54,6 +59,7 @@ export interface EstimateResult {
 
 interface Profile {
   role: Role | null;
+  gate: GateResult | null;
   audit: AuditResult | null;
   roster: RosterProfile | null;
   estimate: EstimateResult | null;
@@ -63,13 +69,14 @@ interface IntakeState extends Profile {
   /** localStorage has been read. Until then, render nothing role-dependent. */
   ready: boolean;
   setRole: (role: Role) => void;
+  setGate: (gate: GateResult) => void;
   setAudit: (audit: AuditResult) => void;
   setRoster: (roster: RosterProfile) => void;
   setEstimate: (estimate: EstimateResult) => void;
   clearAll: () => void;
 }
 
-const EMPTY: Profile = { role: null, audit: null, roster: null, estimate: null };
+const EMPTY: Profile = { role: null, gate: null, audit: null, roster: null, estimate: null };
 
 const IntakeContext = createContext<IntakeState | null>(null);
 
@@ -94,6 +101,7 @@ export function IntakeProvider({ children }: { children: React.ReactNode }) {
         if (parsed.v === SCHEMA_VERSION) {
           setState({
             role: isRole(parsed.role) ? parsed.role : null,
+            gate: parsed.gate ?? null,
             audit: parsed.audit ?? null,
             roster: parsed.roster ?? null,
             estimate: parsed.estimate ?? null,
@@ -120,14 +128,15 @@ export function IntakeProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const setRole = useCallback((role: Role) => persist({ ...stateRef.current, role }), [persist]);
+  const setGate = useCallback((gate: GateResult) => persist({ ...stateRef.current, gate }), [persist]);
   const setAudit = useCallback((audit: AuditResult) => persist({ ...stateRef.current, audit }), [persist]);
   const setRoster = useCallback((roster: RosterProfile) => persist({ ...stateRef.current, roster }), [persist]);
   const setEstimate = useCallback((estimate: EstimateResult) => persist({ ...stateRef.current, estimate }), [persist]);
   const clearAll = useCallback(() => persist(EMPTY), [persist]);
 
   const value = useMemo(
-    () => ({ ...state, ready, setRole, setAudit, setRoster, setEstimate, clearAll }),
-    [state, ready, setRole, setAudit, setRoster, setEstimate, clearAll]
+    () => ({ ...state, ready, setRole, setGate, setAudit, setRoster, setEstimate, clearAll }),
+    [state, ready, setRole, setGate, setAudit, setRoster, setEstimate, clearAll]
   );
 
   return <IntakeContext.Provider value={value}>{children}</IntakeContext.Provider>;

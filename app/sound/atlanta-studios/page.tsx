@@ -223,8 +223,8 @@ export default function AtlantaStudiosPage() {
                             className="mt-4 max-w-2xl text-base leading-relaxed text-white/55"
                             style={{ fontFamily: BODY_FONT }}
                         >
-                            Every recording rate includes mix and master. No upsells, no
-                            hidden fees, no quote call required to find out the number.
+                            Every rate is published. You leave with your stems and whatever
+                            we mixed in the session. No hidden fees, no quote call required.
                         </p>
 
                         <ul className="mt-10 divide-y divide-white/10">

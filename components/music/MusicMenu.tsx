@@ -377,7 +377,7 @@ export function MusicMenu({ className }: { className?: string }) {
                                         Got a record to finish?
                                     </p>
                                     <p className="mt-3 font-sans text-white/75 text-[13.5px] font-medium leading-[1.65]">
-                                        First mix and master is $50. Studio time is $65 an hour with both included.
+                                        First mix and master is $50. Studio time is $80 an hour, stems included.
                                     </p>
                                     <CalBookButton
                                         calLink={CAL_LINKS.hourlySession}

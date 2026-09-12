@@ -9,8 +9,12 @@
 //
 // Managers get a shorter version (two roster questions, four gap items) and a
 // different result: roster economics, not a personal score.
+//
+// The landing popup (RoleGate) already asks three of these. Those answers are
+// read from the intake profile, so this only asks what is left and the result
+// still scores the full list. Nobody gets the same question twice.
 
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
 import {
   FOUNDATION_PRICE,
@@ -44,16 +48,42 @@ export default function ReadinessAudit() {
   const inView = useInView(ref, { once: true, margin: "-80px" });
   const role = useEffectiveRole();
   const isManager = role === "manager";
-  const { setAudit, setRoster } = useIntake();
+  const { gate, setAudit, setRoster } = useIntake();
 
   const items = useMemo(() => itemsFor(role), [role]);
+  // What the popup already answered, limited to keys this role's list has.
+  const seeded = useMemo(() => {
+    const have = new Set<string>();
+    const answered = new Set<string>();
+    for (const item of items) {
+      const a = gate?.answers?.[item.key];
+      if (a === undefined) continue;
+      answered.add(item.key);
+      if (a) have.add(item.key);
+    }
+    return { have, answered };
+  }, [gate, items]);
+  // Only the unanswered items get a screen.
+  const pending = useMemo(
+    () => items.filter((i) => !seeded.answered.has(i.key)),
+    [items, seeded]
+  );
   // Managers answer roster size and stage before the gap items.
   const preSteps = isManager ? 2 : 0;
-  const totalSteps = preSteps + items.length;
+  const totalSteps = preSteps + pending.length;
 
   const [step, setStep] = useState(0);
-  const [have, setHave] = useState<Set<string>>(new Set());
-  const [answered, setAnswered] = useState<Set<string>>(new Set());
+  const [have, setHave] = useState<Set<string>>(seeded.have);
+  const [answered, setAnswered] = useState<Set<string>>(seeded.answered);
+
+  // The popup can be answered after this mounts (it is dynamic-imported and
+  // the visitor may scroll first), so re-seed while nothing has been touched.
+  useEffect(() => {
+    if (step !== 0) return;
+    setHave(new Set(seeded.have));
+    setAnswered(new Set(seeded.answered));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [seeded]);
   const [size, setSize] = useState<string | null>(null);
   const [stage, setStage] = useState<string | null>(null);
   const [planOpen, setPlanOpen] = useState(false);
@@ -103,15 +133,15 @@ export default function ReadinessAudit() {
   };
 
   const restart = () => {
-    setHave(new Set());
-    setAnswered(new Set());
+    setHave(new Set(seeded.have));
+    setAnswered(new Set(seeded.answered));
     setSize(null);
     setStage(null);
     setStep(0);
   };
 
   const itemIndex = step - preSteps;
-  const current = items[itemIndex];
+  const current = pending[itemIndex];
   const currentAnsweredNo = current && answered.has(current.key) && !have.has(current.key);
   const isResult = step >= totalSteps;
 
@@ -132,6 +162,11 @@ export default function ReadinessAudit() {
           style={{ fontFamily: BODY }}
         >
           {totalSteps} questions &middot; 20 seconds
+          {seeded.answered.size > 0 && (
+            <span className="text-white/35 normal-case tracking-normal">
+              {" "}&middot; {seeded.answered.size} already answered
+            </span>
+          )}
         </motion.span>
         <motion.h2
           initial={{ opacity: 0, y: 20 }}
@@ -222,7 +257,7 @@ export default function ReadinessAudit() {
                 title={current.label}
                 sub={current.hint}
                 onBack={step > 0 ? () => setStep(step - 1) : undefined}
-                counter={`${itemIndex + 1} of ${items.length}`}
+                counter={`${itemIndex + 1} of ${pending.length}`}
               >
                 <div className="grid grid-cols-2 gap-3">
                   <YesNo
@@ -270,7 +305,7 @@ export default function ReadinessAudit() {
                           boxShadow: GRADIENT_SHADOW,
                         }}
                       >
-                        {itemIndex + 1 >= items.length ? "See the damage" : "Next"} &rarr;
+                        {itemIndex + 1 >= pending.length ? "See the damage" : "Next"} &rarr;
                       </button>
                     </motion.div>
                   )}

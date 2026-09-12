@@ -8,7 +8,7 @@ author: "Sam Suen"
 authorRole: "Artist & engineer"
 authorUrl: "https://www.rovmusic.com/authors#sam-suen"
 date: "2026-08-16"
-dateModified: "2026-08-16"
+dateModified: "2026-09-11"
 category: "Sound Engineering"
 tags: ["mastering", "mixing", "Atlanta", "recording", "independent artists"]
 featured: true
@@ -92,7 +92,7 @@ You can, and modern assistant mastering tools are a credible starting point rath
 
 ### How much does mastering cost in Atlanta?
 
-Most Atlanta studios quote per project rather than publishing rates. Our mix and master is $50 for a first song and $65 for a single song after that. A dedicated mastering specialist working on major label records will be considerably more, and for a first independent release that is usually not where the money is best spent.
+Most Atlanta studios quote per project rather than publishing rates. Our mix and master is $50 for a first song and $100 for a single song after that, or from $58 a song in a pack. A dedicated mastering specialist working on major label records will be considerably more, and for a first independent release that is usually not where the money is best spent.
 
 ### Does a louder master mean a better master?
 
