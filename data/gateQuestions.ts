@@ -31,74 +31,69 @@ export const GATE_QUESTIONS: Record<Role, GateQuestion[]> = {
   artist: [
     {
       key: "splits",
-      question: "Do you have signed split sheets for your songs?",
-      short: "Split sheets",
-      hint: "Who owns what, on paper, signed.",
-      note: "Most artists do not. But when a song does well, the split is the first fight. It is easy to fix now.",
+      question: "If this song blew up tomorrow, is it clear who gets paid?",
+      short: "Who gets paid",
+      note: "Most artists skip this part. It's usually the first fight when a song does well, and it only takes a few minutes to fix now.",
     },
     {
       key: "stems",
-      question: "Are your stems saved somewhere you control?",
-      short: "Stems backed up",
-      hint: "Not only on a friend's laptop.",
-      note: "Many people lose these. No stems means no remix, no re-master, and no live version later.",
+      question: "If your laptop died tonight, would you still have your stems?",
+      short: "Your stems, safe",
+      note: "A lot of people lose these. No stems means no remix, no remaster, and no live version later.",
     },
     {
       key: "audience",
-      question: "Do you have a way to reach your fans that you own?",
+      question: "Could you reach your fans without an app standing in the middle?",
       short: "Your own fan list",
-      hint: "Like an email or text list.",
-      note: "Followers belong to the app. A list belongs to you. Without it, every release starts from zero.",
+      note: "The app can drop you any day it wants. A list you own can't be taken away.",
     },
   ],
   manager: [
     {
       key: "splits",
-      question: "Do all your artists have signed split sheets?",
-      short: "Split sheets",
-      hint: "For every song, not only the singles.",
-      note: "One missing sheet can block a whole release. It is paperwork, and we can template it.",
+      question: "Across your whole roster, is it clear who gets paid for every song?",
+      short: "Who gets paid",
+      note: "One missing sheet can hold up an entire release. It's just paperwork, and we can template it for you.",
     },
     {
       key: "metadata",
-      question: "Do you keep every artist's ISRC and UPC codes in one place?",
-      short: "Codes in one place",
-      hint: "Plus the exact spelling of their names.",
-      note: "One wrong upload sends a song to the wrong Spotify page. Fixing that takes weeks.",
+      question: "If a song dropped tonight, would it land on the right page?",
+      short: "Lands in the right place",
+      note: "One wrong code sends it to the wrong page, and that can take weeks to fix.",
     },
     {
       key: "epk",
-      question: "Does each artist have an EPK you can send as one link?",
-      short: "One-link EPK",
-      note: "Without it, a pile of links decides the booking. One link is easy to make.",
+      question: "Can you send one link and let a booker say yes on the spot?",
+      short: "One link to book",
+      note: "A pile of links usually loses the booking to whoever sent just one.",
     },
   ],
   other: [
     {
       key: "portfolio",
-      question: "Do you have one link that shows your best work?",
+      question: "Could someone see your best work in one link, right now?",
       short: "One link for your work",
-      note: "Artists choose from links. One clear page wins more work than many posts.",
+      note: "People pick whatever's easiest to look at, not necessarily the best work. One clear page wins more jobs than a feed of posts.",
     },
     {
       key: "deposit",
-      question: "Do you get part of the money before you start?",
-      short: "Deposit up front",
-      note: "Ask for a deposit. It is normal, and it protects your time.",
+      question: "Do you get paid before you start the work?",
+      short: "Paid up front",
+      note: "It's normal to ask for a deposit, and it protects your time.",
     },
     {
       key: "referrals",
-      question: "Do you have people you send artists to for the parts you do not do?",
-      short: "People to refer to",
-      note: "That is what this page is for. If an artist needs sound, we can be that for you.",
+      question: "When it's not your part, do you have someone you send people to?",
+      short: "Someone to send them to",
+      note: "That's exactly what this page is for. If an artist needs sound, send them here.",
     },
   ],
 };
 
 /** Headline for the end of the quiz, by how many were missing. */
 export function gateSummary(missing: number): string {
-  if (missing === 0) return "You are in good shape.";
-  if (missing === 1) return "One thing to fix.";
-  if (missing === 2) return "Two things to fix.";
-  return "Three things to fix.";
+  if (missing === 0) return "You're covered.";
+  if (missing === 1) return "One thing that'll cost you later.";
+  if (missing === 2) return "Two things that'll cost you later.";
+  return "Three things that'll cost you later.";
 }

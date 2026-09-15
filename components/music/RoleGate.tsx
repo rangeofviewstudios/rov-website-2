@@ -17,7 +17,7 @@
 
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
-import { Mic2, Users, Palette, X } from "lucide-react";
+import { Mic2, Users, Palette, X, Check } from "lucide-react";
 import {
   OPEN_GATE_EVENT,
   type Role,
@@ -190,7 +190,7 @@ export default function RoleGate() {
                   <motion.div key="role" {...fade}>
                     <Eyebrow>{forced ? "Switch view" : "Quick question"}</Eyebrow>
                     <Title>What do you do?</Title>
-                    <Lead>One tap. We will show you the page that fits you.</Lead>
+                    <Lead>One tap and we&apos;ll show you the page that fits you.</Lead>
 
                     <div className="flex flex-col gap-2.5">
                       {OPTIONS.map((o) => {
@@ -201,19 +201,25 @@ export default function RoleGate() {
                             key={o.role}
                             type="button"
                             onClick={() => chooseRole(o.role)}
-                            className={`group flex items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-300 cursor-pointer ${
+                            className={`group flex items-center gap-4 rounded-2xl border p-4 text-left transition-all duration-150 active:scale-[0.98] cursor-pointer ${
                               isCurrent
                                 ? "border-[#EA9A61]/50 bg-[#EA9A61]/[0.07]"
                                 : "border-white/[0.08] bg-white/[0.02] hover:border-[#EA9A61]/40 hover:bg-[#EA9A61]/[0.04]"
                             }`}
                           >
-                            <span className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center border border-[#EA9A61]/20 bg-[#EA9A61]/[0.07]">
-                              <Icon className="w-5 h-5 text-[#EA9A61]" strokeWidth={1.6} />
+                            <span
+                              className="shrink-0 w-11 h-11 rounded-xl flex items-center justify-center border border-[#EA9A61]/35"
+                              style={{
+                                background: "linear-gradient(160deg, rgba(234,154,97,0.2) 0%, rgba(144,66,44,0.12) 100%)",
+                                boxShadow: "inset 0 1px 0 rgba(255,244,227,0.14), 0 6px 14px -6px rgba(0,0,0,0.55)",
+                              }}
+                            >
+                              <Icon className="w-5 h-5 text-[#F4B37A]" strokeWidth={1.5} />
                             </span>
                             <span className="flex-1 min-w-0">
                               <span
                                 className="block text-white text-base md:text-lg font-semibold"
-                                style={{ fontFamily: HEADING }}
+                                style={{ fontFamily: BODY }}
                               >
                                 {o.label}
                               </span>
@@ -273,10 +279,14 @@ export default function RoleGate() {
                           transition={{ duration: 0.3 }}
                           className="overflow-hidden"
                         >
-                          <div className="mt-4 rounded-xl border border-[#EA9A61]/25 bg-[#EA9A61]/[0.05] p-4">
+                          {/* The box carries the warning in red border/wash; the
+                              text itself stays neutral cream, not red, since
+                              red-on-red-tinted repeats the same low-contrast
+                              mistake orange-on-orange-tinted made before it. */}
+                          <div className="mt-4 rounded-xl border border-[#FF3B30]/80 bg-[#FF3B30]/[0.2] p-4">
                             <p
-                              className="text-[#EA9A61] text-sm md:text-base leading-relaxed"
-                              style={{ fontFamily: HEADING, fontStyle: "italic" }}
+                              className="text-[#FBE9D6] text-sm md:text-base leading-relaxed"
+                              style={{ fontFamily: BODY }}
                             >
                               {questions[step.index].note}
                             </p>
@@ -307,10 +317,10 @@ export default function RoleGate() {
                     <Title>{gateSummary(missingCount)}</Title>
                     <Lead>
                       {missingCount === 0
-                        ? "Most people are not. We will show you the page for you."
+                        ? "That's rare. We'll show you the page built for you."
                         : picked === "other"
-                          ? "None of it is hard. We will show you the page for you."
-                          : "None of it is hard, and we can help with all of it. The full check is further down the page."}
+                          ? "None of it is hard. We'll show you the page built for you."
+                          : "None of it is hard, and we can help close every gap. There's a full breakdown further down the page."}
                     </Lead>
 
                     <ul className="flex flex-col gap-2 mb-2">
@@ -340,6 +350,13 @@ export default function RoleGate() {
                         );
                       })}
                     </ul>
+
+                    <p
+                      className="text-white/30 text-[11px] leading-relaxed mb-1"
+                      style={{ fontFamily: BODY }}
+                    >
+                      Nothing here is sent anywhere. It just decides what this page shows you next.
+                    </p>
 
                     <PrimaryButton onClick={finish}>Show me the page &rarr;</PrimaryButton>
                   </motion.div>
@@ -418,16 +435,36 @@ function Choice({
   onClick: () => void;
   children: React.ReactNode;
 }) {
-  const on = tone === "yes" ? "border-[#EA9A61]/60 bg-[#EA9A61]/[0.12]" : "border-white/30 bg-white/[0.06]";
+  // Yes leans green, Not yet leans red, on hover as well as once picked, so
+  // the color itself nudges toward the answer before the note text does.
+  // Classes are full literal strings (not interpolated) so Tailwind's JIT
+  // scanner can still find and generate them.
+  const tint = tone === "yes" ? "#3DAE5F" : "#FF3B30";
+  const on =
+    tone === "yes"
+      ? "border-[#3DAE5F]/70 bg-[#3DAE5F]/[0.18]"
+      : "border-[#FF3B30] bg-[#FF3B30]/[0.32]";
+  const hover =
+    tone === "yes"
+      ? "hover:border-[#3DAE5F]/45 hover:bg-[#3DAE5F]/[0.08]"
+      : "hover:border-[#FF3B30]/70 hover:bg-[#FF3B30]/[0.16]";
   return (
     <button
       type="button"
       onClick={onClick}
-      className={`rounded-2xl border p-4 md:p-5 text-center transition-all duration-300 cursor-pointer text-white text-base md:text-lg font-semibold ${
-        selected ? on : "border-white/[0.08] bg-white/[0.02] hover:border-[#EA9A61]/40 hover:bg-[#EA9A61]/[0.04]"
+      className={`relative rounded-2xl border p-4 md:p-5 text-center transition-all duration-150 active:scale-[0.97] cursor-pointer text-white text-base md:text-lg font-semibold ${
+        selected ? on : `border-white/[0.08] bg-white/[0.02] ${hover}`
       }`}
-      style={{ fontFamily: HEADING }}
+      style={{ fontFamily: BODY }}
     >
+      {selected && (
+        <span
+          className="absolute top-2 right-2 w-4 h-4 rounded-full flex items-center justify-center"
+          style={{ background: tint }}
+        >
+          <Check className="w-2.5 h-2.5 text-[#1A1210]" strokeWidth={3} />
+        </span>
+      )}
       {children}
     </button>
   );
@@ -440,7 +477,7 @@ function PrimaryButton({ onClick, children }: { onClick: () => void; children: R
       onClick={onClick}
       className="cta-shine mt-4 block w-full text-center text-white font-semibold rounded-full transition-transform duration-300 hover:scale-[1.02] cursor-pointer"
       style={{
-        fontFamily: HEADING,
+        fontFamily: BODY,
         padding: "13px",
         fontSize: "13px",
         letterSpacing: "0.05em",
