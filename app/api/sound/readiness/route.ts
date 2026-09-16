@@ -16,6 +16,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { subscribeToKlaviyo } from "@/utils/klaviyo";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
@@ -35,6 +36,11 @@ const bodySchema = z.object({
   tier: z.string().trim().max(120).optional().or(z.literal("")),
   have: z.string().trim().max(1200).optional().or(z.literal("")),
   missing: z.string().trim().max(1200).optional().or(z.literal("")),
+  // Raw gap keys (e.g. "splits", "stems"), separate from the joined labels
+  // above: the Klaviyo plan email conditionally renders one block per gap,
+  // which needs its own boolean property per key, not a joined string.
+  haveKeys: z.array(z.string().trim().max(40)).max(20).optional(),
+  missingKeys: z.array(z.string().trim().max(40)).max(20).optional(),
   piecemeal: z.string().trim().max(60).optional().or(z.literal("")),
   roster: z.string().trim().max(40).optional().or(z.literal("")),
   // Honeypot — real users never fill this. Bots do.
@@ -132,6 +138,39 @@ export async function POST(req: NextRequest) {
       },
       { status: 503 }
     );
+  }
+
+  // Fire-and-forget: a lead who doesn't reach the flow is worse than a lead
+  // who reaches Andi's inbox without it, so this never blocks or fails the
+  // response below. Properties carry the audit's own tagging (role, score,
+  // the exact gaps) so the 14-day activation flow can branch and personalize
+  // on them without a second data source.
+  const listId = process.env.KLAVIYO_MUSIC_LIST_ID || process.env.KLAVIYO_LIST_ID;
+  if (listId) {
+    // One boolean per gap key (gap_splits, gap_stems, ...) so the plan email
+    // can do a plain {% if profile.gap_splits %} per block instead of parsing
+    // a joined string. missingKeys wins over haveKeys if a key somehow lands
+    // in both (shouldn't happen, but "it's a gap" is the safer default).
+    const gapProperties: Record<string, string> = {};
+    for (const key of sub.haveKeys || []) gapProperties[`gap_${key}`] = "false";
+    for (const key of sub.missingKeys || []) gapProperties[`gap_${key}`] = "true";
+
+    subscribeToKlaviyo({
+      listId,
+      email: sub.email,
+      name: sub.name,
+      source: "rovmusic-readiness-audit",
+      properties: {
+        role: sub.role || "",
+        score: sub.score || "",
+        tier: sub.tier || "",
+        missing: sub.missing || "",
+        have: sub.have || "",
+        roster: sub.roster || "",
+        artist: sub.artist || "",
+        ...gapProperties,
+      },
+    }).catch(() => {});
   }
 
   try {

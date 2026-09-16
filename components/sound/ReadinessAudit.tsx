@@ -527,6 +527,8 @@ export default function ReadinessAudit() {
           tier: tier.headline,
           have: items.filter((i) => have.has(i.key)).map((i) => i.label).join("; "),
           missing: missing.map((m) => m.label).join("; "),
+          haveKeys: items.filter((i) => have.has(i.key)).map((i) => i.key),
+          missingKeys: missing.map((m) => m.key),
           piecemeal: cost > 0 ? `${approx ? "at least " : ""}${money(cost)}` : "",
           roster: isManager
             ? [
@@ -723,6 +725,12 @@ type PlanContext = {
   tier: string;
   have: string;
   missing: string;
+  // Raw keys alongside the joined labels above: the labels read well in the
+  // notification email, but the Klaviyo plan email needs to conditionally
+  // render one block per gap, which means each gap needs its own property,
+  // not a spot in a semicolon-joined string.
+  haveKeys: string[];
+  missingKeys: string[];
   piecemeal: string;
   roster: string;
 };
