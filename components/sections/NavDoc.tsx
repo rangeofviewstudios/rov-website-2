@@ -30,18 +30,12 @@ const SECONDARY = [
   { title: "Contact", to: "/contact" },
 ];
 
-const RESOURCES = [
-  { kind: "Toolkit", title: "The Web Dev Toolkit", to: "/resources/toolkits/web-dev" },
-  { kind: "Playbook", title: "What Real Estate Agents Take Home", to: "/resources/playbooks/real-estate-agents" },
-  { kind: "Guide", title: "What a Website Costs in Atlanta", to: "/web/how-much-does-a-website-cost-in-atlanta" },
-];
-
 const FEATURED = [
   {
-    title: "The Bando",
-    blurb: "Bounce rate cut 60%",
-    to: "/casestudy/bando",
-    img: "/casestudy/bando/bando1.webp",
+    title: "Wisdom ATL",
+    blurb: "Rebuilt frame by frame",
+    to: "/casestudy/wisdom-atl",
+    img: "/casestudy/wisdom-atl/build/wisdmnewhero.png",
   },
   {
     title: "Aysegul Ikna",
@@ -348,37 +342,6 @@ export function NavigationDock({ className }: NavigationDockProps) {
                   className="group mt-3 flex items-center justify-between border-b border-white/[0.14] pb-3 text-white/85 hover:text-white transition-colors focus-visible:outline-none focus-visible:text-[#EA9A61]"
                 >
                   <span style={DISPLAY} className="text-[13px] font-bold uppercase tracking-[0.22em]">All work</span>
-                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                </Link>
-
-                {/* Resources: the reason to come back before there is a project */}
-                <p style={DISPLAY} className="mt-6 text-white/60 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-3">
-                  Resources
-                </p>
-                <ul className="space-y-0">
-                  {RESOURCES.map((r) => (
-                    <li key={r.to}>
-                      <Link
-                        href={r.to}
-                        onClick={close}
-                        className="group flex items-baseline gap-4 border-b border-white/[0.10] py-2 focus-visible:outline-none focus-visible:text-white"
-                      >
-                        <span style={DISPLAY} className="shrink-0 w-[92px] text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#EA9A61]">
-                          {r.kind}
-                        </span>
-                        <span className="font-sans text-[13.5px] font-medium tracking-[0.01em] text-white/80 group-hover:text-white transition-colors">
-                          {r.title}
-                        </span>
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-                <Link
-                  href="/resources"
-                  onClick={close}
-                  className="group mt-3 flex items-center justify-between text-white/85 hover:text-white transition-colors focus-visible:outline-none focus-visible:text-[#EA9A61]"
-                >
-                  <span style={DISPLAY} className="text-[13px] font-bold uppercase tracking-[0.22em]">The resource hub</span>
                   <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                 </Link>
 
