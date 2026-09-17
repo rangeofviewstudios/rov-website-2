@@ -14,13 +14,14 @@
 //   LEAD_WEBHOOK_URL     https://...                (optional)
 //   RESEND_API_KEY       re_...                     (optional)
 //   BRIEF_TO_EMAIL       you@example.com            (optional; falls back to LEAD_TO_EMAIL)
-//   LEAD_FROM_EMAIL      onboarding@resend.dev      (optional; Resend path)
+//   LEAD_FROM_EMAIL      "Range of View <hello@rovmusic.com>"  (optional; Resend path)
 // ─────────────────────────────────────────────────────────────
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { subscribeToKlaviyo } from "@/utils/klaviyo";
 import { leadRateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { HELLO_FROM } from "@/lib/email-from";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
@@ -28,9 +29,9 @@ export const maxDuration = 15;
 const DEFAULT_TO_EMAIL = "rangeofviewmusic@gmail.com";
 // Briefs join the same Klaviyo web-leads list as every other site form.
 const LEADS_LIST_ID = process.env.KLAVIYO_LEADS_LIST_ID || "WGRd8Q";
-// Resend refuses senders on unverified domains. Until rovstudios.com is
-// verified in Resend, send from their sandbox address.
-const DEFAULT_FROM_EMAIL = "onboarding@resend.dev";
+// rovmusic.com is verified in Resend; override with LEAD_FROM_EMAIL if this
+// route ever needs a different sender.
+const DEFAULT_FROM_EMAIL = HELLO_FROM;
 
 const short = z.string().trim().max(160).optional().or(z.literal(""));
 const long = z.string().trim().max(1500).optional().or(z.literal(""));

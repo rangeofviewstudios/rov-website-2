@@ -28,9 +28,7 @@ export default function BriefCTASection({ service: slug }: { service: string }) 
   if (!service) return null;
 
   // The chips carry what we ask for, so the body copy never restates them.
-  const covered = service.crawl
-    ? ["Your link", "Five questions", "A real number"]
-    : ["Five questions", "No budget question", "A real number"];
+  const covered = ["Five questions", "No budget question", "A real number"];
 
   return (
     <section ref={ref} className="relative bg-black px-6 py-10 md:px-12">
@@ -59,12 +57,11 @@ export default function BriefCTASection({ service: slug }: { service: string }) 
               Five questions. Then we show you what&apos;s leaking, and what it costs.
             </h2>
             <p
-              className="mb-6 max-w-xl leading-relaxed text-white/50"
+              className="mb-6 max-w-xl leading-relaxed text-white/65"
               style={{ fontFamily: BODY, fontSize: "clamp(0.9375rem, 1.3vw, 1.0625rem)" }}
             >
-              {service.crawl
-                ? "Paste your link and we read it on the spot. You get the answer and a real price before we ask for anything, and a person replies within one business day."
-                : "About a minute. You get the answer and a real price before we ask for anything, and a person replies within one business day."}
+              About a minute. You get the answer and a real price before we ask for anything, and a
+              person replies within one business day.
             </p>
             <ul className="flex flex-wrap gap-2">
               {covered.map((c) => (
@@ -92,7 +89,7 @@ export default function BriefCTASection({ service: slug }: { service: string }) 
                 boxShadow: GRADIENT_SHADOW,
               }}
             >
-              {service.crawl ? "Check my site →" : "Start the brief →"}
+              Start the brief →
             </Link>
             <a
               href="https://cal.com/rov-studios-imhphw/15min"
@@ -109,7 +106,7 @@ export default function BriefCTASection({ service: slug }: { service: string }) 
             >
               Book a call instead
             </a>
-            <span className="mt-1 text-center text-xs text-white/30" style={{ fontFamily: BODY }}>
+            <span className="mt-1 text-center text-xs text-white/45" style={{ fontFamily: BODY }}>
               No obligation, no pitch deck
             </span>
           </div>

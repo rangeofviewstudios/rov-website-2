@@ -9,7 +9,8 @@
 // Delivery is env-driven and identical to app/api/sound/quote-inquiry:
 //   1. SUB_WEBHOOK_URL   — if set, POST the JSON to it.
 //   2. RESEND_API_KEY    — else, if set, email via Resend to SUB_TO_EMAIL
-//      (default stems@rovstudios.com).
+//      (default stems@rovstudios.com), from SUB_FROM_EMAIL
+//      (default "Range of View <support@rovmusic.com>").
 //   3. neither set       — 503 { ok:false, code:"not_configured" } so the form
 //      is testable before wiring and fails honestly.
 // ─────────────────────────────────────────────────────────────
@@ -17,14 +18,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { subscribeToKlaviyo } from "@/utils/klaviyo";
+import { SUPPORT_FROM } from "@/lib/email-from";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
 
 const DEFAULT_TO_EMAIL = "stems@rovstudios.com";
-// Resend refuses senders on unverified domains. Until rovstudios.com is
-// verified, send from their sandbox address; override with SUB_FROM_EMAIL.
-const DEFAULT_FROM_EMAIL = "onboarding@resend.dev";
+// rovmusic.com is verified in Resend; override with SUB_FROM_EMAIL if this
+// route ever needs a different sender.
+const DEFAULT_FROM_EMAIL = SUPPORT_FROM;
 
 const bodySchema = z.object({
   name: z.string().trim().min(1).max(120),

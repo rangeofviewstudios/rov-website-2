@@ -2,23 +2,20 @@
 
 // The intake quiz, shared by every service.
 //
-// Four beats:
-//   1. Their link (or business name). If the service crawls, this runs
-//      /api/web/site-check and reports real findings off their homepage. It
-//      also PRE-ANSWERS moments: no booking link found means Captured is
-//      already flagged before they answer anything, so the quiz opens as a
-//      diagnosis in progress rather than a blank form.
-//   2. Five questions, one screen, yes/no. Every "no" is a leak.
-//   3. The reveal. Leaks lit, count stated, tier and real price shown. This is
+// Three beats:
+//   1. Five questions, one screen, yes/no, straight in with no warm-up field.
+//      Every "no" is a leak.
+//   2. The reveal. Leaks lit, count stated, tier and real price shown. This is
 //      the beat the whole thing exists for, and it happens BEFORE the gate:
 //      they get the answer whether or not they hand over an email.
-//   4. The gate. Name and email for the written breakdown.
+//   3. The gate. Name and email for the written breakdown.
 //
 // Prices come from lib/pricing.ts and questions from lib/intake.ts, so nothing
 // here can drift from /pricing or from the service pages.
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
+import { Check } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import {
   MOMENTS,
@@ -38,9 +35,6 @@ import {
   trackFormSubmit,
   trackLead,
 } from "@/lib/lead-analytics";
-
-type Finding = { key: string; label: string; why: string; tone: "gap" | "ok" };
-type SiteCheck = { title: string; favicon: string; findings: Finding[] };
 
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
@@ -62,16 +56,17 @@ type Answers = Partial<Record<MomentKey, Choice>>;
 /** Anything that is not a confident yes is treated as a leak. */
 const leaks = (c: Choice | undefined) => c !== undefined && c !== "yes";
 
-type Phase = "open" | "questions" | "reveal" | "gate" | "done";
+type Phase = "questions" | "reveal" | "gate" | "done";
 
 export default function IntakeQuiz({ service }: { service: IntakeService }) {
   const reduce = useReducedMotion();
 
-  const [phase, setPhase] = useState<Phase>("open");
-  const [opening, setOpening] = useState("");
+  const [phase, setPhase] = useState<Phase>("questions");
   const [answers, setAnswers] = useState<Answers>({});
-  const [site, setSite] = useState<SiteCheck | null>(null);
-  const [crawling, setCrawling] = useState(false);
+  // Which of the five moments is on screen. One question at a time, not all
+  // five stacked at once — a visitor should never have to read more than one
+  // question, its hint, and (on a leak) one note before deciding anything.
+  const [qIndex, setQIndex] = useState(0);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -86,6 +81,8 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
 
   useEffect(() => {
     captureAttribution();
+    trackFormStart(service.source);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Move focus to the new heading on each beat so keyboard and screen reader
@@ -96,7 +93,7 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
       return;
     }
     headingRef.current?.focus();
-  }, [phase]);
+  }, [phase, qIndex]);
 
   const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim());
 
@@ -104,7 +101,6 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
     () => service.questions.filter((q) => leaks(answers[q.key])),
     [answers, service.questions]
   );
-  const answeredAll = service.questions.every((q) => answers[q.key] !== undefined);
   const tier = tierForMoments(leaking.length);
 
   function scrollToTop() {
@@ -120,50 +116,21 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
   }
 
   // ── Beat 1 ──────────────────────────────────────────────────
-  async function startQuiz() {
-    if (!opening.trim()) {
-      setTouched(true);
-      return;
-    }
-    trackFormStart(service.source);
-
-    if (!service.crawl) {
-      go("questions", 1, "opened");
-      return;
-    }
-
-    setCrawling(true);
-    try {
-      const res = await fetch("/api/web/site-check", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ url: opening.trim() }),
-      });
-      const json = await res.json().catch(() => ({ ok: false }));
-      if (json.ok && Array.isArray(json.findings)) {
-        setSite(json as SiteCheck);
-        // Pre-answer what the crawl can already see. A gap finding means that
-        // moment is not working, so the visitor confirms rather than starts cold.
-        const gaps: Answers = {};
-        for (const f of json.findings as Finding[]) {
-          if (f.tone !== "gap") continue;
-          if (/booking|contact|form|phone|call/i.test(f.key + f.label)) gaps.captured = "no";
-          if (/title|meta|description|schema|index|search/i.test(f.key + f.label)) gaps.found = "no";
-        }
-        setAnswers(gaps);
-      }
-    } catch {
-      /* a dead or blocked site is not a dead end; carry on with nothing */
-    }
-    setCrawling(false);
-    go("questions", 1, "opened");
-  }
-
-  const preAnsweredCount = Object.keys(answers).length;
-
-  // ── Beat 2 ──────────────────────────────────────────────────
   function answer(key: MomentKey, choice: Choice) {
     setAnswers((p) => ({ ...p, [key]: choice }));
+  }
+
+  // "Yes" has nothing to explain, so it moves on by itself. "No" and "Not
+  // sure" hold the screen so the note underneath gets read, and this is what
+  // the resulting Next button calls.
+  function nextQuestion(index: number) {
+    if (index + 1 >= service.questions.length) {
+      go("reveal", 2, `answered-${leaking.length}-leaking`);
+    } else {
+      trackFormStep(service.source, 1, `q${index + 1}-answered`);
+      setQIndex(index + 1);
+      scrollToTop();
+    }
   }
 
   // ── Beat 4 ──────────────────────────────────────────────────
@@ -180,16 +147,11 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
     const leakLines = leaking.map((q) => `· ${MOMENTS.find((m) => m.key === q.key)?.label}: ${q.leak}`);
     const message = [
       `Service: ${service.parentLabel}`,
-      service.crawl ? `Site: ${opening.trim()}` : `Business: ${opening.trim()}`,
-      site?.title ? `Site title: ${site.title}` : "",
       "",
       `Moments leaking: ${leaking.length} of ${service.questions.length}`,
       ...leakLines,
       "",
       `Tier indicated: ${tier.name} (${fmt(tier.priceFrom)} to ${fmt(tier.priceTo)})`,
-      site && site.findings.length
-        ? `\nWhat the crawl saw:\n${site.findings.map((f) => `· ${f.label}`).join("\n")}`
-        : "",
       notes.trim() ? `\nWhat they said:\n${notes.trim()}` : "",
     ]
       .filter(Boolean)
@@ -207,6 +169,15 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
           message,
           source: `${service.source}:${leaking.length}-leaking`,
           page: typeof window !== "undefined" ? window.location.pathname : "",
+          intake: {
+            leaking: leaking.map((q) => ({
+              label: MOMENTS.find((m) => m.key === q.key)?.label ?? q.key,
+              leak: q.leak,
+            })),
+            tierName: tier.name,
+            tierPriceFrom: tier.priceFrom,
+            tierPriceTo: tier.priceTo,
+          },
           ...attributionPayload(),
         }),
       });
@@ -237,132 +208,89 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
       className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 md:p-9"
     >
       <AnimatePresence mode="wait">
-        {/* ══ 1 · OPEN ══ */}
-        {phase === "open" && (
-          <motion.div key="open" {...slide} transition={{ duration: reduce ? 0 : 0.22 }}>
-            <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold italic text-white outline-none md:text-3xl" style={{ fontFamily: HEADING }}>
-              {service.crawl ? "Where are we starting?" : service.openingLabel}
-            </h2>
-            <p className="mb-7 mt-1.5 text-sm text-white/45" style={{ fontFamily: BODY }}>
-              {service.crawl ? service.urlHint : service.openingHint}
-            </p>
-
-            <input
-              type={service.crawl ? "url" : "text"}
-              inputMode={service.crawl ? "url" : "text"}
-              value={opening}
-              onChange={(e) => setOpening(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && startQuiz()}
-              placeholder={service.crawl ? "yourbusiness.com" : service.openingPlaceholder}
-              aria-label={service.crawl ? service.urlLabel : service.openingLabel}
-              aria-invalid={touched && !opening.trim() ? true : undefined}
-              maxLength={160}
-              autoFocus
-              className={`w-full rounded-lg border bg-white/[0.04] px-3.5 py-3 text-base text-white placeholder-white/25 outline-none transition-colors focus:border-[#EA9A61]/60 ${
-                touched && !opening.trim() ? "border-[#ff8b6b]/60" : "border-white/10"
-              }`}
-              style={{ fontFamily: BODY }}
-            />
-            {touched && !opening.trim() && (
-              <p className="mt-1.5 text-xs text-[#ff8b6b]" style={{ fontFamily: BODY }}>
-                We need something to go on.
-              </p>
-            )}
-
-            <div className="mt-8 flex items-center justify-between gap-3 border-t border-white/[0.07] pt-6">
-              <span className="text-xs text-white/30" style={{ fontFamily: BODY }}>
-                Five questions. About a minute.
+        {/* ══ 1 · QUESTIONS ══ */}
+        {phase === "questions" && (() => {
+          const q = service.questions[qIndex];
+          const v = answers[q.key];
+          const isLeak = leaks(v);
+          return (
+            <motion.div key={`q-${qIndex}`} {...slide} transition={{ duration: reduce ? 0 : 0.22 }}>
+              <Progress count={service.questions.length} index={qIndex} />
+              <span className="mb-3 block text-[0.7rem] tracking-[0.2em] text-white/50" style={{ fontFamily: BODY }}>
+                {qIndex + 1} OF {service.questions.length}
               </span>
-              <button
-                type="button"
-                onClick={startQuiz}
-                disabled={crawling}
-                className="cta-shine rounded-full text-center font-semibold text-white transition-transform duration-300 hover:scale-[1.03] disabled:opacity-70"
-                style={{ fontFamily: HEADING, padding: "13px 34px", fontSize: "13px", letterSpacing: "0.05em", background: GRADIENT, boxShadow: GRADIENT_SHADOW }}
-              >
-                {crawling ? "Reading your site…" : service.crawl ? "Check my site →" : "Start →"}
-              </button>
-            </div>
-          </motion.div>
-        )}
+              <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold italic text-white outline-none md:text-3xl" style={{ fontFamily: HEADING }}>
+                {q.question}
+              </h2>
+              <p className="mb-7 mt-1.5 text-sm text-white/75" style={{ fontFamily: BODY }}>
+                {q.hint}
+              </p>
 
-        {/* ══ 2 · QUESTIONS ══ */}
-        {phase === "questions" && (
-          <motion.div key="questions" {...slide} transition={{ duration: reduce ? 0 : 0.22 }}>
-            <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold italic text-white outline-none md:text-3xl" style={{ fontFamily: HEADING }}>
-              Five moments. Which ones work?
-            </h2>
-            <p className="mb-7 mt-1.5 text-sm text-white/45" style={{ fontFamily: BODY }}>
-              {preAnsweredCount > 0
-                ? `We could already see ${preAnsweredCount === 1 ? "one of these" : `${preAnsweredCount} of these`} from your site. Confirm the rest.`
-                : "Be honest. Nobody has all five."}
-            </p>
+              <div className="flex gap-2" role="radiogroup" aria-label={q.question}>
+                <PillChoice tone="yes" selected={v === "yes"} onClick={() => { answer(q.key, "yes"); nextQuestion(qIndex); }}>
+                  Yes
+                </PillChoice>
+                <PillChoice tone="no" selected={v === "no"} onClick={() => answer(q.key, "no")}>
+                  No
+                </PillChoice>
+                <PillChoice tone="unsure" selected={v === "unsure"} onClick={() => answer(q.key, "unsure")}>
+                  Not sure
+                </PillChoice>
+              </div>
 
-            <ol className="space-y-3">
-              {service.questions.map((q, i) => {
-                const v = answers[q.key];
-                return (
-                  <li key={q.key} className="rounded-xl border border-white/[0.08] bg-white/[0.02] p-4">
-                    <div className="mb-3 flex items-start gap-3">
-                      <span className="mt-0.5 shrink-0 text-[0.7rem] tracking-[0.2em] text-white/25" style={{ fontFamily: BODY }}>
-                        {String(i + 1).padStart(2, "0")}
-                      </span>
-                      <span className="min-w-0 flex-1">
-                        <span className="block text-[0.95rem] font-semibold text-white" style={{ fontFamily: HEADING }}>
-                          {q.question}
-                        </span>
-                        <span className="mt-0.5 block text-xs text-white/40" style={{ fontFamily: BODY }}>
-                          {q.hint}
-                        </span>
-                      </span>
-                    </div>
-                    <div className="flex gap-2 pl-8" role="radiogroup" aria-label={q.question}>
-                      {([
-                        { label: "Yes", value: "yes" },
-                        { label: "No", value: "no" },
-                        { label: "Not sure", value: "unsure" },
-                      ] as const).map((opt) => {
-                        const on = v === opt.value;
-                        return (
-                          <button
-                            key={opt.label}
-                            type="button"
-                            role="radio"
-                            aria-checked={on}
-                            onClick={() => answer(q.key, opt.value)}
-                            className={`rounded-full border px-4 py-2 text-sm transition-all duration-200 ${
-                              on
-                                ? "border-[#EA9A61]/60 bg-[#EA9A61]/[0.12] text-white"
-                                : "border-white/[0.1] bg-white/[0.02] text-white/55 hover:border-white/25 hover:text-white/85"
-                            }`}
-                            style={{ fontFamily: BODY }}
-                          >
-                            {opt.label}
-                          </button>
-                        );
-                      })}
-                    </div>
-                  </li>
-                );
-              })}
-            </ol>
+              {/* One line, only on a leak: what it costs, then that it's
+                  fixable. Neutral cream text on a tone-tinted box, not
+                  tone-colored text, so it doesn't repeat the low-contrast
+                  mistake a color-matched warning box made elsewhere. Holds
+                  the screen here, same as RoleGate's "Not yet", so the note
+                  gets read before advancing. */}
+              <AnimatePresence>
+                {isLeak && q.note && (
+                  <motion.div
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{ duration: 0.25 }}
+                    className="overflow-hidden"
+                  >
+                    <p
+                      className="mt-4 rounded-lg border border-[#EA9A61]/25 bg-[#EA9A61]/[0.06] p-4 text-sm leading-relaxed text-white/70"
+                      style={{ fontFamily: BODY }}
+                    >
+                      {q.note}
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => nextQuestion(qIndex)}
+                      className="cta-shine mt-4 block w-full rounded-full text-center font-semibold text-white transition-transform duration-300 hover:scale-[1.02]"
+                      style={{ fontFamily: BODY, padding: "13px", fontSize: "13px", letterSpacing: "0.05em", background: GRADIENT, boxShadow: GRADIENT_SHADOW }}
+                    >
+                      {qIndex + 1 >= service.questions.length ? "See what this means →" : "Next →"}
+                    </button>
+                  </motion.div>
+                )}
+              </AnimatePresence>
 
-            <div className="mt-8 flex items-center justify-between gap-3 border-t border-white/[0.07] pt-6">
-              <button type="button" onClick={() => setPhase("open")} className="text-sm text-white/45 transition-colors hover:text-white" style={{ fontFamily: BODY }}>
-                ← Back
-              </button>
-              <button
-                type="button"
-                onClick={() => go("reveal", 2, `answered-${leaking.length}-leaking`)}
-                disabled={!answeredAll}
-                className="cta-shine rounded-full text-center font-semibold text-white transition-transform duration-300 hover:scale-[1.03] disabled:cursor-not-allowed disabled:opacity-40"
-                style={{ fontFamily: HEADING, padding: "13px 34px", fontSize: "13px", letterSpacing: "0.05em", background: GRADIENT, boxShadow: GRADIENT_SHADOW }}
-              >
-                {answeredAll ? "See what this means →" : `${service.questions.length - Object.keys(answers).length} to go`}
-              </button>
-            </div>
-          </motion.div>
-        )}
+              <div className="mt-8 flex items-center justify-between gap-3 border-t border-white/[0.07] pt-6">
+                {qIndex > 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => setQIndex(qIndex - 1)}
+                    className="text-sm text-white/45 transition-colors hover:text-white"
+                    style={{ fontFamily: BODY }}
+                  >
+                    ← Back
+                  </button>
+                ) : (
+                  <span />
+                )}
+                <span className="text-xs text-white/45" style={{ fontFamily: BODY }}>
+                  {isLeak ? "Read the note, then Next" : "Pick one to continue"}
+                </span>
+              </div>
+            </motion.div>
+          );
+        })()}
 
         {/* ══ 3 · REVEAL ══ */}
         {phase === "reveal" && (
@@ -370,28 +298,6 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
             <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold italic text-white outline-none md:text-3xl lg:text-4xl" style={{ fontFamily: HEADING }}>
               {leakHeadline(leaking.length, service.questions.length)}
             </h2>
-
-            {/* The picture, before any words. Lit means leaking. */}
-            <ol className="mt-6 grid grid-cols-5 gap-1.5">
-              {service.questions.map((q) => {
-                const isLeaking = leaks(answers[q.key]);
-                const label = MOMENTS.find((m) => m.key === q.key)?.label ?? q.key;
-                return (
-                  <li key={q.key} className="text-center">
-                    <div
-                      className="mb-2 h-1.5 rounded-full"
-                      style={{ background: isLeaking ? ORANGE : "rgba(255,255,255,0.12)" }}
-                    />
-                    <span
-                      className="block text-[0.7rem] leading-tight md:text-xs"
-                      style={{ fontFamily: BODY, color: isLeaking ? ORANGE : "rgba(255,255,255,0.3)" }}
-                    >
-                      {label}
-                    </span>
-                  </li>
-                );
-              })}
-            </ol>
 
             {leaking.length > 0 ? (
               <ul className="mt-7 space-y-3">
@@ -401,7 +307,7 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
                       !
                     </span>
                     <span>
-                      <span className="block text-[0.9375rem] font-semibold text-white" style={{ fontFamily: HEADING }}>
+                      <span className="block text-[0.9375rem] font-semibold text-white" style={{ fontFamily: BODY }}>
                         {MOMENTS.find((m) => m.key === q.key)?.label}
                       </span>
                       <span className="block text-sm leading-relaxed text-white/55" style={{ fontFamily: BODY }}>
@@ -423,20 +329,20 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
             {leaking.length > 0 && (
               <div className="mt-8 rounded-xl border p-5 md:p-6" style={{ borderColor: "rgba(234,154,97,0.25)", background: "rgba(234,154,97,0.05)" }}>
                 <span className="mb-2 block text-[11px] uppercase tracking-[0.25em]" style={{ fontFamily: BODY, color: ORANGE }}>
-                  What this usually is
+                  Fixing this usually costs
                 </span>
-                <h3 className="text-xl font-bold italic text-white md:text-2xl" style={{ fontFamily: HEADING }}>
-                  {tier.name}
-                </h3>
-                <p className="mt-1 text-2xl font-bold italic text-white md:text-3xl" style={{ fontFamily: HEADING }}>
+                <p className="text-3xl font-bold italic text-white md:text-4xl" style={{ fontFamily: HEADING }}>
                   {fmt(tier.priceFrom)}{" "}
-                  <span className="text-lg text-white/40">to {fmt(tier.priceTo)}</span>
+                  <span className="text-xl text-white/55">to {fmt(tier.priceTo)}</span>
                 </p>
-                <p className="mt-3 text-sm leading-relaxed text-white/55" style={{ fontFamily: BODY }}>
+                <p className="mt-3 text-sm leading-relaxed text-white/70" style={{ fontFamily: BODY }}>
                   {tier.tagline}
                 </p>
+                <p className="mt-3 text-xs uppercase tracking-[0.15em] text-white/40" style={{ fontFamily: BODY }}>
+                  We call this {tier.name} — {tier.kicker.toLowerCase()}
+                </p>
                 {leaking.length >= 4 && (
-                  <p className="mt-3 border-t border-[#EA9A61]/15 pt-3 text-xs leading-relaxed text-white/40" style={{ fontFamily: BODY }}>
+                  <p className="mt-3 border-t border-[#EA9A61]/15 pt-3 text-xs leading-relaxed text-white/55" style={{ fontFamily: BODY }}>
                     {OVER_CEILING_NOTE}
                   </p>
                 )}
@@ -461,7 +367,7 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
                 type="button"
                 onClick={() => go("gate", 3, "reveal-accepted")}
                 className="cta-shine rounded-full text-center font-semibold text-white transition-transform duration-300 hover:scale-[1.03]"
-                style={{ fontFamily: HEADING, padding: "13px 34px", fontSize: "13px", letterSpacing: "0.05em", background: GRADIENT, boxShadow: GRADIENT_SHADOW }}
+                style={{ fontFamily: BODY, padding: "13px 34px", fontSize: "13px", letterSpacing: "0.05em", background: GRADIENT, boxShadow: GRADIENT_SHADOW }}
               >
                 Send me the breakdown →
               </button>
@@ -475,7 +381,7 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
             <h2 ref={headingRef} tabIndex={-1} className="text-2xl font-bold italic text-white outline-none md:text-3xl" style={{ fontFamily: HEADING }}>
               Where do we send it?
             </h2>
-            <p className="mb-7 mt-1.5 text-sm text-white/45" style={{ fontFamily: BODY }}>
+            <p className="mb-7 mt-1.5 text-sm text-white/60" style={{ fontFamily: BODY }}>
               A written breakdown of the {leaking.length === 1 ? "moment" : `${leaking.length} moments`} above,
               what each one is costing, and what we would fix first. One business day.
             </p>
@@ -529,7 +435,7 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
             </div>
 
             <label className="mb-1 mt-4 block text-sm text-white/75" style={{ fontFamily: BODY }}>
-              Anything else? <span className="text-white/30">(optional)</span>
+              Anything else? <span className="text-white/45">(optional)</span>
             </label>
             <textarea
               value={notes}
@@ -551,7 +457,7 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
               <p role="alert" className="mt-4 text-sm text-[#ff8b6b]" style={{ fontFamily: BODY }}>{error}</p>
             )}
 
-            <p className="mt-4 text-xs leading-relaxed text-white/30" style={{ fontFamily: BODY }}>
+            <p className="mt-4 text-xs leading-relaxed text-white/50" style={{ fontFamily: BODY }}>
               We use this to send your breakdown and reply. No lists you didn&apos;t ask for.
             </p>
 
@@ -564,7 +470,7 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
                 onClick={submit}
                 disabled={status === "sending"}
                 className="cta-shine rounded-full text-center font-semibold text-white transition-transform duration-300 hover:scale-[1.03] disabled:opacity-70"
-                style={{ fontFamily: HEADING, padding: "13px 34px", fontSize: "13px", letterSpacing: "0.05em", background: GRADIENT, boxShadow: GRADIENT_SHADOW }}
+                style={{ fontFamily: BODY, padding: "13px 34px", fontSize: "13px", letterSpacing: "0.05em", background: GRADIENT, boxShadow: GRADIENT_SHADOW }}
               >
                 {status === "sending" ? "Sending…" : "Send it over →"}
               </button>
@@ -584,9 +490,9 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
               Got it, {name.split(" ")[0] || "thanks"}.
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55" style={{ fontFamily: BODY }}>
-              Your breakdown is being written by a person, not generated. It lands within one business
-              day and covers the {leaking.length === 1 ? "moment" : `${leaking.length} moments`} you
-              flagged, what each is costing, and where we would start.
+              Check your inbox, what you just answered is already on its way to you in writing. The
+              full breakdown, written by a person and covering where we would start, lands within one
+              business day.
             </p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">
@@ -596,14 +502,14 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
                 rel="noopener noreferrer"
                 onClick={() => trackBookingClick(service.source)}
                 className="flex-1 rounded-full border border-white/12 text-center font-semibold text-white/70 transition-all duration-300 hover:border-[#EA9A61]/50 hover:text-white"
-                style={{ fontFamily: HEADING, padding: "14px", fontSize: "13px", letterSpacing: "0.05em", background: "rgba(255,255,255,0.03)" }}
+                style={{ fontFamily: BODY, padding: "14px", fontSize: "13px", letterSpacing: "0.05em", background: "rgba(255,255,255,0.03)" }}
               >
                 Book a call while you wait
               </a>
               <Link
                 href="/works"
                 className="flex-1 rounded-full border border-white/12 text-center font-semibold text-white/70 transition-all duration-300 hover:border-[#EA9A61]/50 hover:text-white"
-                style={{ fontFamily: HEADING, padding: "14px", fontSize: "13px", letterSpacing: "0.05em", background: "rgba(255,255,255,0.03)" }}
+                style={{ fontFamily: BODY, padding: "14px", fontSize: "13px", letterSpacing: "0.05em", background: "rgba(255,255,255,0.03)" }}
               >
                 See recent work
               </Link>
@@ -612,5 +518,76 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+/** Segmented progress bar for the one-question-at-a-time screen, same shape
+ * as RoleGate's. */
+function Progress({ count, index }: { count: number; index: number }) {
+  return (
+    <div className="mb-4 flex items-center gap-1.5">
+      {Array.from({ length: count }).map((_, i) => (
+        <div
+          key={i}
+          className="h-1 flex-1 rounded-full transition-colors duration-300"
+          style={{ background: i <= index ? "#EA9A61" : "rgba(255,255,255,0.1)" }}
+        />
+      ))}
+    </div>
+  );
+}
+
+/**
+ * One answer pill. Yes leans green, No leans red, Not sure leans the brand
+ * orange, so the color itself says something before the note text does, the
+ * same framing used on rovmusic's landing quiz. A selected pill gets a
+ * checkmark and a slight press on tap; classes are full literal strings (not
+ * built from a variable) so Tailwind's JIT scanner can still find them.
+ */
+function PillChoice({
+  tone,
+  selected,
+  onClick,
+  children,
+}: {
+  tone: "yes" | "no" | "unsure";
+  selected: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  const tint = tone === "yes" ? "#3DAE5F" : tone === "no" ? "#FF3B30" : "#EA9A61";
+  const on =
+    tone === "yes"
+      ? "border-[#3DAE5F] bg-[#3DAE5F]/[0.2] text-white"
+      : tone === "no"
+        ? "border-[#FF3B30] bg-[#FF3B30]/[0.28] text-white"
+        : "border-[#EA9A61] bg-[#EA9A61]/[0.22] text-white";
+  const hover =
+    tone === "yes"
+      ? "hover:border-[#3DAE5F]/50 hover:bg-[#3DAE5F]/[0.08]"
+      : tone === "no"
+        ? "hover:border-[#FF3B30]/60 hover:bg-[#FF3B30]/[0.1]"
+        : "hover:border-[#EA9A61]/50 hover:bg-[#EA9A61]/[0.08]";
+  return (
+    <button
+      type="button"
+      role="radio"
+      aria-checked={selected}
+      onClick={onClick}
+      className={`relative rounded-full border px-4 py-2 text-sm transition-all duration-150 active:scale-[0.96] cursor-pointer ${
+        selected ? on : `border-white/[0.1] bg-white/[0.02] text-white/55 ${hover} hover:text-white/85`
+      }`}
+      style={{ fontFamily: BODY }}
+    >
+      {selected && (
+        <span
+          className="absolute -top-1.5 -right-1.5 flex h-4 w-4 items-center justify-center rounded-full"
+          style={{ background: tint }}
+        >
+          <Check className="h-2.5 w-2.5 text-[#1A1210]" strokeWidth={3} />
+        </span>
+      )}
+      {children}
+    </button>
   );
 }

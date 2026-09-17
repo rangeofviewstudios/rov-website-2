@@ -20,7 +20,7 @@
 //   LEAD_WEBHOOK_URL       https://...            (optional)
 //   RESEND_API_KEY         re_...                 (optional)
 //   LEAD_TO_EMAIL          you@example.com        (optional; default below)
-//   LEAD_FROM_EMAIL        onboarding@resend.dev  (optional; Resend path)
+//   LEAD_FROM_EMAIL        "Range of View <hello@rovmusic.com>"  (optional; Resend path)
 //   KLAVIYO_PRIVATE_KEY    pk_...                (required for the list add)
 //   KLAVIYO_LEADS_LIST_ID  XXXXXX                (optional; defaults to WGRd8Q)
 // ─────────────────────────────────────────────────────────────
@@ -29,6 +29,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { subscribeToKlaviyo } from "@/utils/klaviyo";
 import { leadRateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { HELLO_FROM } from "@/lib/email-from";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
@@ -36,11 +37,9 @@ export const maxDuration = 15;
 // One inbox for every rovstudios.com lead, matching app/api/leads and
 // app/api/web/brief. Override with LEAD_TO_EMAIL.
 const DEFAULT_TO_EMAIL = "rangeofviewmusic@gmail.com";
-// Resend rejects senders on unverified domains, which would fail this route
-// outright rather than degrading. Stay on the sandbox sender until
-// rovstudios.com is verified in Resend, then set LEAD_FROM_EMAIL once and
-// every lead route picks it up.
-const DEFAULT_FROM_EMAIL = "onboarding@resend.dev";
+// rovmusic.com is verified in Resend; override with LEAD_FROM_EMAIL if this
+// route ever needs a different sender.
+const DEFAULT_FROM_EMAIL = HELLO_FROM;
 
 // Same "ROV web leads" list the other business forms use, so every B2B lead
 // lands in one place regardless of which page captured it. Matches

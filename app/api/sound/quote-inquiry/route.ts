@@ -15,20 +15,20 @@
 //   SUB_WEBHOOK_URL   https://...            (optional)
 //   RESEND_API_KEY    re_...                 (optional; shared with lead route)
 //   SUB_TO_EMAIL      you@example.com        (optional; default below)
-//   SUB_FROM_EMAIL    plans@rovstudios.com   (optional; Resend path)
+//   SUB_FROM_EMAIL    "Range of View <support@rovmusic.com>"  (optional; Resend path)
 // ─────────────────────────────────────────────────────────────
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
+import { SUPPORT_FROM } from "@/lib/email-from";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
 
 const DEFAULT_TO_EMAIL = "stems@rovstudios.com";
-// Resend refuses senders on unverified domains. Until rovstudios.com is
-// verified in Resend (DNS records), send from their sandbox address; override
-// with SUB_FROM_EMAIL=plans@rovstudios.com once the domain is verified.
-const DEFAULT_FROM_EMAIL = "onboarding@resend.dev";
+// rovmusic.com is verified in Resend; override with SUB_FROM_EMAIL if this
+// route ever needs a different sender.
+const DEFAULT_FROM_EMAIL = SUPPORT_FROM;
 
 const bodySchema = z.object({
   name: z.string().trim().min(1).max(120),

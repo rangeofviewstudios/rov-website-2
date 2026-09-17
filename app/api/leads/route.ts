@@ -14,13 +14,14 @@
 //   LEAD_WEBHOOK_URL     https://...                (optional)
 //   RESEND_API_KEY       re_...                     (optional)
 //   LEAD_TO_EMAIL        you@example.com            (optional; default below)
-//   LEAD_FROM_EMAIL      onboarding@resend.dev      (optional; Resend path)
+//   LEAD_FROM_EMAIL      "Range of View <hello@rovmusic.com>"  (optional; Resend path)
 // ─────────────────────────────────────────────────────────────
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { subscribeToKlaviyo } from "@/utils/klaviyo";
 import { leadRateLimit, rateLimitResponse } from "@/lib/rate-limit";
+import { HELLO_FROM } from "@/lib/email-from";
 
 export const runtime = "nodejs";
 export const maxDuration = 15;
@@ -29,10 +30,9 @@ const DEFAULT_TO_EMAIL = "rangeofviewmusic@gmail.com";
 // Every website form lead is also added to the Klaviyo "ROV web leads" list,
 // kept separate from card-collected leads. Override with KLAVIYO_LEADS_LIST_ID.
 const LEADS_LIST_ID = process.env.KLAVIYO_LEADS_LIST_ID || "WGRd8Q";
-// Resend refuses senders on unverified domains. Until rovstudios.com is
-// verified in Resend, send from their sandbox address; override with
-// LEAD_FROM_EMAIL once the domain is verified.
-const DEFAULT_FROM_EMAIL = "onboarding@resend.dev";
+// rovmusic.com is verified in Resend; override with LEAD_FROM_EMAIL if a
+// route ever needs a different sender.
+const DEFAULT_FROM_EMAIL = HELLO_FROM;
 
 const bodySchema = z.object({
   name: z.string().trim().min(1).max(120),
@@ -56,6 +56,26 @@ const bodySchema = z.object({
   landing_page: z.string().trim().max(300).optional(),
   // Honeypot — real users never fill this. Bots do.
   company: z.string().max(0).optional(),
+  // Set only by the intake quiz. When present, the lead gets an instant
+  // reply email built from their own answers, not just the internal
+  // notification. Everything in it is our own copy (leak/tier text from
+  // lib/intake.ts and lib/pricing.ts), never free-typed visitor input, so
+  // it's safe to drop straight into an email we send on their behalf.
+  intake: z
+    .object({
+      leaking: z
+        .array(
+          z.object({
+            label: z.string().trim().max(60),
+            leak: z.string().trim().max(300),
+          })
+        )
+        .max(5),
+      tierName: z.string().trim().max(80),
+      tierPriceFrom: z.number(),
+      tierPriceTo: z.number(),
+    })
+    .optional(),
 });
 
 type Lead = z.infer<typeof bodySchema>;
@@ -115,6 +135,61 @@ async function deliverResend(apiKey: string, lead: Lead) {
   return res.ok;
 }
 
+function fmtUsd(n: number): string {
+  return "$" + n.toLocaleString("en-US");
+}
+
+/**
+ * Instant reply to the lead's own inbox, built from their intake answers.
+ * Templated, not AI-generated: it costs nothing per send and it's still
+ * genuinely theirs, since it names their exact leaking moments and price
+ * range instead of a generic "thanks, we got it". A person still follows up
+ * with the full written breakdown within one business day; this just proves
+ * the submission landed somewhere real in the meantime.
+ */
+async function deliverIntakeReply(apiKey: string, lead: Lead) {
+  if (!lead.intake) return;
+  const { leaking, tierName, tierPriceFrom, tierPriceTo } = lead.intake;
+  const from = process.env.LEAD_FROM_EMAIL || DEFAULT_FROM_EMAIL;
+  const firstName = lead.name.trim().split(" ")[0] || "there";
+
+  const leakLines = leaking.length
+    ? leaking.map((l) => `· ${l.label}: ${l.leak}`).join("\n")
+    : "Nothing you flagged is currently leaking, which is rare.";
+
+  const text = [
+    `Hey ${firstName},`,
+    "",
+    "Here's what you told us, in writing so you have it:",
+    "",
+    leakLines,
+    "",
+    leaking.length
+      ? `Based on that, the estimate is ${tierName}, ${fmtUsd(tierPriceFrom)} to ${fmtUsd(tierPriceTo)}.`
+      : "",
+    "",
+    "A real person will follow up with the full breakdown within one business day. If anything above needs adjusting, just reply, it comes straight to us.",
+    "",
+    "Talk soon,",
+    "Andi / Range Of View Studios",
+  ]
+    .filter((line) => line !== "")
+    .join("\n");
+
+  const res = await timedFetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from,
+      to: [lead.email],
+      reply_to: process.env.LEAD_TO_EMAIL || DEFAULT_TO_EMAIL,
+      subject: "What's leaking, in writing",
+      text,
+    }),
+  });
+  if (!res.ok) console.error("Intake reply email failed (non-2xx from Resend).");
+}
+
 export async function POST(req: NextRequest) {
   const limit = leadRateLimit(req, "leads");
   if (!limit.ok) return rateLimitResponse(limit);
@@ -167,6 +242,14 @@ export async function POST(req: NextRequest) {
     const delivered = webhookUrl
       ? await deliverWebhook(webhookUrl, lead)
       : await deliverResend(resendKey as string, lead);
+
+    // Best-effort, same as Klaviyo: the internal notification above is the
+    // one thing that must succeed for this request to count as delivered.
+    if (resendKey && lead.intake) {
+      deliverIntakeReply(resendKey, lead).catch((err) =>
+        console.error("Intake reply exception:", err instanceof Error ? err.message : "unknown")
+      );
+    }
 
     await klaviyoPromise; // best-effort; result logged inside the helper
 
