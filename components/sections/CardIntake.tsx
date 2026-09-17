@@ -4,9 +4,10 @@
 // field, built for someone tapping a phone in the ten seconds after a
 // handshake. Subscribes to the "From Cards" Klaviyo list (SQRrEK, override via
 // NEXT_PUBLIC_KLAVIYO_CARD_LIST_ID) so the add is instant, and fires a
-// best-effort copy to /api/leads (pinned to the same From-Cards list, not web
-// leads) so the team sees the scan by email too. Visual language matches
-// StartProjectForm (dark espresso card).
+// best-effort copy to /api/leads so the team sees the scan by email too;
+// that route also adds every lead to ROV web leads regardless of the
+// From-Cards tag, so a card scan still reaches the shared welcome flow.
+// Visual language matches StartProjectForm (dark espresso card).
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
@@ -113,7 +114,9 @@ export default function CardIntake() {
       source,
       page: "/card",
       company,
-      // Keep card scans out of the web-leads list; they belong in From-Cards.
+      // Pinned to From-Cards for reporting; app/api/leads also adds every
+      // lead to ROV web leads regardless of this override, so card scans
+      // still reach the shared welcome flow scoped to that list.
       klaviyoListId: CARD_LIST_ID,
       ...attributionPayload(),
     });

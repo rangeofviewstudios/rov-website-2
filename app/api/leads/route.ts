@@ -189,12 +189,26 @@ export async function POST(req: NextRequest) {
   // Add the lead to the Klaviyo business-leads list in parallel with the email.
   // Non-fatal: subscribeToKlaviyo never throws, and the email is the primary
   // delivery, so a Klaviyo hiccup must not fail the submission.
+  //
+  // A caller-supplied klaviyoListId (currently only /card, pinned to "From
+  // Cards") is additional, not a replacement: every lead still joins ROV web
+  // leads too, so the one welcome flow scoped to that list reaches every
+  // lead regardless of which form or list tagging brought them in.
   const klaviyoPromise = subscribeToKlaviyo({
-    listId: lead.klaviyoListId || LEADS_LIST_ID,
+    listId: LEADS_LIST_ID,
     email: lead.email,
     name: lead.name,
     source: lead.source,
   });
+  const klaviyoOverridePromise =
+    lead.klaviyoListId && lead.klaviyoListId !== LEADS_LIST_ID
+      ? subscribeToKlaviyo({
+          listId: lead.klaviyoListId,
+          email: lead.email,
+          name: lead.name,
+          source: lead.source,
+        })
+      : Promise.resolve(true);
 
   // Quiz completions also fire a dedicated event, so one Klaviyo Flow can
   // send the same email to every quiz lead without us hand-writing anything
@@ -216,7 +230,7 @@ export async function POST(req: NextRequest) {
       ? await deliverWebhook(webhookUrl, lead)
       : await deliverResend(resendKey as string, lead);
 
-    await klaviyoPromise; // best-effort; result logged inside the helper
+    await Promise.all([klaviyoPromise, klaviyoOverridePromise]); // best-effort; results logged inside the helper
 
     if (delivered) return NextResponse.json({ ok: true });
 
