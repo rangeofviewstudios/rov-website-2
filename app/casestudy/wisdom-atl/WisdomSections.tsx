@@ -595,6 +595,206 @@ export function FeatureRow({
     );
 }
 
+type ArchNode = { id: string; label: string; desc: string };
+
+const ARCH_HUB: ArchNode = {
+    id: "shop",
+    label: "Home + Shop",
+    desc: "Landing and the product grid merged into one scroll. Every other page on the site branches out from here, and every branch leads back.",
+};
+
+const ARCH_SPOKES: ArchNode[] = [
+    { id: "story", label: "Story", desc: "The collab timeline. Nike, SCAD, Drake, Nordstrom, in order, revealed on scroll instead of flattened into one gallery." },
+    { id: "iwecs", label: "I Wish Everybody Could See", desc: "Fans submit their own photos in the frames and get tagged, like a real social feed. The community runs the lookbook now." },
+    { id: "arcade", label: "The Arcade", desc: "Pop a balloon, win 15% off. A custom minigame standing in for a coupon field." },
+    { id: "info", label: "Info", desc: "FAQs, contact, and the brand films leading the hero, instead of filed away behind a tab." },
+    { id: "press", label: "Press", desc: "Every article and mention in one place, built for SEO and backlinks." },
+    { id: "cart", label: "Checkout", desc: "Native Shopify checkout. However someone arrives, the cart in the corner funnels them here." },
+];
+
+const ARCH_ALL = [ARCH_HUB, ...ARCH_SPOKES];
+
+/**
+ * Section 04's showcase: the new sitemap as a hub-and-spoke diagram instead
+ * of a static list. Home+Shop sits in the center since the rebuild's whole
+ * point was merging those two into one flow; everything else branches out
+ * and funnels back to Checkout. Autoplays through the spokes, pauses on
+ * hover, and mobile gets a stacked accordion instead of the radial layout.
+ */
+export function SiteArchitecture() {
+    const [active, setActive] = useState<string>(ARCH_SPOKES[0].id);
+    const [paused, setPaused] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState<string>(ARCH_SPOKES[0].id);
+    const reduced = useReducedMotion();
+
+    useEffect(() => {
+        if (paused || reduced) return;
+        const id = setInterval(() => {
+            setActive((cur) => {
+                const i = ARCH_SPOKES.findIndex((n) => n.id === cur);
+                return ARCH_SPOKES[(i + 1) % ARCH_SPOKES.length].id;
+            });
+        }, 2600);
+        return () => clearInterval(id);
+    }, [paused, reduced]);
+
+    const activeNode = ARCH_ALL.find((n) => n.id === active) ?? ARCH_HUB;
+    const radius = 38;
+    const positions = ARCH_SPOKES.map((n, i) => {
+        const angle = (-90 + (360 / ARCH_SPOKES.length) * i) * (Math.PI / 180);
+        return { id: n.id, x: 50 + radius * Math.cos(angle), y: 50 + radius * Math.sin(angle) };
+    });
+
+    return (
+        <Rise className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
+            {/* Desktop radial map */}
+            <div
+                className="relative mx-auto hidden aspect-square w-full max-w-[520px] md:block"
+                onMouseEnter={() => setPaused(true)}
+                onMouseLeave={() => setPaused(false)}
+            >
+                <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" aria-hidden>
+                    {positions.map((p) => {
+                        const isActive = p.id === active;
+                        return (
+                            <line
+                                key={p.id}
+                                x1={50}
+                                y1={50}
+                                x2={p.x}
+                                y2={p.y}
+                                stroke={isActive ? W.ink : "rgba(255,244,227,0.18)"}
+                                strokeWidth={isActive ? 0.6 : 0.35}
+                                vectorEffect="non-scaling-stroke"
+                            />
+                        );
+                    })}
+                    {!reduced &&
+                        positions
+                            .filter((p) => p.id === active)
+                            .map((p) => (
+                                <motion.circle
+                                    key={`pulse-${p.id}`}
+                                    r={1.5}
+                                    fill={W.ink}
+                                    initial={{ opacity: 0 }}
+                                    animate={{ cx: [50, p.x], cy: [50, p.y], opacity: [0, 1, 0] }}
+                                    transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.5, ease: "easeInOut" }}
+                                />
+                            ))}
+                </svg>
+
+                <button
+                    type="button"
+                    onClick={() => setActive("shop")}
+                    className="absolute flex flex-col items-center justify-center rounded-full text-center transition-shadow duration-300"
+                    style={{
+                        left: "50%",
+                        top: "50%",
+                        transform: "translate(-50%, -50%)",
+                        width: "27%",
+                        aspectRatio: "1 / 1",
+                        backgroundColor: W.ink,
+                        boxShadow: active === "shop" ? "0 0 0 8px rgba(232,56,48,0.2)" : "0 0 0 6px rgba(232,56,48,0.12)",
+                    }}
+                >
+                    <span
+                        className="px-2 text-[10px] uppercase leading-tight md:text-xs"
+                        style={{ fontFamily: W.label, letterSpacing: "0.08em", color: W.cream, fontWeight: 600 }}
+                    >
+                        Home + Shop
+                    </span>
+                </button>
+
+                {positions.map((p, i) => {
+                    const node = ARCH_SPOKES[i];
+                    const isActive = p.id === active;
+                    return (
+                        <button
+                            key={p.id}
+                            type="button"
+                            onClick={() => setActive(p.id)}
+                            onFocus={() => setActive(p.id)}
+                            className="absolute flex items-center justify-center rounded-full px-3 py-2 text-center transition-all duration-300"
+                            style={{
+                                left: `${p.x}%`,
+                                top: `${p.y}%`,
+                                transform: "translate(-50%, -50%)",
+                                minWidth: 100,
+                                backgroundColor: isActive ? W.ink : "rgba(255,244,227,0.06)",
+                                border: `1px solid ${isActive ? W.ink : "rgba(255,244,227,0.18)"}`,
+                            }}
+                        >
+                            <span
+                                className="text-[10px] uppercase leading-tight md:text-[11px]"
+                                style={{ fontFamily: W.label, letterSpacing: "0.08em", color: W.cream, opacity: isActive ? 1 : 0.75 }}
+                            >
+                                {node.label}
+                            </span>
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* Mobile stacked accordion */}
+            <div className="flex flex-col gap-2 md:hidden">
+                {ARCH_ALL.map((node) => {
+                    const isOpen = node.id === mobileOpen;
+                    const isHub = node.id === "shop";
+                    return (
+                        <button
+                            key={node.id}
+                            type="button"
+                            onClick={() => setMobileOpen(isOpen ? "" : node.id)}
+                            className="flex flex-col rounded-lg px-4 py-3 text-left transition-colors"
+                            style={{
+                                border: `1px solid ${isOpen ? W.ink : "rgba(255,244,227,0.14)"}`,
+                                backgroundColor: isOpen ? "rgba(232,56,48,0.10)" : isHub ? "rgba(232,56,48,0.06)" : "rgba(255,244,227,0.03)",
+                            }}
+                        >
+                            <span className="flex items-center gap-2 text-xs uppercase" style={{ fontFamily: W.label, letterSpacing: "0.12em", color: W.cream }}>
+                                {isHub && <span style={{ color: W.ink }}>Hub</span>}
+                                {node.label}
+                            </span>
+                            {isOpen && (
+                                <span className="mt-2 text-sm leading-relaxed" style={{ fontFamily: W.body, color: W.cream, opacity: 0.78 }}>
+                                    {node.desc}
+                                </span>
+                            )}
+                        </button>
+                    );
+                })}
+            </div>
+
+            {/* Description panel, desktop only, the map speaks for itself on mobile */}
+            <div className="hidden md:block">
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={activeNode.id}
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <div className="mb-3 flex items-center gap-3 text-[10px] uppercase md:text-xs" style={{ fontFamily: W.label, letterSpacing: "0.22em", color: W.cream }}>
+                            <span style={{ color: W.ink }}>{activeNode.id === "shop" ? "The hub" : "Now viewing"}</span>
+                        </div>
+                        <h3 className="uppercase" style={{ fontFamily: W.display, color: W.cream, fontSize: "clamp(1.6rem, 3.6vw, 2.6rem)", lineHeight: 1 }}>
+                            {activeNode.label}
+                        </h3>
+                        <p className="mt-4 max-w-md text-base leading-relaxed md:text-lg" style={{ fontFamily: W.body, color: W.cream, opacity: 0.78 }}>
+                            {activeNode.desc}
+                        </p>
+                    </motion.div>
+                </AnimatePresence>
+                <p className="mt-8 text-[11px] uppercase" style={{ fontFamily: W.label, letterSpacing: "0.16em", color: W.cream, opacity: 0.4 }}>
+                    Click any page, or let it cycle
+                </p>
+            </div>
+        </Rise>
+    );
+}
+
 /** Desktop-only sticky index. Lights whichever section owns the middle of the screen. */
 export function SectionIndex({ items }: { items: { id: string; label: string }[] }) {
     const [active, setActive] = useState(items[0]?.id);

@@ -14,6 +14,7 @@ import {
     SectionIndex,
     Principles,
     FeatureRow,
+    SiteArchitecture,
     Receipt,
     ClosingCTA,
     ScrollRail,
@@ -27,6 +28,7 @@ const SECTIONS = [
     { id: "thinking", label: "The calls" },
     { id: "frames", label: "Frame by frame" },
     { id: "world", label: "The new world" },
+    { id: "map", label: "The site map" },
     { id: "shipped", label: "What shipped" },
 ];
 
@@ -89,8 +91,8 @@ export default function WisdomAtlContent() {
                                 notes: ["the shop is a *whole separate page* from here", "you get hyped, then have to *go find the store yourself*"],
                             },
                             after: {
-                                src: "/casestudy/wisdom-atl/build/wisdmshopgateway2.png",
-                                caption: "One flow. Momentum from the hero carries straight into buying.",
+                                src: "/casestudy/wisdom-atl/build/wisdmnewhero.png",
+                                caption: "New custom illustrated shop button and rotating glasses, one unified shop with home to lessen touchpoints.",
                             },
                         },
                         {
@@ -100,7 +102,7 @@ export default function WisdomAtlContent() {
                                 notes: ["*only 2 across.* the lineup takes forever to get through", "sorting is the *only way* to explore", "and *no footer at all.* the page just stops."],
                             },
                             after: {
-                                src: "/casestudy/wisdom-atl/build/wisdmnewshop1.png",
+                                src: "/casestudy/wisdom-atl/build/wisdmnewshop2.png",
                                 caption: "4x1, broken up, linked out below. Scrolling keeps discovering instead of just listing product.",
                             },
                         },
@@ -111,7 +113,7 @@ export default function WisdomAtlContent() {
                                 notes: ["*Nike, SCAD, Drake, Nordstrom,* all flattened into one gallery", "no story, no context, *no reason to care*"],
                             },
                             after: {
-                                src: "/casestudy/wisdom-atl/build/newherostorypage.png",
+                                src: "/casestudy/wisdom-atl/build/newcollectionshowcase.png",
                                 caption: "A real Story page, with scroll triggered collections and a proper collab timeline.",
                             },
                         },
@@ -123,7 +125,7 @@ export default function WisdomAtlContent() {
                             },
                             after: {
                                 videoSrc: "/casestudy/wisdom-atl/build/newinfopagehero-web.mp4",
-                                caption: "The films now lead the Story and Info page heroes directly.",
+                                caption: "The films now lead the new Info page hero directly.",
                             },
                         },
                     ]}
@@ -155,7 +157,7 @@ export default function WisdomAtlContent() {
                         kicker="I Wish Everybody Could See"
                         title="Fans submit. Fans get featured."
                         body="A social media style feed where customers post themselves in the frames. The community does the lookbook now, and it never goes stale."
-                        src="/casestudy/wisdom-atl/build/newiwecssocialmediastyle.png"
+                        src="/casestudy/wisdom-atl/build/newiwecspage.png"
                         flip
                     />
                     <FeatureRow
@@ -219,9 +221,23 @@ export default function WisdomAtlContent() {
                 </div>
             </section>
 
-            {/* 04, the receipt. A Result section with real numbers slots in after this. */}
+            {/* 04, how it all connects now */}
+            <section id="map" className="mx-auto w-full max-w-6xl scroll-mt-16 px-5 py-16 md:px-10 md:py-24">
+                <SectionHead
+                    index="04"
+                    label="The architecture"
+                    title="How it all connects"
+                    note="one hub, everything funnels back to it"
+                >
+                    Home and Shop merged into a single hub. Every new destination, the Story page, the fan feed, the
+                    Arcade, Info, Press, branches off it, and every branch still funnels back to checkout.
+                </SectionHead>
+                <SiteArchitecture />
+            </section>
+
+            {/* 05, the receipt. A Result section with real numbers slots in after this. */}
             <section id="shipped" className="mx-auto w-full max-w-6xl scroll-mt-16 px-5 py-16 md:px-10 md:py-24">
-                <SectionHead index="04" label="The receipt" title="What shipped" />
+                <SectionHead index="05" label="The receipt" title="What shipped" />
                 <Receipt
                     note="no numbers on this page yet. we only put up the real ones."
                     items={[
