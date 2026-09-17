@@ -164,7 +164,7 @@ export default function WisdomAtlContent() {
                         index={3}
                         kicker="The Story page"
                         title="Nike through Nordstrom, in order"
-                        body="A detailed timeline of how each collaboration actually happened. This is the proof most eyewear brands do not have, finally on display."
+                        body="We told the story of all his collections from the top. A detailed timeline of how each collaboration actually happened, the proof most eyewear brands do not have, finally on display."
                         src="/casestudy/wisdom-atl/build/storypage2.png"
                     />
                 </div>

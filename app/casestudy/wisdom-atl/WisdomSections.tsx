@@ -330,7 +330,7 @@ export function CollabSplit({ items, oldFrame }: { items: string[]; oldFrame: st
                         <span style={{ opacity: 0.55 }}>What a visitor could see</span>
                     </div>
                     <h2 className="uppercase" style={{ fontFamily: W.display, color: W.cream, fontSize: "clamp(1.5rem, 3.4vw, 2.4rem)", lineHeight: 0.98 }}>
-                        None of it.
+                        None of it was easy to find.
                     </h2>
                     <div className="mt-5 flex items-center gap-4">
                         <span className="relative block w-[42%] shrink-0 overflow-hidden rounded-md" style={{ border: "1px solid rgba(255,244,227,0.14)" }}>
@@ -343,7 +343,7 @@ export function CollabSplit({ items, oldFrame }: { items: string[]; oldFrame: st
                             </span>
                         </span>
                         <HandNote className="text-[1.2rem] leading-tight md:text-[1.45rem]" tilt={1.2}>
-                            not one logo. not one story. just a flat gallery.
+                            all the work was real, just nowhere fun to discover it.
                         </HandNote>
                     </div>
                 </div>
@@ -407,14 +407,15 @@ export function SectionHead({
 }
 
 export function Principles({ items }: { items: string[] }) {
+    const border = "rgba(255,244,227,0.14)";
     return (
-        <div className="flex flex-col">
+        <div className="grid grid-cols-1 md:grid-cols-2">
             {items.map((item, i) => (
                 <Rise
                     key={item}
                     delay={(i % 2) * 0.06}
-                    className="border-t py-7 md:py-9"
-                    style={{ borderColor: "rgba(255,244,227,0.14)" }}
+                    className={`border-t py-7 md:py-9 ${i % 2 === 1 ? "md:border-l md:pl-10" : "md:pr-10"}`}
+                    style={{ borderColor: border }}
                 >
                     <h3
                         className="uppercase"
@@ -649,11 +650,23 @@ export function SiteArchitecture() {
         <Rise className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
             {/* Desktop radial map */}
             <div
-                className="relative mx-auto hidden aspect-square w-full max-w-[520px] md:block"
+                className="relative mx-auto hidden aspect-square w-full max-w-[540px] md:block"
                 onMouseEnter={() => setPaused(true)}
                 onMouseLeave={() => setPaused(false)}
             >
+                <div
+                    aria-hidden
+                    className="pointer-events-none absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
+                    style={{ width: "78%", aspectRatio: "1 / 1", background: W.red, filter: "blur(90px)", opacity: 0.16 }}
+                />
+
                 <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full" aria-hidden>
+                    <defs>
+                        <radialGradient id="archLineActive" cx="0%" cy="0%" r="100%">
+                            <stop offset="0%" stopColor={W.ink} stopOpacity="1" />
+                            <stop offset="100%" stopColor={W.ink} stopOpacity="0.35" />
+                        </radialGradient>
+                    </defs>
                     {positions.map((p) => {
                         const isActive = p.id === active;
                         return (
@@ -663,8 +676,9 @@ export function SiteArchitecture() {
                                 y1={50}
                                 x2={p.x}
                                 y2={p.y}
-                                stroke={isActive ? W.ink : "rgba(255,244,227,0.18)"}
-                                strokeWidth={isActive ? 0.6 : 0.35}
+                                stroke={isActive ? "url(#archLineActive)" : "rgba(255,244,227,0.14)"}
+                                strokeWidth={isActive ? 0.55 : 0.3}
+                                strokeLinecap="round"
                                 vectorEffect="non-scaling-stroke"
                             />
                         );
@@ -675,8 +689,8 @@ export function SiteArchitecture() {
                             .map((p) => (
                                 <motion.circle
                                     key={`pulse-${p.id}`}
-                                    r={1.5}
-                                    fill={W.ink}
+                                    r={1.3}
+                                    fill={W.cream}
                                     initial={{ opacity: 0 }}
                                     animate={{ cx: [50, p.x], cy: [50, p.y], opacity: [0, 1, 0] }}
                                     transition={{ duration: 1.1, repeat: Infinity, repeatDelay: 0.5, ease: "easeInOut" }}
@@ -684,54 +698,65 @@ export function SiteArchitecture() {
                             ))}
                 </svg>
 
-                <button
+                <motion.button
                     type="button"
                     onClick={() => setActive("shop")}
-                    className="absolute flex flex-col items-center justify-center rounded-full text-center transition-shadow duration-300"
+                    className="absolute flex flex-col items-center justify-center rounded-full text-center"
+                    animate={{ scale: active === "shop" ? 1.05 : 1 }}
+                    transition={{ duration: 0.4, ease: EASE }}
                     style={{
                         left: "50%",
                         top: "50%",
                         transform: "translate(-50%, -50%)",
-                        width: "27%",
+                        width: "26%",
                         aspectRatio: "1 / 1",
-                        backgroundColor: W.ink,
-                        boxShadow: active === "shop" ? "0 0 0 8px rgba(232,56,48,0.2)" : "0 0 0 6px rgba(232,56,48,0.12)",
+                        background: `radial-gradient(circle at 32% 28%, ${W.pop}, ${W.ink} 62%, #a9241d 100%)`,
+                        boxShadow:
+                            active === "shop"
+                                ? `0 0 0 1px rgba(255,244,227,0.5), 0 0 0 10px rgba(232,56,48,0.16), 0 18px 40px rgba(232,56,48,0.4)`
+                                : `0 0 0 1px rgba(255,244,227,0.25), 0 0 0 7px rgba(232,56,48,0.1), 0 12px 30px rgba(0,0,0,0.5)`,
                     }}
                 >
                     <span
-                        className="px-2 text-[10px] uppercase leading-tight md:text-xs"
-                        style={{ fontFamily: W.label, letterSpacing: "0.08em", color: W.cream, fontWeight: 600 }}
+                        className="px-2 uppercase leading-[1.05]"
+                        style={{ fontFamily: W.heading, letterSpacing: "0.01em", color: W.cream, fontSize: "clamp(0.7rem, 1.6vw, 0.95rem)" }}
                     >
-                        Home + Shop
+                        Home
+                        <br />+ Shop
                     </span>
-                </button>
+                </motion.button>
 
                 {positions.map((p, i) => {
                     const node = ARCH_SPOKES[i];
                     const isActive = p.id === active;
                     return (
-                        <button
+                        <motion.button
                             key={p.id}
                             type="button"
                             onClick={() => setActive(p.id)}
                             onFocus={() => setActive(p.id)}
-                            className="absolute flex items-center justify-center rounded-full px-3 py-2 text-center transition-all duration-300"
+                            animate={{ scale: isActive ? 1.08 : 1 }}
+                            whileHover={{ scale: isActive ? 1.08 : 1.04 }}
+                            transition={{ duration: 0.3, ease: EASE }}
+                            className="absolute flex items-center justify-center rounded-full px-4 py-2.5 text-center backdrop-blur-sm"
                             style={{
                                 left: `${p.x}%`,
                                 top: `${p.y}%`,
                                 transform: "translate(-50%, -50%)",
-                                minWidth: 100,
-                                backgroundColor: isActive ? W.ink : "rgba(255,244,227,0.06)",
-                                border: `1px solid ${isActive ? W.ink : "rgba(255,244,227,0.18)"}`,
+                                minWidth: 108,
+                                maxWidth: 140,
+                                background: isActive ? `linear-gradient(135deg, ${W.pop}, ${W.ink})` : "rgba(255,244,227,0.05)",
+                                border: `1px solid ${isActive ? "rgba(255,244,227,0.35)" : "rgba(255,244,227,0.16)"}`,
+                                boxShadow: isActive ? "0 10px 26px rgba(232,56,48,0.38)" : "0 1px 0 rgba(255,244,227,0.03)",
                             }}
                         >
                             <span
-                                className="text-[10px] uppercase leading-tight md:text-[11px]"
-                                style={{ fontFamily: W.label, letterSpacing: "0.08em", color: W.cream, opacity: isActive ? 1 : 0.75 }}
+                                className="uppercase leading-[1.15]"
+                                style={{ fontFamily: W.heading, letterSpacing: "0.005em", color: W.cream, fontSize: "clamp(0.66rem, 1.3vw, 0.8rem)", opacity: isActive ? 1 : 0.72 }}
                             >
                                 {node.label}
                             </span>
-                        </button>
+                        </motion.button>
                     );
                 })}
             </div>
@@ -746,18 +771,26 @@ export function SiteArchitecture() {
                             key={node.id}
                             type="button"
                             onClick={() => setMobileOpen(isOpen ? "" : node.id)}
-                            className="flex flex-col rounded-lg px-4 py-3 text-left transition-colors"
+                            className="flex flex-col rounded-xl px-4 py-3.5 text-left transition-colors"
                             style={{
-                                border: `1px solid ${isOpen ? W.ink : "rgba(255,244,227,0.14)"}`,
-                                backgroundColor: isOpen ? "rgba(232,56,48,0.10)" : isHub ? "rgba(232,56,48,0.06)" : "rgba(255,244,227,0.03)",
+                                border: `1px solid ${isOpen ? "rgba(255,244,227,0.35)" : "rgba(255,244,227,0.14)"}`,
+                                background: isOpen ? `linear-gradient(135deg, ${W.pop}, ${W.ink})` : isHub ? "rgba(232,56,48,0.06)" : "rgba(255,244,227,0.03)",
+                                boxShadow: isOpen ? "0 10px 26px rgba(232,56,48,0.3)" : "none",
                             }}
                         >
-                            <span className="flex items-center gap-2 text-xs uppercase" style={{ fontFamily: W.label, letterSpacing: "0.12em", color: W.cream }}>
-                                {isHub && <span style={{ color: W.ink }}>Hub</span>}
+                            <span className="flex items-center gap-2 uppercase" style={{ fontFamily: W.heading, letterSpacing: "0.01em", color: W.cream, fontSize: "0.95rem" }}>
+                                {isHub && (
+                                    <span
+                                        className="rounded-full px-2 py-0.5 text-[9px]"
+                                        style={{ fontFamily: W.label, letterSpacing: "0.14em", color: W.ink, backgroundColor: "rgba(255,244,227,0.9)" }}
+                                    >
+                                        Hub
+                                    </span>
+                                )}
                                 {node.label}
                             </span>
                             {isOpen && (
-                                <span className="mt-2 text-sm leading-relaxed" style={{ fontFamily: W.body, color: W.cream, opacity: 0.78 }}>
+                                <span className="mt-2 text-sm leading-relaxed" style={{ fontFamily: W.body, color: W.cream, opacity: 0.9 }}>
                                     {node.desc}
                                 </span>
                             )}
@@ -768,26 +801,38 @@ export function SiteArchitecture() {
 
             {/* Description panel, desktop only, the map speaks for itself on mobile */}
             <div className="hidden md:block">
-                <AnimatePresence mode="wait">
-                    <motion.div
-                        key={activeNode.id}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: -10 }}
-                        transition={{ duration: 0.3 }}
-                    >
-                        <div className="mb-3 flex items-center gap-3 text-[10px] uppercase md:text-xs" style={{ fontFamily: W.label, letterSpacing: "0.22em", color: W.cream }}>
-                            <span style={{ color: W.ink }}>{activeNode.id === "shop" ? "The hub" : "Now viewing"}</span>
-                        </div>
-                        <h3 className="uppercase" style={{ fontFamily: W.display, color: W.cream, fontSize: "clamp(1.6rem, 3.6vw, 2.6rem)", lineHeight: 1 }}>
-                            {activeNode.label}
-                        </h3>
-                        <p className="mt-4 max-w-md text-base leading-relaxed md:text-lg" style={{ fontFamily: W.body, color: W.cream, opacity: 0.78 }}>
-                            {activeNode.desc}
-                        </p>
-                    </motion.div>
-                </AnimatePresence>
-                <p className="mt-8 text-[11px] uppercase" style={{ fontFamily: W.label, letterSpacing: "0.16em", color: W.cream, opacity: 0.4 }}>
+                <div
+                    className="rounded-2xl p-8"
+                    style={{ border: "1px solid rgba(255,244,227,0.14)", backgroundColor: "rgba(255,244,227,0.03)" }}
+                >
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={activeNode.id}
+                            initial={{ opacity: 0, y: 10 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -10 }}
+                            transition={{ duration: 0.3 }}
+                        >
+                            <div className="mb-4 flex items-center gap-3 text-[10px] uppercase md:text-xs" style={{ fontFamily: W.label, letterSpacing: "0.22em", color: W.cream }}>
+                                <span
+                                    className="h-1.5 w-1.5 rounded-full"
+                                    style={{ backgroundColor: W.ink, boxShadow: `0 0 10px ${W.ink}` }}
+                                />
+                                <span style={{ color: W.ink }}>{activeNode.id === "shop" ? "The hub" : "Now viewing"}</span>
+                            </div>
+                            <h3 className="uppercase" style={{ fontFamily: W.display, color: W.cream, fontSize: "clamp(1.7rem, 3.6vw, 2.7rem)", lineHeight: 1 }}>
+                                {activeNode.label}
+                            </h3>
+                            <p className="mt-4 max-w-md text-base leading-relaxed md:text-lg" style={{ fontFamily: W.body, color: W.cream, opacity: 0.78 }}>
+                                {activeNode.desc}
+                            </p>
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
+                <p className="mt-6 flex items-center gap-2 text-[11px] uppercase" style={{ fontFamily: W.label, letterSpacing: "0.16em", color: W.cream, opacity: 0.4 }}>
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M9 18l6-6-6-6" />
+                    </svg>
                     Click any page, or let it cycle
                 </p>
             </div>

@@ -18,11 +18,26 @@ const ARROW_PATHS = [
 const ARROW_HEAD = 'M11,31 L28,21 M11,31 L28,41';
 const NOTE_TILTS = [-1.6, 1.1, -0.7, 1.7, -1.2];
 
-// *word* inside a note renders in the ink color, the rest in the text color.
+// *word* inside a note renders in the ink color on a cartoon marker-blob of
+// white, so the highlight still reads against the black frame it sits on.
 function inkWords(text: string, ink: string) {
     return text.split(/(\*[^*]+\*)/g).filter(Boolean).map((part, i) =>
         part.startsWith('*') && part.endsWith('*')
-            ? <span key={i} style={{ color: ink }}>{part.slice(1, -1)}</span>
+            ? (
+                <span
+                    key={i}
+                    className="inline-block px-2 py-0.5 mx-0.5"
+                    style={{
+                        color: ink,
+                        backgroundColor: '#fff',
+                        borderRadius: '255px 15px 225px 15px / 15px 225px 15px 255px',
+                        boxShadow: '2px 3px 0 rgba(0,0,0,0.4)',
+                        transform: `rotate(${i % 2 === 0 ? -1.4 : 1.6}deg)`,
+                    }}
+                >
+                    {part.slice(1, -1)}
+                </span>
+              )
             : <React.Fragment key={i}>{part}</React.Fragment>
     );
 }
