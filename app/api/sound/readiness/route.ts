@@ -151,9 +151,20 @@ export async function POST(req: NextRequest) {
     // can do a plain {% if profile.gap_splits %} per block instead of parsing
     // a joined string. missingKeys wins over haveKeys if a key somehow lands
     // in both (shouldn't happen, but "it's a gap" is the safer default).
+    //
+    // Also send a per-key display number (gap_splits_num, ...) equal to the
+    // key's position within missingKeys, not its fixed position in the full
+    // item list: the template's badges must read 1, 2, 3 for whichever gaps
+    // actually show, not 1, 3, 5 because "stems" happens to be third overall.
+    // missingKeys already arrives in the same pillar/importance order the
+    // email's blocks are written in (both trace back to READINESS_ITEMS), so
+    // index position here is exactly the badge number.
     const gapProperties: Record<string, string> = {};
     for (const key of sub.haveKeys || []) gapProperties[`gap_${key}`] = "false";
-    for (const key of sub.missingKeys || []) gapProperties[`gap_${key}`] = "true";
+    (sub.missingKeys || []).forEach((key, i) => {
+      gapProperties[`gap_${key}`] = "true";
+      gapProperties[`gap_${key}_num`] = String(i + 1);
+    });
 
     subscribeToKlaviyo({
       listId,
