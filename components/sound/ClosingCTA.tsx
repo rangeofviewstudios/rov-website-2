@@ -43,7 +43,7 @@ export default function ClosingCTA() {
               "linear-gradient(180deg, #000 0%, rgba(0,0,0,0.55) 30%, rgba(0,0,0,0.55) 70%, #000 100%)",
           }}
         />
-        <PhotoCredit className="bottom-4 right-4 sm:opacity-100 sm:translate-y-0 sm:scale-100" />
+        <PhotoCredit className="bottom-5 right-6" />
       </div>
       <div
         aria-hidden

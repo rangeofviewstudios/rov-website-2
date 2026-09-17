@@ -155,3 +155,47 @@ export async function subscribeToKlaviyo(input: KlaviyoSubscribeInput): Promise<
     return false;
   }
 }
+
+/**
+ * Fires a named Klaviyo event (e.g. "Completed Intake Quiz") against a
+ * profile, so a single Klaviyo Flow can trigger off it and send the same
+ * email to every lead, without us hand-templating anything per lead. Server
+ * key only: without KLAVIYO_PRIVATE_KEY there's no event to attach a flow
+ * to anyway, so this is a silent no-op rather than a public-API fallback.
+ * Never throws; a failed event must not block the lead notification.
+ */
+export async function trackKlaviyoEvent(input: {
+  metric: string;
+  email: string;
+  properties?: Record<string, string | number>;
+}): Promise<boolean> {
+  if (!PRIVATE_KEY) return false;
+  try {
+    const res = await timedFetch("https://a.klaviyo.com/api/events/", {
+      method: "POST",
+      headers: {
+        Authorization: `Klaviyo-API-Key ${PRIVATE_KEY}`,
+        revision: REVISION,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+      body: JSON.stringify({
+        data: {
+          type: "event",
+          attributes: {
+            properties: input.properties || {},
+            metric: { data: { type: "metric", attributes: { name: input.metric } } },
+            profile: { data: { type: "profile", attributes: { email: input.email } } },
+          },
+        },
+      }),
+    });
+    if (res.status === 202 || res.ok) return true;
+    const text = await res.text().catch(() => "");
+    console.error(`Klaviyo event failed (${res.status}):`, text.slice(0, 500));
+    return false;
+  } catch (err) {
+    console.error("Klaviyo event exception:", err instanceof Error ? err.message : "unknown");
+    return false;
+  }
+}

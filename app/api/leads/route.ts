@@ -19,7 +19,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
-import { subscribeToKlaviyo } from "@/utils/klaviyo";
+import { subscribeToKlaviyo, trackKlaviyoEvent } from "@/utils/klaviyo";
 import { leadRateLimit, rateLimitResponse } from "@/lib/rate-limit";
 import { HELLO_FROM } from "@/lib/email-from";
 
@@ -56,11 +56,10 @@ const bodySchema = z.object({
   landing_page: z.string().trim().max(300).optional(),
   // Honeypot — real users never fill this. Bots do.
   company: z.string().max(0).optional(),
-  // Set only by the intake quiz. When present, the lead gets an instant
-  // reply email built from their own answers, not just the internal
-  // notification. Everything in it is our own copy (leak/tier text from
-  // lib/intake.ts and lib/pricing.ts), never free-typed visitor input, so
-  // it's safe to drop straight into an email we send on their behalf.
+  // Set only by the intake quiz. When present, fires the "Completed Intake
+  // Quiz" Klaviyo event (see trackKlaviyoEvent below) so a single Flow can
+  // send the same email to every quiz lead, and carries the numbers into the
+  // internal notification so a person knows what to reach out about.
   intake: z
     .object({
       leaking: z
@@ -99,6 +98,10 @@ async function deliverWebhook(url: string, lead: Lead) {
   return res.ok;
 }
 
+function fmtUsd(n: number): string {
+  return "$" + n.toLocaleString("en-US");
+}
+
 async function deliverResend(apiKey: string, lead: Lead) {
   const to = process.env.LEAD_TO_EMAIL || DEFAULT_TO_EMAIL;
   const from = process.env.LEAD_FROM_EMAIL || DEFAULT_FROM_EMAIL;
@@ -110,12 +113,22 @@ async function deliverResend(apiKey: string, lead: Lead) {
     lead.landing_page && lead.landing_page !== lead.page && `Landed on: ${lead.landing_page}`,
   ].filter(Boolean) as string[];
 
+  const intakeLines = lead.intake
+    ? [
+        "",
+        `Moments leaking: ${lead.intake.leaking.length}`,
+        ...lead.intake.leaking.map((l) => `· ${l.label}: ${l.leak}`),
+        `Tier indicated: ${lead.intake.tierName} (${fmtUsd(lead.intake.tierPriceFrom)} to ${fmtUsd(lead.intake.tierPriceTo)})`,
+      ]
+    : [];
+
   const lines = [
     `Name: ${lead.name}`,
     `Email: ${lead.email}`,
     `Source: ${lead.source}`,
     `Page: ${lead.page || "n/a"}`,
     ...attribution,
+    ...intakeLines,
     "",
     "What they're working on:",
     lead.message || "(none)",
@@ -133,61 +146,6 @@ async function deliverResend(apiKey: string, lead: Lead) {
     }),
   });
   return res.ok;
-}
-
-function fmtUsd(n: number): string {
-  return "$" + n.toLocaleString("en-US");
-}
-
-/**
- * Instant reply to the lead's own inbox, built from their intake answers.
- * Templated, not AI-generated: it costs nothing per send and it's still
- * genuinely theirs, since it names their exact leaking moments and price
- * range instead of a generic "thanks, we got it". A person still follows up
- * with the full written breakdown within one business day; this just proves
- * the submission landed somewhere real in the meantime.
- */
-async function deliverIntakeReply(apiKey: string, lead: Lead) {
-  if (!lead.intake) return;
-  const { leaking, tierName, tierPriceFrom, tierPriceTo } = lead.intake;
-  const from = process.env.LEAD_FROM_EMAIL || DEFAULT_FROM_EMAIL;
-  const firstName = lead.name.trim().split(" ")[0] || "there";
-
-  const leakLines = leaking.length
-    ? leaking.map((l) => `· ${l.label}: ${l.leak}`).join("\n")
-    : "Nothing you flagged is currently leaking, which is rare.";
-
-  const text = [
-    `Hey ${firstName},`,
-    "",
-    "Here's what you told us, in writing so you have it:",
-    "",
-    leakLines,
-    "",
-    leaking.length
-      ? `Based on that, the estimate is ${tierName}, ${fmtUsd(tierPriceFrom)} to ${fmtUsd(tierPriceTo)}.`
-      : "",
-    "",
-    "A real person will follow up with the full breakdown within one business day. If anything above needs adjusting, just reply, it comes straight to us.",
-    "",
-    "Talk soon,",
-    "Andi / Range Of View Studios",
-  ]
-    .filter((line) => line !== "")
-    .join("\n");
-
-  const res = await timedFetch("https://api.resend.com/emails", {
-    method: "POST",
-    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      from,
-      to: [lead.email],
-      reply_to: process.env.LEAD_TO_EMAIL || DEFAULT_TO_EMAIL,
-      subject: "What's leaking, in writing",
-      text,
-    }),
-  });
-  if (!res.ok) console.error("Intake reply email failed (non-2xx from Resend).");
 }
 
 export async function POST(req: NextRequest) {
@@ -238,18 +196,25 @@ export async function POST(req: NextRequest) {
     source: lead.source,
   });
 
+  // Quiz completions also fire a dedicated event, so one Klaviyo Flow can
+  // send the same email to every quiz lead without us hand-writing anything
+  // per lead. Fire-and-forget, same as the list subscribe above.
+  if (lead.intake) {
+    trackKlaviyoEvent({
+      metric: "Completed Intake Quiz",
+      email: lead.email,
+      properties: {
+        source: lead.source,
+        leaking_count: lead.intake.leaking.length,
+        tier_name: lead.intake.tierName,
+      },
+    }).catch(() => {});
+  }
+
   try {
     const delivered = webhookUrl
       ? await deliverWebhook(webhookUrl, lead)
       : await deliverResend(resendKey as string, lead);
-
-    // Best-effort, same as Klaviyo: the internal notification above is the
-    // one thing that must succeed for this request to count as delivered.
-    if (resendKey && lead.intake) {
-      deliverIntakeReply(resendKey, lead).catch((err) =>
-        console.error("Intake reply exception:", err instanceof Error ? err.message : "unknown")
-      );
-    }
 
     await klaviyoPromise; // best-effort; result logged inside the helper
 

@@ -490,9 +490,9 @@ export default function IntakeQuiz({ service }: { service: IntakeService }) {
               Got it, {name.split(" ")[0] || "thanks"}.
             </h2>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-white/55" style={{ fontFamily: BODY }}>
-              Check your inbox, what you just answered is already on its way to you in writing. The
-              full breakdown, written by a person and covering where we would start, lands within one
-              business day.
+              Your breakdown is being written by a person, not generated. It lands within one business
+              day and covers the {leaking.length === 1 ? "moment" : `${leaking.length} moments`} you
+              flagged, what each is costing, and where we would start.
             </p>
 
             <div className="mt-7 flex flex-col gap-3 sm:flex-row">

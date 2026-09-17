@@ -6,16 +6,25 @@ import YourPath from "../_components/YourPath";
 // CTRL-A — START
 // The intake quiz, set as part of the magazine rather than as a form.
 //
-// Question 01 is four full-bleed accent panels that expand under the
-// cursor, each carrying one of the CTRL-A cosmic marks. Questions 02 to
-// 04 and the reveal are editorial rows on hairlines, the same language
-// as CraftPathways on the landing: giant grotesque answers, mono gold
-// meta, accent on the node rather than on the text. No cards, no boxes,
-// no icon set. Layout and motion live in globals.css under .ctrla-panel
-// and .ctrla-row; only the per-craft accent is passed down, as --acc.
+// Two questions, not four: what do you make, and where did your last
+// thing end up. Question 01 is the four full-bleed accent panels with
+// the issue's own cosmic marks. Question 02 is a row ladder — the same
+// language as the reveal below it. No cards, no boxes, no icon set.
+// Layout and motion live in globals.css under .ctrla-panel and
+// .ctrla-row; only the per-craft accent is passed down, as --acc.
 //
-// The four answers land in lib/ctrla/profile.ts, which is what the nav,
-// the toolkit modes, and the landing page read back later.
+// The reveal offers two equal, real doors instead of one primary door
+// with secondary asides bolted on: someone who hasn't shipped anything
+// gets "make something now" (the Brand Kit Generator) next to "get
+// grounded first" (their craft's toolkit); someone who has shipped gets
+// "show it off now" next to "get sharper first". Both a full answer, not
+// a hero door with a footnote.
+//
+// `level`, `intent`, and `hasBrand` still exist in lib/ctrla/profile.ts
+// because Space's star-map routing (app/ctrla/space) and the server path
+// API read them directly, but the quiz no longer asks for them one at a
+// time. `deriveFromRung` below backfills them from the single ladder
+// answer instead — see its comment for the exact thresholds.
 // ═══════════════════════════════════════════════════════
 
 import { useEffect, useMemo, useRef, useState } from "react";
@@ -24,11 +33,9 @@ import Image from "next/image";
 import { ed, Bleed, Label, Kicker } from "../_components/editorial";
 import {
   useCtrlAProfile,
-  profileSentence,
   type CraftSlug,
-  type Intent,
   type Level,
-  type CtrlAProfile,
+  type Intent,
 } from "@/lib/ctrla/profile";
 
 // ── Question 01 ──────────────────────────────────────────────
@@ -54,120 +61,122 @@ const CRAFTS: CraftOption[] = [
   { value: "video", label: "Video", accent: "#7FA8A0", art: "/ctrla/Assets%20and%20Textures/CTRL%20A_spaceship.svg", meta: "8 picks" },
 ];
 
-// ── Questions 02 to 04 ───────────────────────────────────────
-// Each answer is a row. The right-hand mono line is the only support
-// copy any of them get.
+// ── Question 02 ──────────────────────────────────────────────
+// Where their last thing ended up. Replaces the old "how far in" +
+// "what do you want" + "do you have a look" questions: one honest rung
+// on a ladder tells you nearly everything those three did, without
+// asking a beginner to self-rate their own skill.
 
-type LevelOption = { value: Level; label: string; meta: string };
+type RungOption = { rung: number; label: string; meta: string };
 
-const LEVELS: LevelOption[] = [
-  { value: "beginner", label: "Just starting", meta: "Nothing finished yet" },
-  { value: "beginner", label: "Made a few things", meta: "Still figuring it out" },
-  { value: "expert", label: "I do this seriously", meta: "Paid, or shipping constantly" },
+const RUNGS: RungOption[] = [
+  { rung: 0, label: "Still just an idea", meta: "Nothing finished" },
+  { rung: 1, label: "Finished it, never showed anyone", meta: "It's just sitting there" },
+  { rung: 2, label: "Showed a few people", meta: "Friends, a group chat, wherever" },
+  { rung: 3, label: "It's out in the world", meta: "Someone besides your friends found it" },
 ];
 
-type IntentOption = { value: Intent; label: string; meta: string };
-
-const INTENTS: IntentOption[] = [
-  { value: "craft", label: "Get better", meta: "The craft itself" },
-  { value: "brand", label: "Build my look", meta: "Name, logo, colours" },
-  { value: "release", label: "Finish something", meta: "Work sitting unfinished" },
-  { value: "atlanta", label: "Meet ATL creatives", meta: "Rooms, events, people" },
-];
+/**
+ * Backfill for the fields the quiz no longer asks directly. Space's
+ * routing and the server path API still read `level`, `intent`, and
+ * `hasBrand` off the stored profile, so a fresh completion needs to set
+ * them from the one thing we did ask.
+ *
+ * Two different thresholds on purpose: "have they shipped anything" (the
+ * reveal's own question, rung >= 1 counts a finished-but-hidden piece as
+ * shipped) is a lower bar than "how far along are they" (rung >= 2, shown
+ * to someone besides themselves) which is what should flip Space into
+ * its expert routes. A rung-1 person sees "Show it" on the reveal but
+ * still gets routed like a beginner in Space — intentional, since
+ * finishing something privately isn't the same signal as having shown it
+ * to anyone.
+ */
+function deriveFromRung(rung: number): { level: Level; intent: Intent; hasBrand: boolean } {
+  const seasoned = rung >= 2;
+  return {
+    level: seasoned ? "expert" : "beginner",
+    intent: rung >= 1 ? "release" : "craft",
+    hasBrand: seasoned,
+  };
+}
 
 // ── Where each answer sends them ─────────────────────────────
 
-type Door = { href: string; label: string; note: string };
+type Outcome = {
+  eyebrow: string;
+  label: string;
+  format: string;
+  lead: string;
+  rest: string;
+  href: string;
+  emph: boolean;
+};
 
-const DOORS = {
-  brandKit: {
-    href: "/ctrla/brand-kit",
-    label: "The Brand Kit Generator",
-    note: "Logo, palette, type, voice. One sitting, free.",
-  },
-  atl: {
-    href: "/ctrla/atl",
-    label: "CTRL-A · Atlanta",
-    note: "The lineage, the events, the rooms.",
-  },
-  lockIn: {
-    href: "/ctrla/the-fold",
-    label: "Lock In",
-    note: "Five rooms. Sound, timer, nothing else.",
-  },
-  daily: {
-    href: "/ctrla/daily",
-    label: "The Daily Taste Test",
-    note: "Two options a day. One is sharper.",
-  },
-} satisfies Record<string, Door>;
-
-function toolkitDoor(craft: CraftSlug): Door {
+function toolkitDoor(craft: CraftSlug): { href: string; label: string; note: string } {
   const meta: Record<CraftSlug, { label: string; note: string }> = {
-    music: { label: "The Music Toolkit", note: "The chain our engineers run in real sessions." },
-    design: { label: "The Design Toolkit", note: "Interface, brand, and 3D, from real client work." },
-    "web-dev": { label: "The Development Toolkit", note: "The stack we ship on, framework to deploy." },
-    video: { label: "The Video Toolkit", note: "Bodies, glass, light, and the finish room." },
+    music: { label: "The Music Toolkit", note: "The chain our engineers run in real sessions, explained step by step before you touch a fader." },
+    design: { label: "The Design Toolkit", note: "Interface, brand, and 3D, taught from real client work, in the order you'll actually use it." },
+    "web-dev": { label: "The Development Toolkit", note: "The stack we ship on, framework to deploy, explained before you write a line." },
+    video: { label: "The Video Toolkit", note: "Bodies, glass, light, and the finish room, taught in the order a real shoot runs." },
   };
   return { href: `/ctrla/toolkit/${craft}`, ...meta[craft] };
 }
 
 /**
- * One primary door and two secondary ones.
- *
- * The rule that matters: a beginner with no look yet goes to the brand kit
- * first, whatever else they said. Handing someone who has never finished a
- * project a page of professional tooling is how you lose them, and the kit
- * is the one thing on CTRL-A that produces a finished artifact in one
- * sitting. Everyone else goes to the toolkit for what they make.
+ * Two real, equal-weight options — not a primary door with secondary
+ * asides bolted on. Someone who hasn't shipped anything gets a fast win
+ * (the brand kit) next to getting grounded first; someone who has
+ * shipped gets to show it off next to getting sharper. Both are a full
+ * answer, sized and worded the same.
  */
-function doorsFor(p: {
-  crafts: CraftSlug[];
-  level: Level;
-  intent: Intent;
-  hasBrand: boolean;
-}): { primary: Door; secondary: Door[]; why: string } {
-  const craft = p.crafts[0];
+function outcomeFor(craft: CraftSlug, hasShipped: boolean): { headline: string; sub: string; optA: Outcome; optB: Outcome } {
   const kit = toolkitDoor(craft);
-  const second = p.crafts[1] ? toolkitDoor(p.crafts[1]) : null;
+  const optB: Outcome = {
+    eyebrow: "Get sharper first",
+    label: kit.label,
+    format: "Course · self-paced",
+    lead: "A free course, read at your own pace.",
+    rest: kit.note,
+    href: kit.href,
+    emph: false,
+  };
 
-  if (p.intent === "brand" || (p.level === "beginner" && !p.hasBrand)) {
+  if (!hasShipped) {
     return {
-      primary: DOORS.brandKit,
-      secondary: [kit, second ?? DOORS.lockIn],
-      why:
-        p.intent === "brand"
-          ? "The look is what you're after. This is where it gets made."
-          : "Fastest way to finish something. The toolkit lands better after.",
-    };
-  }
-
-  if (p.intent === "atlanta") {
-    return {
-      primary: DOORS.atl,
-      secondary: [kit, DOORS.lockIn],
-      why: "The scene, and where to go. Your toolkit is one tap away.",
-    };
-  }
-
-  if (p.intent === "release") {
-    return {
-      primary: kit,
-      secondary: [DOORS.lockIn, p.hasBrand ? (second ?? DOORS.daily) : DOORS.brandKit],
-      why: "Everything you need to finish it, in order.",
+      headline: "Where do you want to start?",
+      sub: "Both are real starts. Pick whichever sounds more like you right now.",
+      optA: {
+        eyebrow: "Make something now",
+        label: "The Brand Kit Generator",
+        format: "Tool · ~10 min",
+        lead: "A free tool, not a lesson.",
+        rest: "Answer a few questions and walk out with a logo, palette, type, and voice, done in one sitting.",
+        href: "/ctrla/brand-kit",
+        emph: true,
+      },
+      optB,
     };
   }
 
   return {
-    primary: kit,
-    secondary: [second ?? DOORS.daily, DOORS.lockIn],
-    why: "The founder's guide sits on top. Read it in order.",
+    headline: "Where do you want to go next?",
+    sub: "Both are real starts. Pick whichever sounds more like you right now.",
+    optA: {
+      eyebrow: "Show it off now",
+      label: "Show it",
+      format: "Submission · 5 min",
+      lead: "Not a lesson, a mailbox.",
+      rest: "Paste a link to what you made. If it's good, it lands on your page with your name on it.",
+      href: "/ctrla/submit",
+      emph: true,
+    },
+    optB,
   };
 }
 
 // ── Chrome ───────────────────────────────────────────────────
 
-const STEPS = 4;
+const STEPS = 2;
 
 /** A hairline that fills across the top of the page as the quiz advances. */
 function ProgressRule({ step }: { step: number }) {
@@ -325,11 +334,15 @@ function Row({
   );
 }
 
-/** A door on the reveal. Same row language, sized by rank. */
-function DoorRow({ door, primary, accent }: { door: Door; primary?: boolean; accent: string }) {
+/**
+ * A door on the reveal. Two of these render, equal size — neither is a
+ * hero over the other. `emph` only changes the accent colour and the top
+ * hairline, never the type scale, so both read as a full answer.
+ */
+function OutcomeRow({ opt, accent }: { opt: Outcome; accent: string }) {
   return (
     <a
-      href={door.href}
+      href={opt.href}
       className="ctrla-start-door"
       style={{
         display: "grid",
@@ -337,46 +350,62 @@ function DoorRow({ door, primary, accent }: { door: Door; primary?: boolean; acc
         alignItems: "end",
         gap: "clamp(12px,2vw,28px)",
         textDecoration: "none",
-        padding: primary ? "clamp(22px,3vw,38px) 0" : "clamp(16px,2.2vw,26px) 0",
+        padding: "clamp(20px,2.8vw,34px) 0",
         borderBottom: `1px solid ${ed.hair}`,
-        borderTop: primary ? `2px solid ${accent}` : "none",
+        borderTop: opt.emph ? `2px solid ${accent}` : "none",
       }}
     >
       <span style={{ minWidth: 0 }}>
-        {primary && (
-          <span style={{ display: "block", marginBottom: 12 }}>
-            <Kicker color={accent}>Start here</Kicker>
+        <span style={{ display: "block", marginBottom: 12 }}>
+          <Kicker color={opt.emph ? accent : ed.gold}>{opt.eyebrow}</Kicker>
+        </span>
+        <span style={{ display: "flex", alignItems: "baseline", gap: 14, flexWrap: "wrap" }}>
+          <span
+            style={{
+              fontFamily: ed.grotesque,
+              fontWeight: 800,
+              fontSize: "clamp(28px,4.6vw,60px)",
+              letterSpacing: "-0.03em",
+              lineHeight: 0.98,
+              color: opt.emph ? accent : ed.ink,
+            }}
+          >
+            {opt.label}
           </span>
-        )}
-        <span
-          style={{
-            display: "block",
-            fontFamily: ed.grotesque,
-            fontWeight: 800,
-            fontSize: primary ? "clamp(30px,5.2vw,72px)" : "clamp(20px,2.6vw,34px)",
-            letterSpacing: "-0.03em",
-            lineHeight: 0.98,
-            color: primary ? accent : ed.ink,
-          }}
-        >
-          {door.label}
+          <span
+            style={{
+              fontFamily: ed.mono,
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: "0.12em",
+              textTransform: "uppercase",
+              padding: "4px 10px",
+              borderRadius: 999,
+              border: `1px solid ${opt.emph ? accent : ed.hair}`,
+              color: opt.emph ? ed.ground : ed.inkFaint,
+              background: opt.emph ? accent : "transparent",
+              whiteSpace: "nowrap",
+            }}
+          >
+            {opt.format}
+          </span>
         </span>
         <span
           style={{
             display: "block",
             marginTop: 10,
             fontFamily: ed.body,
-            fontSize: primary ? "clamp(14px,1.6vw,18px)" : "clamp(13px,1.4vw,15px)",
+            fontSize: "clamp(13px,1.5vw,16px)",
             lineHeight: 1.5,
             color: ed.inkSoft,
-            maxWidth: 560,
+            maxWidth: 600,
           }}
         >
-          {door.note}
+          <b style={{ color: ed.ink }}>{opt.lead}</b> {opt.rest}
         </span>
       </span>
       <span style={{ justifySelf: "end", whiteSpace: "nowrap", paddingBottom: 4 }}>
-        <Label color={primary ? accent : ed.gold}>
+        <Label color={opt.emph ? accent : ed.gold}>
           Enter <span aria-hidden className="ctrla-start-door-arrow">→</span>
         </Label>
       </span>
@@ -390,12 +419,10 @@ export default function StartContent() {
   const reduce = useReducedMotion();
   const { profile, save, clear, ready } = useCtrlAProfile();
 
-  // 0..3 are the questions, 4 is the reveal.
+  // 0 and 1 are the questions, 2 (STEPS) is the reveal.
   const [step, setStep] = useState(0);
   const [crafts, setCrafts] = useState<CraftSlug[]>([]);
-  const [levelIdx, setLevelIdx] = useState<number | null>(null);
-  const [intent, setIntent] = useState<Intent | null>(null);
-  const [hasBrand, setHasBrand] = useState<boolean | null>(null);
+  const [rung, setRung] = useState<number | null>(null);
 
   const headingRef = useRef<HTMLDivElement>(null);
   const didMount = useRef(false);
@@ -418,9 +445,6 @@ export default function StartContent() {
     if (!ready || restored.current || saved.current || !profile) return;
     restored.current = true;
     setCrafts(profile.crafts);
-    setLevelIdx(LEVELS.findIndex((l) => l.value === profile.level));
-    setIntent(profile.intent);
-    setHasBrand(profile.hasBrand);
     setStep(STEPS);
     setResuming(true);
     saved.current = true;
@@ -445,15 +469,15 @@ export default function StartContent() {
     window.scrollTo({ top: 0, behavior: reduce ? "auto" : "smooth" });
   }, [step, reduce]);
 
-  const level: Level | null = levelIdx === null ? null : LEVELS[levelIdx].value;
+  // A resumed visit already has a saved profile; a fresh completion has to
+  // derive one from the rung they just picked. Either way this is the one
+  // thing persisted and read back on the reveal.
+  const answers = useMemo(() => {
+    if (resuming && profile) return { crafts: profile.crafts, level: profile.level, intent: profile.intent, hasBrand: profile.hasBrand };
+    return crafts.length > 0 && rung !== null ? { crafts, ...deriveFromRung(rung) } : null;
+  }, [resuming, profile, crafts, rung]);
 
-  const answers = useMemo(
-    () =>
-      crafts.length > 0 && level !== null && intent !== null && hasBrand !== null
-        ? { crafts, level, intent, hasBrand }
-        : null,
-    [crafts, level, intent, hasBrand]
-  );
+  const hasShipped = resuming && profile ? profile.intent === "release" : rung !== null ? rung >= 1 : false;
 
   // Persist once, on arrival at the reveal.
   useEffect(() => {
@@ -471,15 +495,13 @@ export default function StartContent() {
     saved.current = false;
     restored.current = false;
     setCrafts([]);
-    setLevelIdx(null);
-    setIntent(null);
-    setHasBrand(null);
+    setRung(null);
     setResuming(false);
     setStep(0);
   }
 
   const accent = crafts[0] ? CRAFTS.find((c) => c.value === crafts[0])!.accent : ed.gold;
-  const doors = answers ? doorsFor(answers) : null;
+  const outcome = answers ? outcomeFor(answers.crafts[0], hasShipped) : null;
 
   const fade = reduce
     ? {}
@@ -529,7 +551,7 @@ export default function StartContent() {
             {step === 0 && (
               <motion.div key="q0" {...fade}>
                 <Bleed style={{ padding: "0 clamp(18px,5vw,64px) clamp(20px,2.6vw,32px)" }}>
-                  <Kicker color={ed.gold}>Four taps, twenty seconds</Kicker>
+                  <Kicker color={ed.gold}>Two questions, twenty seconds</Kicker>
                   <Question>What do you make?</Question>
                   <Sub>Tap all that apply. The first one leads.</Sub>
                 </Bleed>
@@ -543,92 +565,36 @@ export default function StartContent() {
               </motion.div>
             )}
 
-            {/* ── 02 · Level ───────────────────────────────── */}
+            {/* ── 02 · The ladder ──────────────────────────── */}
             {step === 1 && (
               <motion.div key="q1" {...fade}>
                 <Bleed style={{ padding: "0 clamp(18px,5vw,64px)" }}>
-                  <Kicker color={ed.gold}>Question 02</Kicker>
-                  <Question>How far in are you?</Question>
+                  <Kicker color={ed.gold}>One more question</Kicker>
+                  <Question>{"Where'd your last thing end up?"}</Question>
                   <Sub>No wrong answer.</Sub>
                   <div style={{ marginTop: "clamp(22px,3vw,40px)" }}>
-                    {LEVELS.map((l, i) => (
+                    {RUNGS.map((r) => (
                       <Row
-                        key={l.label}
-                        label={l.label}
-                        meta={l.meta}
-                        selected={levelIdx === i}
+                        key={r.rung}
+                        label={r.label}
+                        meta={r.meta}
+                        selected={rung === r.rung}
                         onClick={() => {
-                          setLevelIdx(i);
-                          setStep(2);
+                          setRung(r.rung);
+                          setStep(STEPS);
                         }}
                       />
                     ))}
-                  </div>
-                </Bleed>
-              </motion.div>
-            )}
-
-            {/* ── 03 · Intent ──────────────────────────────── */}
-            {step === 2 && (
-              <motion.div key="q2" {...fade}>
-                <Bleed style={{ padding: "0 clamp(18px,5vw,64px)" }}>
-                  <Kicker color={ed.gold}>Question 03</Kicker>
-                  <Question>What do you want right now?</Question>
-                  <Sub>Whatever is true today.</Sub>
-                  <div style={{ marginTop: "clamp(22px,3vw,40px)" }}>
-                    {INTENTS.map((o) => (
-                      <Row
-                        key={o.value}
-                        label={o.label}
-                        meta={o.meta}
-                        selected={intent === o.value}
-                        onClick={() => {
-                          setIntent(o.value);
-                          setStep(3);
-                        }}
-                      />
-                    ))}
-                  </div>
-                </Bleed>
-              </motion.div>
-            )}
-
-            {/* ── 04 · Brand ───────────────────────────────── */}
-            {step === 3 && (
-              <motion.div key="q3" {...fade}>
-                <Bleed style={{ padding: "0 clamp(18px,5vw,64px)" }}>
-                  <Kicker color={ed.gold}>Question 04</Kicker>
-                  <Question>Do you have a look yet?</Question>
-                  <Sub>A name, a logo, colours that read as yours.</Sub>
-                  <div style={{ marginTop: "clamp(22px,3vw,40px)" }}>
-                    <Row
-                      label="Yeah, I've got one"
-                      meta="Logo and colours I already use"
-                      selected={hasBrand === true}
-                      onClick={() => {
-                        setHasBrand(true);
-                        setStep(STEPS);
-                      }}
-                    />
-                    <Row
-                      label="Nope, blank page"
-                      meta="No name or colours yet"
-                      selected={hasBrand === false}
-                      onClick={() => {
-                        setHasBrand(false);
-                        setStep(STEPS);
-                      }}
-                    />
                   </div>
                 </Bleed>
               </motion.div>
             )}
 
             {/* ── Reveal ───────────────────────────────────── */}
-            {step === STEPS && answers && doors && (
+            {step === STEPS && answers && outcome && (
               <motion.div key="reveal" {...fade}>
                 <Bleed style={{ padding: "0 clamp(18px,5vw,64px)" }}>
-                  <Kicker color={accent}>{resuming ? "Where you left off" : "Here's where you start"}</Kicker>
+                  <Kicker color={accent}>{resuming ? "Where you left off" : "Two ways in"}</Kicker>
                   <h1
                     tabIndex={-1}
                     style={{
@@ -643,15 +609,13 @@ export default function StartContent() {
                       outline: "none",
                     }}
                   >
-                    {profileSentence({ ...answers, v: 1, completedAt: "" } as CtrlAProfile)}
+                    {outcome.headline}
                   </h1>
-                  <Sub>{doors.why}</Sub>
+                  <Sub>{outcome.sub}</Sub>
 
                   <div style={{ marginTop: "clamp(26px,3.4vw,46px)" }}>
-                    <DoorRow door={doors.primary} primary accent={accent} />
-                    {doors.secondary.map((d) => (
-                      <DoorRow key={d.href} door={d} accent={accent} />
-                    ))}
+                    <OutcomeRow opt={outcome.optA} accent={accent} />
+                    <OutcomeRow opt={outcome.optB} accent={accent} />
                   </div>
 
                   <div style={{ marginTop: "clamp(26px,3.4vw,46px)" }}>
@@ -718,7 +682,7 @@ export default function StartContent() {
             </div>
 
             {/* Only the multi-select question needs an explicit Next; the
-                single-answer screens advance on tap. */}
+                single-answer screen advances on tap. */}
             {step === 0 && (
               <button
                 type="button"

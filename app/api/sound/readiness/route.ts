@@ -6,6 +6,12 @@
 // their score, and the exact list of what they're missing. That's a lead you
 // can answer in one paragraph instead of one call.
 //
+// Three things fire on a successful submit: the Klaviyo subscribe (which
+// triggers the automated Day-0 plan email), the internal lead-capture email
+// below, and deliverFollowupNotify — a separate, immediate reminder to
+// FOLLOWUP_NOTIFY_EMAIL prompting an actual human to reach out, instead of
+// scripting a second automated email.
+//
 // Delivery is env-driven and identical to app/api/sound/quote-inquiry:
 //   1. SUB_WEBHOOK_URL   — if set, POST the JSON to it.
 //   2. RESEND_API_KEY    — else, if set, email via Resend to SUB_TO_EMAIL
@@ -66,6 +72,43 @@ async function deliverWebhook(url: string, sub: Submission) {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ source: "readiness-audit", ...sub }),
+  });
+  return res.ok;
+}
+
+// Reach-out reminder: fires the moment the audit is submitted, alongside the
+// main lead-capture email, addressed to whoever is actually going to reply
+// (not the shared inbox). Replaces what would otherwise be an automated Day-1
+// email in the Klaviyo flow: a human follow-up beats a bot's, so this exists
+// to prompt the human instead of scripting the message.
+const DEFAULT_FOLLOWUP_EMAIL = "rangeofviewmusic@gmail.com";
+
+async function deliverFollowupNotify(apiKey: string, sub: Submission) {
+  const to = process.env.FOLLOWUP_NOTIFY_EMAIL || DEFAULT_FOLLOWUP_EMAIL;
+  const from = process.env.SUB_FROM_EMAIL || DEFAULT_FROM_EMAIL;
+
+  const lines = [
+    `${sub.name} just ran the readiness audit. Worth reaching out yourself.`,
+    "",
+    `Email: ${sub.email}`,
+    `Artist: ${sub.artist || "—"}`,
+    `Role: ${sub.role || "—"}${sub.roster ? ` (roster: ${sub.roster})` : ""}`,
+    `Score: ${sub.score || "—"}  ·  ${sub.tier || "—"}`,
+    "",
+    "Missing:",
+    ...(sub.missing ? sub.missing.split("; ").map((m) => `  - ${m}`) : ["  (none)"]),
+  ].join("\n");
+
+  const res = await timedFetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+    body: JSON.stringify({
+      from,
+      to: [to],
+      reply_to: sub.email,
+      subject: `Reach out to ${sub.name} personally`,
+      text: lines,
+    }),
   });
   return res.ok;
 }
@@ -184,6 +227,12 @@ export async function POST(req: NextRequest) {
         ...gapProperties,
       },
     }).catch(() => {});
+  }
+
+  // Same fire-and-forget treatment: a slow or failed reminder is never worth
+  // failing the actual submission over.
+  if (resendKey) {
+    deliverFollowupNotify(resendKey, sub).catch(() => {});
   }
 
   try {

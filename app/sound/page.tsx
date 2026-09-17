@@ -16,6 +16,7 @@ import { VideoSchema } from "@/components/schema/VideoSchema";
 import { ServiceSchema } from "@/components/schema/ServiceSchema";
 import { BreadcrumbSchema } from "@/components/schema/BreadcrumbSchema";
 import { SESSION } from "@/components/sound/SessionPhoto";
+import { caveat } from "@/components/sound/musicStory";
 import { FAQPageSchema } from "@/components/schema/FAQPageSchema";
 
 // rovmusic.com is served from this same app via a host rewrite (see middleware.ts).
@@ -117,6 +118,7 @@ export default function Page() {
         // Role state wraps the whole page: the gate sets it, and sections read
         // it to swap copy and reorder proof.
         <IntakeProvider>
+          <div className={caveat.variable}>
             <ServiceSchema
                 name="Sound Engineering & Music Production"
                 description="Professional sound engineering, mixing, and mastering services. Mix and master from $58 a song with 48-hour turnaround. First mix is $50."
@@ -180,11 +182,13 @@ export default function Page() {
                 reachable from the menu. */}
             <ActBreak
                 act="Act two · the song"
-                line="That is what your record could sound like. Here is what it costs."
-                sub="Produced, written, mixed, and mastered here. Every rate below is published in full. You leave every session with your stems and whatever we mixed that day."
-                link={{ label: "Hear all six records, named and linked", href: "/credits" }}
+                line="That is what yours could sound like."
+                note="every rate is on this page. you leave with your stems, and whatever we mixed that day."
+                link={{ label: "hear all six records", href: "/credits" }}
                 photo={SESSION.street}
+                tag="one mic, outside, at dusk"
                 layout="bleed"
+                tilt={-1.4}
             />
 
             {/* 04 — Two-path fork (record vs send stems) */}
@@ -210,10 +214,12 @@ export default function Page() {
                 subject just changed. This says it in one line. */}
             <ActBreak
                 act="Act three · the career"
-                line="A mix makes one song better. This is what makes a catalogue worth something."
-                sub="Most artists are not short a mix. They are short the artwork, the video, the release page, the splits, and the metadata that stops a song landing on a duplicate profile. Nobody sells that, so nobody buys it, and it is the reason good records disappear."
-                link={{ label: "See the whole path we run, capture to release", href: "/toolkit" }}
+                line="A mix fixes one song."
+                note="the art, the video, the splits, the metadata: that is what makes a catalogue worth something. nobody sells it. we do."
+                link={{ label: "the whole path, capture to release", href: "/toolkit" }}
                 photo={SESSION.eyesClosed}
+                tag="in it"
+                tilt={1.1}
             />
 
             {/* 08 — Whatever's missing: the full-service claim, shown as
@@ -242,10 +248,12 @@ export default function Page() {
                 testimonials below read as evidence rather than decoration. */}
             <ActBreak
                 act="Act four · the honest part"
-                line="We will tell you when the answer is not us."
-                sub="Sometimes a record needs a re-record rather than a mix, or a room bigger than ours. Saying so costs us the invoice and saves you three of them."
-                link={{ label: "How every Atlanta studio compares, including the ones we are not", href: "/atlanta-studios" }}
+                line="Sometimes the answer is not us."
+                note="a re-record, or a bigger room. saying so costs us one invoice and saves you three."
+                link={{ label: "how every Atlanta studio compares", href: "/atlanta-studios" }}
                 photo={SESSION.knit}
+                tag="between takes"
+                tilt={-0.9}
             />
 
             {/* 12 — Testimonials (speed and process, i.e. objections) */}
@@ -262,6 +270,7 @@ export default function Page() {
             <MusicMenu />
             <RoleToast />
             <RoleGate />
+          </div>
         </IntakeProvider>
     );
 }

@@ -1,81 +1,78 @@
-import Link from "next/link";
-import SessionPhoto, { PhotoCredit, type SessionFrame } from "@/components/sound/SessionPhoto";
+import SessionPhoto, { type SessionFrame } from "@/components/sound/SessionPhoto";
+import { Hand, HandLink, M, PinTag, Squiggle } from "@/components/sound/musicStory";
 
 // The music home page is built in four acts (proof, the song, the career, the
-// close) and that structure only ever existed as comments in the JSX. On screen
-// it read as fourteen dark sections of equal weight, so the journey was
-// invisible: nice components, no narrative punctuation.
-//
-// ActBreak is the punctuation. It is deliberately quiet, a label, one line that
-// carries the argument forward, and a hairline. It is not a section and must
-// never compete with the sections around it.
+// close). ActBreak is the punctuation between them, in the Wisdom case study
+// voice: one big uppercase line, a drawn underline, and a handwritten note
+// where a paragraph used to be. It must never compete with the sections
+// around it, so there is one line, one note, one route out, nothing else.
 //
 // It can carry one session photo. "bleed" puts the photo behind the line for
 // the one break that deserves a full-width moment; "side" sets it beside the
-// text so the break still reads as a pause, not a hero.
-
-const HEADING_FONT = "Norwige, sans-serif";
-const BODY_FONT = "'Roboto', sans-serif";
-const ACCENT = "#EA9A61";
+// text. A handwritten tag pins to the photo like the frame tags on Wisdom.
 
 export default function ActBreak({
     act,
     line,
-    sub,
+    note,
     link,
     photo,
+    tag,
     layout = "side",
+    tilt = -1.2,
 }: {
-    /** e.g. "Act two". Small, accent, sets position in the journey. */
+    /** e.g. "Act two · the song". Small label, sets position in the journey. */
     act: string;
-    /** The one line that moves the reader from the act above to the one below. */
+    /** The one line that moves the reader on. Set uppercase, keep it short. */
     line: string;
-    /** Optional second line, for the bridge that needs a beat more. */
-    sub?: string;
-    /** Optional route out to the proof pages, which otherwise live only in the menu. */
+    /** Handwritten aside in ink. The studio talking, not marketing. */
+    note?: string;
+    /** Route out to the proof pages, handwritten. */
     link?: { label: string; href: string };
     /** Optional session still. See SessionPhoto for the frames. */
     photo?: SessionFrame;
+    /** Handwritten tag pinned on the photo. Keep it true. */
+    tag?: string;
     /** How the photo sits. Only read when `photo` is set. */
     layout?: "bleed" | "side";
+    /** Tilt of the note, so stacked breaks never look cloned. */
+    tilt?: number;
 }) {
     const copy = (
         <>
             <p
-                className="text-[11px] uppercase tracking-[0.3em]"
-                style={{ fontFamily: BODY_FONT, color: ACCENT }}
+                className="text-[10px] uppercase md:text-xs"
+                style={{ fontFamily: M.label, letterSpacing: "0.22em", color: M.ink }}
             >
                 {act}
             </p>
 
-            <p
-                className="mt-5 max-w-3xl text-white"
+            <h2
+                className="mt-4 uppercase"
                 style={{
-                    fontFamily: HEADING_FONT,
-                    fontSize: "clamp(1.75rem, 4vw, 3rem)",
-                    lineHeight: 1.15,
+                    fontFamily: M.display,
+                    color: M.cream,
+                    fontSize: "clamp(2.1rem, 6.5vw, 4.4rem)",
+                    lineHeight: 0.95,
                 }}
             >
                 {line}
-            </p>
+            </h2>
 
-            {sub && (
-                <p
-                    className="mt-5 max-w-2xl text-base leading-relaxed text-white/55 sm:text-lg"
-                    style={{ fontFamily: BODY_FONT }}
-                >
-                    {sub}
-                </p>
+            <div className="mt-3 max-w-[260px] md:max-w-[360px]">
+                <Squiggle />
+            </div>
+
+            {note && (
+                <Hand className="mt-6 max-w-md text-[1.35rem] leading-tight md:text-[1.7rem]" tilt={tilt}>
+                    {note}
+                </Hand>
             )}
 
             {link && (
-                <Link
-                    href={link.href}
-                    className="mt-7 inline-block text-sm underline decoration-white/25 underline-offset-4 transition-colors hover:text-white"
-                    style={{ fontFamily: BODY_FONT, color: "rgba(255,255,255,0.6)" }}
-                >
-                    {link.label} →
-                </Link>
+                <div className="mt-7">
+                    <HandLink href={link.href} tilt={-tilt / 2}>{link.label}</HandLink>
+                </div>
             )}
         </>
     );
@@ -88,7 +85,7 @@ export default function ActBreak({
                     Phones: the photo stacks above the copy at its own ratio,
                     fading to black where the text begins. */}
                 <div className="group relative aspect-[3/2] md:absolute md:inset-y-0 md:right-0 md:left-[30%] md:aspect-auto">
-                    <SessionPhoto frame={photo} sizes="(min-width: 768px) 70vw, 100vw" fade={false} credit={false} />
+                    <SessionPhoto frame={photo} sizes="(min-width: 768px) 70vw, 100vw" fade={false} creditClass="md:bottom-10 md:right-8" />
                     <div
                         aria-hidden
                         className="absolute inset-0 md:hidden"
@@ -102,7 +99,7 @@ export default function ActBreak({
                                 "linear-gradient(90deg, #000 0%, rgba(0,0,0,0.7) 22%, rgba(0,0,0,0.15) 55%, rgba(0,0,0,0.1) 100%), linear-gradient(180deg, #000 0%, transparent 22%, transparent 70%, #000 100%)",
                         }}
                     />
-                    <PhotoCredit className="md:bottom-10 md:right-6" />
+                    {tag && <PinTag tilt={-2}>{tag}</PinTag>}
                 </div>
                 <div className="relative mx-auto max-w-6xl px-6 pb-16 pt-6 md:flex md:min-h-[78vh] md:items-center md:py-32">
                     <div className="max-w-xl">{copy}</div>
@@ -115,11 +112,14 @@ export default function ActBreak({
         return (
             <section className="bg-black px-6 py-20 sm:py-28">
                 <div className="mx-auto max-w-6xl">
-                    <div className="h-px w-full" style={{ background: "rgba(255,255,255,0.12)" }} />
-                    <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-[1.2fr_1fr] md:items-center lg:gap-16">
+                    <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.2fr_1fr] md:items-center lg:gap-16">
                         <div>{copy}</div>
-                        <div className="group relative aspect-[4/5] max-h-[520px] w-full overflow-hidden rounded-2xl">
+                        <div
+                            className="group relative aspect-[4/5] max-h-[520px] w-full overflow-hidden rounded-2xl"
+                            style={{ transform: `rotate(${tilt > 0 ? -0.7 : 0.6}deg)` }}
+                        >
                             <SessionPhoto frame={photo} sizes="(min-width: 768px) 40vw, 100vw" />
+                            {tag && <PinTag tilt={tilt > 0 ? 2.2 : -2.5}>{tag}</PinTag>}
                         </div>
                     </div>
                 </div>
@@ -129,10 +129,7 @@ export default function ActBreak({
 
     return (
         <section className="bg-black px-6 py-20 sm:py-28">
-            <div className="mx-auto max-w-4xl">
-                <div className="h-px w-full" style={{ background: "rgba(255,255,255,0.12)" }} />
-                <div className="mt-10">{copy}</div>
-            </div>
+            <div className="mx-auto max-w-4xl">{copy}</div>
         </section>
     );
 }
