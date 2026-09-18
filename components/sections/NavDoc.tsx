@@ -187,7 +187,7 @@ export function NavigationDock({ className }: NavigationDockProps) {
             <Link
               href="/"
               onClick={close}
-              className="pointer-events-auto inline-flex h-11 md:h-12 items-center opacity-90 hover:opacity-100 focus-visible:outline-none focus-visible:opacity-100 transition-opacity"
+              className="pointer-events-auto -ml-2 inline-flex h-11 md:h-12 items-center opacity-90 hover:opacity-100 focus-visible:outline-none focus-visible:opacity-100 transition-opacity"
             >
               <Image
                 src="/brand/rov-logo.webp"
@@ -324,50 +324,50 @@ export function NavigationDock({ className }: NavigationDockProps) {
               </div>
 
               {/* ── Right: proof, then the one CTA. Desktop only —
-                  on phones the left column carries the whole menu. The CTA
-                  is pinned to the bottom via mt-auto so it lines up with the
-                  socials row at the foot of the left column. ── */}
-              <div className="hidden lg:flex lg:h-full lg:flex-col">
-                <div>
-                  <p style={DISPLAY} className="text-white/60 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-6 md:mb-7">
-                    Recent work
-                  </p>
+                  on phones the left column carries the whole menu. lg:self-end
+                  drops the whole group to the bottom of the column, level with
+                  the socials row on the left, so the empty space lands as
+                  breathing room above the group instead of a gap splitting it
+                  from the CTA. ── */}
+              <div className="hidden lg:block lg:self-end">
+                <p style={DISPLAY} className="text-white/60 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-6 md:mb-7">
+                  Recent work
+                </p>
 
-                  <div className="grid grid-cols-2 gap-3.5">
-                    {FEATURED.map((f) => (
-                      <Link
-                        key={f.to}
-                        href={f.to}
-                        onClick={close}
-                        className="group relative block overflow-hidden rounded-xl border border-white/10 h-[94px] md:h-[96px]"
-                      >
-                        <Image
-                          src={f.img}
-                          alt={f.title}
-                          fill
-                          sizes="(max-width: 1024px) 50vw, 210px"
-                          className="object-cover opacity-[0.72] group-hover:opacity-95 group-hover:scale-[1.03] transition-all duration-500"
-                        />
-                        <span className="absolute inset-0 bg-gradient-to-t from-[#0B0603] via-[#0B0603]/45 to-transparent" />
-                        <span className="absolute left-3.5 right-3.5 bottom-3">
-                          <span style={DISPLAY} className="block text-white text-[14px] font-bold uppercase tracking-[0.12em]">{f.title}</span>
-                          <span className="block mt-1 font-sans text-white/75 text-[11.5px] font-medium leading-snug">{f.blurb}</span>
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-
-                  <Link
-                    href="/works"
-                    onClick={close}
-                    className="group mt-3 flex items-center justify-between border-b border-white/[0.14] pb-3 text-white/85 hover:text-white transition-colors focus-visible:outline-none focus-visible:text-[#EA9A61]"
-                  >
-                    <span style={DISPLAY} className="text-[13px] font-bold uppercase tracking-[0.22em]">All work</span>
-                    <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                  </Link>
+                <div className="grid grid-cols-2 gap-3.5">
+                  {FEATURED.map((f) => (
+                    <Link
+                      key={f.to}
+                      href={f.to}
+                      onClick={close}
+                      className="group relative block overflow-hidden rounded-xl border border-white/10 h-[94px] md:h-[96px]"
+                    >
+                      <Image
+                        src={f.img}
+                        alt={f.title}
+                        fill
+                        sizes="(max-width: 1024px) 50vw, 210px"
+                        className="object-cover opacity-[0.72] group-hover:opacity-95 group-hover:scale-[1.03] transition-all duration-500"
+                      />
+                      <span className="absolute inset-0 bg-gradient-to-t from-[#0B0603] via-[#0B0603]/45 to-transparent" />
+                      <span className="absolute left-3.5 right-3.5 bottom-3">
+                        <span style={DISPLAY} className="block text-white text-[14px] font-bold uppercase tracking-[0.12em]">{f.title}</span>
+                        <span className="block mt-1 font-sans text-white/75 text-[11.5px] font-medium leading-snug">{f.blurb}</span>
+                      </span>
+                    </Link>
+                  ))}
                 </div>
 
-                <div className="mt-auto pt-6 rounded-xl border border-[#EA9A61]/25 bg-[#EA9A61]/[0.07] p-4 md:p-5">
+                <Link
+                  href="/works"
+                  onClick={close}
+                  className="group mt-3 flex items-center justify-between border-b border-white/[0.14] pb-3 text-white/85 hover:text-white transition-colors focus-visible:outline-none focus-visible:text-[#EA9A61]"
+                >
+                  <span style={DISPLAY} className="text-[13px] font-bold uppercase tracking-[0.22em]">All work</span>
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                </Link>
+
+                <div className="mt-6 rounded-xl border border-[#EA9A61]/25 bg-[#EA9A61]/[0.07] p-4 md:p-5">
                   <p style={DISPLAY} className="text-white text-[16px] md:text-[18px] font-black uppercase tracking-[0.08em] leading-snug">
                     Have a project in mind?
                   </p>
