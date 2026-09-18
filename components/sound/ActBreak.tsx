@@ -64,9 +64,14 @@ export default function ActBreak({
             </div>
 
             {note && (
-                <Hand className="mt-6 max-w-md text-[1.35rem] leading-tight md:text-[1.7rem]" tilt={tilt}>
-                    {note}
-                </Hand>
+                <div
+                    className="mt-6 inline-block max-w-md rounded-2xl px-5 py-4"
+                    style={{ background: "rgba(255,244,227,0.06)", border: "1px solid rgba(255,244,227,0.1)" }}
+                >
+                    <Hand className="text-[1.2rem] leading-tight md:text-[1.5rem]" tilt={tilt}>
+                        {note}
+                    </Hand>
+                </div>
             )}
 
             {link && (
@@ -112,7 +117,7 @@ export default function ActBreak({
         return (
             <section className="bg-black px-6 py-20 sm:py-28">
                 <div className="mx-auto max-w-6xl">
-                    <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.2fr_1fr] md:items-center lg:gap-16">
+                    <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.2fr_1fr] md:items-start lg:gap-16">
                         <div>{copy}</div>
                         <div
                             className="group relative aspect-[4/5] max-h-[520px] w-full overflow-hidden rounded-2xl"

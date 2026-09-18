@@ -96,7 +96,7 @@ export default function CollaboratorCard() {
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.14 }}
-          className="text-white/45 text-sm md:text-base leading-relaxed max-w-lg mx-auto text-center mb-3"
+          className="text-white/70 text-sm md:text-base leading-relaxed max-w-lg mx-auto text-center mb-3"
           style={{ fontFamily: BODY }}
         >
           Most of what we put out has someone else&apos;s hands on it, and their name on
@@ -119,7 +119,7 @@ export default function CollaboratorCard() {
                   {r.title}
                 </h3>
                 <p
-                  className="text-white/45 text-sm leading-relaxed flex-1 mb-5"
+                  className="text-white/70 text-sm leading-relaxed flex-1 mb-5"
                   style={{ fontFamily: BODY }}
                 >
                   {r.body}

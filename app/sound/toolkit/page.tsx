@@ -52,7 +52,7 @@ export const metadata: Metadata = {
 function Label({ children }: { children: React.ReactNode }) {
     return (
         <span
-            className="text-[11px] uppercase tracking-[0.2em] text-white/40"
+            className="text-[11px] uppercase tracking-[0.2em] text-white/65"
             style={{ fontFamily: BODY_FONT }}
         >
             {children}
@@ -109,7 +109,7 @@ export default function MusicToolkitPage() {
                         </p>
 
                         <div
-                            className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/40"
+                            className="mt-8 flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-white/65"
                             style={{ fontFamily: BODY_FONT }}
                         >
                             <span>
@@ -180,7 +180,7 @@ export default function MusicToolkitPage() {
                                                         {tool.name}
                                                     </p>
                                                     <p
-                                                        className="mt-1 max-w-xl text-sm leading-relaxed text-white/45"
+                                                        className="mt-1 max-w-xl text-sm leading-relaxed text-white/70"
                                                         style={{ fontFamily: BODY_FONT }}
                                                     >
                                                         {tool.note}
@@ -230,7 +230,7 @@ export default function MusicToolkitPage() {
                             {beforeYouBook.map((item) => (
                                 <div key={item.claim}>
                                     <p
-                                        className="text-base text-white/35 line-through decoration-white/20"
+                                        className="text-base text-white/60 line-through decoration-white/20"
                                         style={{ fontFamily: BODY_FONT }}
                                     >
                                         {item.claim}
@@ -390,7 +390,7 @@ export default function MusicToolkitPage() {
                         </div>
 
                         <p
-                            className="mt-14 max-w-xl text-sm leading-relaxed text-white/35"
+                            className="mt-14 max-w-xl text-sm leading-relaxed text-white/60"
                             style={{ fontFamily: BODY_FONT }}
                         >
                             Want the wider version, including the history of how recorded

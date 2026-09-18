@@ -207,7 +207,7 @@ function RecordingRates() {
         initial={{ opacity: 0, y: 10 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ ...spring, delay: 0.15 }}
-        className="text-white/40 text-sm md:text-base mb-10 max-w-xl"
+        className="text-white/65 text-sm md:text-base mb-10 max-w-xl"
         style={{ fontFamily: BODY_FONT }}
       >
         You book the hour and leave with your files and whatever we mixed. The full mix and master is a separate line, and both numbers are on this page.
@@ -221,7 +221,7 @@ function RecordingRates() {
           transition={{ ...spring, delay: 0.2 }}
           className="relative rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 md:p-8 flex flex-col"
         >
-          <span className="text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-white/40 mb-4" style={{ fontFamily: BODY_FONT }}>
+          <span className="text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-white/65 mb-4" style={{ fontFamily: BODY_FONT }}>
             Studio Time
           </span>
           <div className="flex items-baseline gap-1 mb-1">
@@ -233,13 +233,13 @@ function RecordingRates() {
           </span>
           <ul className="flex-1 space-y-2 mb-6">
             {recordingFeatures.map((f) => (
-              <li key={f} className="flex items-start gap-2 text-white/50 text-sm" style={{ fontFamily: BODY_FONT }}>
+              <li key={f} className="flex items-start gap-2 text-white/72 text-sm" style={{ fontFamily: BODY_FONT }}>
                 <span className="text-[#EA9A61] mt-0.5 shrink-0">&#10003;</span>
                 {f}
               </li>
             ))}
           </ul>
-          <p className="text-white/55 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
+          <p className="text-white/76 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
             Comparable Atlanta rooms run <span className="text-white/70 not-italic line-through">$75&ndash;120/hr</span>. You leave with your labeled stems the same day.
           </p>
           <CalBookButton
@@ -265,7 +265,7 @@ function RecordingRates() {
           >
             Best Deal
           </span>
-          <span className="text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-white/40 mb-4" style={{ fontFamily: BODY_FONT }}>
+          <span className="text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-white/65 mb-4" style={{ fontFamily: BODY_FONT }}>
             4-Hour Block
           </span>
           <div className="flex items-baseline gap-2 mb-1">
@@ -277,13 +277,13 @@ function RecordingRates() {
           </span>
           <ul className="flex-1 space-y-2 mb-6">
             {["Four hours in the room, your lowest rate", "Your stems plus whatever we mixed in the session", "48-hour turnaround", "Usually two to three songs tracked"].map((f) => (
-              <li key={f} className="flex items-start gap-2 text-white/50 text-sm" style={{ fontFamily: BODY_FONT }}>
+              <li key={f} className="flex items-start gap-2 text-white/72 text-sm" style={{ fontFamily: BODY_FONT }}>
                 <span className="text-[#EA9A61] mt-0.5 shrink-0">&#10003;</span>
                 {f}
               </li>
             ))}
           </ul>
-          <p className="text-white/55 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
+          <p className="text-white/76 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
             Atlanta rooms average around <span className="text-white/70 not-italic">$102 an hour</span> on rental marketplaces, so four hours elsewhere usually runs <span className="text-white/70 not-italic">$400+</span> before anyone touches a mix.
           </p>
           <CalBookButton
@@ -304,7 +304,7 @@ function RecordingRates() {
         </motion.div>
       </div>
 
-      <p className="text-white/40 text-xs md:text-sm mt-6" style={{ fontFamily: BODY_FONT }}>
+      <p className="text-white/65 text-xs md:text-sm mt-6" style={{ fontFamily: BODY_FONT }}>
         Students may be eligible for additional discounts. <span className="text-[#EA9A61]">Get in touch.</span>
       </p>
     </div>
@@ -367,7 +367,7 @@ export default function StudioSection() {
             transition={{ ...spring, delay: 0.2 }}
           >
             <p
-              className="text-white/50 text-base md:text-lg leading-relaxed mb-6"
+              className="text-white/72 text-base md:text-lg leading-relaxed mb-6"
               style={{ fontFamily: BODY_FONT }}
             >
               We don&apos;t just mix files from a laptop. Artists record in our Atlanta studio, stand behind real mics,

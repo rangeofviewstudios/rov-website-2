@@ -71,7 +71,7 @@ export default function ClosingCTA() {
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.08 }}
-          className="text-white/45 text-sm md:text-base leading-relaxed max-w-lg mx-auto mb-9"
+          className="text-white/70 text-sm md:text-base leading-relaxed max-w-lg mx-auto mb-9"
           style={{ fontFamily: BODY }}
         >
           {isManager

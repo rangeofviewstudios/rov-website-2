@@ -49,7 +49,7 @@ export const metadata: Metadata = {
 function Label({ children }: { children: React.ReactNode }) {
     return (
         <span
-            className="text-[11px] uppercase tracking-[0.2em] text-white/40"
+            className="text-[11px] uppercase tracking-[0.2em] text-white/65"
             style={{ fontFamily: BODY_FONT }}
         >
             {children}
@@ -123,7 +123,7 @@ export default function AtlantaStudiosPage() {
                                     {tier.title}
                                 </h2>
                                 <p
-                                    className="mt-3 max-w-2xl text-base leading-relaxed text-white/50"
+                                    className="mt-3 max-w-2xl text-base leading-relaxed text-white/72"
                                     style={{ fontFamily: BODY_FONT }}
                                 >
                                     {tier.who}
@@ -160,7 +160,7 @@ export default function AtlantaStudiosPage() {
                                                 )}
                                             </div>
                                             <p
-                                                className="mt-1 text-sm text-white/40"
+                                                className="mt-1 text-sm text-white/65"
                                                 style={{ fontFamily: BODY_FONT }}
                                             >
                                                 {studio.location}
@@ -179,7 +179,7 @@ export default function AtlantaStudiosPage() {
                                             </p>
                                             {studio.trackRecord && (
                                                 <p
-                                                    className="mt-3 text-sm leading-relaxed text-white/45"
+                                                    className="mt-3 text-sm leading-relaxed text-white/70"
                                                     style={{ fontFamily: BODY_FONT }}
                                                 >
                                                     {studio.trackRecord}
@@ -190,7 +190,7 @@ export default function AtlantaStudiosPage() {
                                                 style={{ fontFamily: BODY_FONT }}
                                             >
                                                 <span className="text-white/70">
-                                                    Rates: <span className="text-white/45">{studio.rates}</span>
+                                                    Rates: <span className="text-white/70">{studio.rates}</span>
                                                 </span>
                                                 <a
                                                     href={studio.url}
@@ -227,7 +227,7 @@ export default function AtlantaStudiosPage() {
                             <Squiggle />
                         </div>
                         <p
-                            className="mt-4 max-w-2xl text-base leading-relaxed text-white/55"
+                            className="mt-4 max-w-2xl text-base leading-relaxed text-white/76"
                             style={{ fontFamily: BODY_FONT }}
                         >
                             Every rate is published. You leave with your stems and whatever
@@ -244,7 +244,7 @@ export default function AtlantaStudiosPage() {
                                     <span className="text-white/80">{rate.label}</span>
                                     <span className="flex items-baseline gap-3">
                                         {rate.note && (
-                                            <span className="text-sm text-white/35">{rate.note}</span>
+                                            <span className="text-sm text-white/60">{rate.note}</span>
                                         )}
                                         <span className="text-lg text-white">{rate.price}</span>
                                     </span>

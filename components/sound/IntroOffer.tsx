@@ -140,7 +140,7 @@ export default function IntroOffer() {
           </a>
 
           <p
-            className="text-white/40 text-[clamp(0.7rem,1.5vw,0.75rem)] md:text-xs mt-6 leading-relaxed max-w-md mx-auto lg:mx-0"
+            className="text-white/65 text-[clamp(0.7rem,1.5vw,0.75rem)] md:text-xs mt-6 leading-relaxed max-w-md mx-auto lg:mx-0"
             style={{ fontFamily: BODY }}
           >
             One per artist. Same finished sound as every paid record we release. After that
@@ -163,7 +163,7 @@ function FlyerCredit() {
       <span>
         Designed by <span className="text-white font-semibold">Karina</span>
       </span>
-      {KARINA_PORTFOLIO_URL && <span className="text-white/50 group-hover:text-[#EA9A61] transition-colors">&#8599;</span>}
+      {KARINA_PORTFOLIO_URL && <span className="text-white/72 group-hover:text-[#EA9A61] transition-colors">&#8599;</span>}
     </>
   );
 

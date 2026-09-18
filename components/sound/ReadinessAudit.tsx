@@ -164,7 +164,7 @@ export default function ReadinessAudit() {
         >
           {totalSteps} questions &middot; 20 seconds
           {seeded.answered.size > 0 && (
-            <span className="text-white/35 normal-case tracking-normal">
+            <span className="text-white/60 normal-case tracking-normal">
               {" "}&middot; {seeded.answered.size} already answered
             </span>
           )}
@@ -185,7 +185,7 @@ export default function ReadinessAudit() {
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.14 }}
-          className="text-white/50 text-sm md:text-base mb-3 text-center max-w-lg mx-auto"
+          className="text-white/72 text-sm md:text-base mb-3 text-center max-w-lg mx-auto"
           style={{ fontFamily: BODY }}
         >
           A mix makes one song better. These are the things that decide whether a
@@ -330,7 +330,7 @@ export default function ReadinessAudit() {
                   <Dial have={haveCount} total={items.length} />
                   <div className="min-w-0">
                     <span
-                      className="block text-xs uppercase tracking-[0.25em] text-white/40 mb-1.5"
+                      className="block text-xs uppercase tracking-[0.25em] text-white/65 mb-1.5"
                       style={{ fontFamily: BODY }}
                     >
                       Readiness
@@ -345,7 +345,7 @@ export default function ReadinessAudit() {
                 </div>
 
                 <p
-                  className="text-white/50 text-sm leading-relaxed mb-7 border-b border-white/[0.08] pb-7"
+                  className="text-white/72 text-sm leading-relaxed mb-7 border-b border-white/[0.08] pb-7"
                   style={{ fontFamily: BODY }}
                 >
                   {tier.body}
@@ -391,7 +391,7 @@ export default function ReadinessAudit() {
                             )}
                           </div>
                           <p
-                            className="text-white/45 text-xs md:text-sm leading-relaxed"
+                            className="text-white/70 text-xs md:text-sm leading-relaxed"
                             style={{ fontFamily: BODY }}
                           >
                             {m.consequence}
@@ -411,13 +411,13 @@ export default function ReadinessAudit() {
                         <div className="grid grid-cols-2 gap-3 mb-4">
                           <div className="rounded-lg border border-white/[0.06] bg-white/[0.02] p-3">
                             <span
-                              className="block text-[10px] uppercase tracking-[0.2em] text-white/35 mb-1"
+                              className="block text-[10px] uppercase tracking-[0.2em] text-white/60 mb-1"
                               style={{ fontFamily: BODY }}
                             >
                               Piece by piece
                             </span>
                             <span
-                              className="text-white/45 text-xl md:text-2xl font-bold italic tabular-nums"
+                              className="text-white/70 text-xl md:text-2xl font-bold italic tabular-nums"
                               style={{ fontFamily: HEADING }}
                             >
                               {approx && (
@@ -446,7 +446,7 @@ export default function ReadinessAudit() {
                           </div>
                         </div>
                         <p
-                          className="text-white/45 text-xs leading-relaxed text-center"
+                          className="text-white/70 text-xs leading-relaxed text-center"
                           style={{ fontFamily: BODY }}
                         >
                           {approx
@@ -510,7 +510,7 @@ export default function ReadinessAudit() {
                   <button
                     type="button"
                     onClick={restart}
-                    className="text-white/40 hover:text-white/70 text-xs transition-colors cursor-pointer"
+                    className="text-white/65 hover:text-white/70 text-xs transition-colors cursor-pointer"
                     style={{ fontFamily: BODY }}
                   >
                     Start over
@@ -612,7 +612,7 @@ function Shell({
             type="button"
             onClick={onBack}
             aria-label="Back"
-            className="mt-1.5 text-white/40 hover:text-white transition-colors cursor-pointer shrink-0"
+            className="mt-1.5 text-white/65 hover:text-white transition-colors cursor-pointer shrink-0"
           >
             <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -629,7 +629,7 @@ function Shell({
             {title}
           </h3>
           {sub && (
-            <p className="text-white/40 text-xs mt-1.5 leading-relaxed" style={{ fontFamily: BODY }}>
+            <p className="text-white/65 text-xs mt-1.5 leading-relaxed" style={{ fontFamily: BODY }}>
               {sub}
             </p>
           )}
@@ -712,7 +712,7 @@ function Row({
         {label}
       </span>
       {sub && (
-        <span className="block text-white/40 text-xs mt-0.5" style={{ fontFamily: BODY }}>
+        <span className="block text-white/65 text-xs mt-0.5" style={{ fontFamily: BODY }}>
           {sub}
         </span>
       )}
@@ -820,7 +820,7 @@ function PlanModal({
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="absolute top-4 right-4 text-white/50 hover:text-white transition-colors cursor-pointer"
+              className="absolute top-4 right-4 text-white/72 hover:text-white transition-colors cursor-pointer"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 6 6 18M6 6l12 12" />
@@ -837,7 +837,7 @@ function PlanModal({
                 <h4 className="text-white text-xl font-bold italic mb-2" style={{ fontFamily: HEADING }}>
                   That&apos;s in.
                 </h4>
-                <p className="text-white/50 text-sm" style={{ fontFamily: BODY }}>
+                <p className="text-white/72 text-sm" style={{ fontFamily: BODY }}>
                   Your plan comes back within one business day, with the gaps in the order
                   we&apos;d close them.
                 </p>
@@ -855,7 +855,7 @@ function PlanModal({
                 <h4 className="text-white text-2xl font-bold italic mb-1" style={{ fontFamily: HEADING }}>
                   Send me the plan
                 </h4>
-                <p className="text-white/50 text-sm mb-5 leading-relaxed" style={{ fontFamily: BODY }}>
+                <p className="text-white/72 text-sm mb-5 leading-relaxed" style={{ fontFamily: BODY }}>
                   Your {context.score} and every gap, written up in the order we&apos;d close
                   them. No call required.
                 </p>

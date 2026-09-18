@@ -103,7 +103,7 @@ export default function CreditsPage() {
                 <section className="px-6 pt-28 pb-14 sm:pt-36">
                     <div className="mx-auto max-w-5xl">
                         <span
-                            className="text-[11px] uppercase tracking-[0.2em] text-white/40"
+                            className="text-[11px] uppercase tracking-[0.2em] text-white/65"
                             style={{ fontFamily: BODY_FONT }}
                         >
                             Atlanta · Discography
@@ -173,7 +173,7 @@ export default function CreditsPage() {
                                         {credit.role}
                                     </p>
                                     <span
-                                        className="mt-4 inline-block text-xs text-white/35 group-hover:text-white/60"
+                                        className="mt-4 inline-block text-xs text-white/60 group-hover:text-white/60"
                                         style={{ fontFamily: BODY_FONT }}
                                     >
                                         Listen on Spotify →
@@ -194,7 +194,7 @@ export default function CreditsPage() {
                 <section className="border-t border-white/10 px-6 py-20">
                     <div className="mx-auto max-w-5xl">
                         <span
-                            className="text-[11px] uppercase tracking-[0.2em] text-white/40"
+                            className="text-[11px] uppercase tracking-[0.2em] text-white/65"
                             style={{ fontFamily: BODY_FONT }}
                         >
                             In house
@@ -250,7 +250,7 @@ export default function CreditsPage() {
                                                 Apple Music →
                                             </a>
                                         )}
-                                        <Link href="/sam-suen" className="text-white/50 hover:text-white/80">
+                                        <Link href="/sam-suen" className="text-white/72 hover:text-white/80">
                                             Read the full case study →
                                         </Link>
                                     </div>
@@ -264,7 +264,7 @@ export default function CreditsPage() {
                 <section className="border-t border-white/10 px-6 py-20">
                     <div className="mx-auto max-w-5xl">
                         <span
-                            className="text-[11px] uppercase tracking-[0.2em] text-white/40"
+                            className="text-[11px] uppercase tracking-[0.2em] text-white/65"
                             style={{ fontFamily: BODY_FONT }}
                         >
                             Stages
@@ -293,7 +293,7 @@ export default function CreditsPage() {
                                         {stage.year}
                                     </span>
                                     <span className="text-white">{stage.name}</span>
-                                    <span className="text-sm text-white/40">{stage.venue}</span>
+                                    <span className="text-sm text-white/65">{stage.venue}</span>
                                 </li>
                             ))}
                         </ul>

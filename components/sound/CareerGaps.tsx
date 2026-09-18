@@ -142,7 +142,7 @@ export default function CareerGaps() {
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-14 md:mb-20"
         >
           <p
-            className="text-white/45 text-base md:text-lg leading-relaxed max-w-xl"
+            className="text-white/70 text-base md:text-lg leading-relaxed max-w-xl"
             style={{ fontFamily: BODY }}
           >
             Most artists hire five people for one release and spend the whole rollout

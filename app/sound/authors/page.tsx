@@ -116,7 +116,7 @@ export default function AuthorsPage() {
             <main className="bg-black" style={{ minHeight: "100vh" }}>
                 <section className="px-6 pt-28 pb-14 sm:pt-36">
                     <div className="mx-auto max-w-4xl">
-                        <span className="text-[11px] uppercase tracking-[0.2em] text-white/40" style={{ fontFamily: BODY_FONT }}>
+                        <span className="text-[11px] uppercase tracking-[0.2em] text-white/65" style={{ fontFamily: BODY_FONT }}>
                             Atlanta · The people
                         </span>
                         <h1
@@ -158,7 +158,7 @@ export default function AuthorsPage() {
                                             </p>
                                         ))}
 
-                                        <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/40" style={{ fontFamily: BODY_FONT }}>
+                                        <p className="mt-5 max-w-2xl text-sm leading-relaxed text-white/65" style={{ fontFamily: BODY_FONT }}>
                                             Writes about: {a.writesAbout}
                                         </p>
 

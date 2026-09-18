@@ -116,13 +116,13 @@ export default function PathFork() {
                 className="group text-left rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 md:p-8 flex flex-col hover:border-[#EA9A61]/40 hover:bg-[#EA9A61]/[0.03] transition-all duration-300"
               >
                 <Icon className="w-7 h-7 text-[#EA9A61] mb-5" strokeWidth={1.5} />
-                <span className="text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-white/40 mb-2" style={{ fontFamily: BODY }}>
+                <span className="text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-white/65 mb-2" style={{ fontFamily: BODY }}>
                   {p.kicker}
                 </span>
                 <h3 className="text-white text-2xl md:text-3xl font-bold italic mb-3" style={{ fontFamily: HEADING }}>
                   {p.title}
                 </h3>
-                <p className="text-white/50 text-sm leading-relaxed mb-6 flex-1" style={{ fontFamily: BODY }}>
+                <p className="text-white/72 text-sm leading-relaxed mb-6 flex-1" style={{ fontFamily: BODY }}>
                   {p.body}
                 </p>
                 <div className="flex items-baseline gap-2 mb-5">
@@ -152,7 +152,7 @@ export default function PathFork() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ ...spring, delay: 0.45 }}
-          className="text-center text-white/35 text-sm mt-7"
+          className="text-center text-white/60 text-sm mt-7"
           style={{ fontFamily: BODY }}
         >
           {isManager ? "Not sure where the roster stands? " : "Not sure where you're at? "}

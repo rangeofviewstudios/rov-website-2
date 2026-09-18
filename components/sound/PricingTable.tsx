@@ -127,7 +127,7 @@ function Hero() {
           <Squiggle />
         </div>
         <p
-          className="text-white/45 text-base md:text-lg leading-relaxed max-w-xl mx-auto"
+          className="text-white/70 text-base md:text-lg leading-relaxed max-w-xl mx-auto"
           style={{ fontFamily: BODY }}
         >
           No quote required to see a number, no discount you have to negotiate for. The
@@ -189,7 +189,7 @@ function Section({
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.1 }}
-          className="text-white/45 text-sm md:text-base leading-relaxed max-w-2xl mb-9"
+          className="text-white/70 text-sm md:text-base leading-relaxed max-w-2xl mb-9"
           style={{ fontFamily: BODY }}
         >
           {blurb}
@@ -206,7 +206,7 @@ function Section({
             initial={{ opacity: 0 }}
             animate={inView ? { opacity: 1 } : {}}
             transition={{ ...spring, delay: 0.4 }}
-            className="text-white/40 text-xs md:text-sm mt-6"
+            className="text-white/65 text-xs md:text-sm mt-6"
             style={{ fontFamily: BODY }}
           >
             {footnote}
@@ -250,7 +250,7 @@ function PriceRow({ row, delay, inView }: { row: Row; delay: number; inView: boo
         >
           {row.name}
         </h3>
-        <p className="text-white/45 text-xs md:text-sm leading-relaxed" style={{ fontFamily: BODY }}>
+        <p className="text-white/70 text-xs md:text-sm leading-relaxed" style={{ fontFamily: BODY }}>
           {row.note}
         </p>
       </div>
@@ -374,14 +374,14 @@ function FoundationRow() {
               >
                 {money(FOUNDATION_PRICE)}
               </span>
-              <span className="block text-white/35 text-xs mt-1" style={{ fontFamily: BODY }}>
+              <span className="block text-white/60 text-xs mt-1" style={{ fontFamily: BODY }}>
                 one time, yours forever
               </span>
             </div>
           </div>
 
           <p
-            className="text-white/50 text-sm md:text-base leading-relaxed max-w-2xl mb-7"
+            className="text-white/72 text-sm md:text-base leading-relaxed max-w-2xl mb-7"
             style={{ fontFamily: BODY }}
           >
             Website, EPK, release hub with email capture, booking and lead forms, your
@@ -441,17 +441,17 @@ function Closer() {
         className="max-w-4xl mx-auto rounded-2xl border border-white/[0.07] bg-white/[0.015] p-6 md:p-7"
       >
         <span
-          className="block text-[11px] uppercase tracking-[0.25em] text-white/35 mb-3"
+          className="block text-[11px] uppercase tracking-[0.25em] text-white/60 mb-3"
           style={{ fontFamily: BODY }}
         >
           What we don&apos;t sell
         </span>
-        <p className="text-white/45 text-sm leading-relaxed mb-4" style={{ fontFamily: BODY }}>
+        <p className="text-white/70 text-sm leading-relaxed mb-4" style={{ fontFamily: BODY }}>
           No label services, no radio promo, no booking agency, no publishing
           administration. We refer out for publishing admin and anything contractual,
           because you want a lawyer for that, not a studio.
         </p>
-        <p className="text-white/35 text-xs leading-relaxed" style={{ fontFamily: BODY }}>
+        <p className="text-white/60 text-xs leading-relaxed" style={{ fontFamily: BODY }}>
           Full projects, EPs, and roster work are quoted rather than listed. If your
           release doesn&apos;t look like anything above, that&apos;s normal, just{" "}
           <a

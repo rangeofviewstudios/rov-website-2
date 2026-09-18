@@ -371,7 +371,7 @@ export default function MusicPlayer() {
                                                 <Image src={song.cover} width={32} height={32} className="rounded object-cover" alt={song.title} />
                                                 <div className="flex flex-col min-w-0">
                                                     <span className={`text-sm font-medium truncate ${i === currentIndex ? "text-[#EA9A61]" : "text-white"}`}>{song.title}</span>
-                                                    <span className="text-xs text-white/40 truncate">{song.artist}</span>
+                                                    <span className="text-xs text-white/65 truncate">{song.artist}</span>
                                                 </div>
                                             </button>
                                         ))}
@@ -423,7 +423,7 @@ export default function MusicPlayer() {
                                             <h3 className="text-white text-base font-bold tracking-wide truncate group-hover/info:text-[#EA9A61] transition-colors">
                                                 {songData[currentIndex].title}
                                             </h3>
-                                            <p className="text-white/50 text-sm font-medium truncate mt-0.5">
+                                            <p className="text-white/72 text-sm font-medium truncate mt-0.5">
                                                 {songData[currentIndex].artist}
                                             </p>
                                         </div>
@@ -452,7 +452,7 @@ export default function MusicPlayer() {
                                 {/* Right: Time, Playlist, Volume */}
                                 <div className="flex flex-row items-center justify-between md:justify-end gap-6 md:gap-8 w-full md:w-1/3 order-2 md:order-3">
                                     {/* Time Display */}
-                                    <div className="text-xs md:text-sm font-mono text-white/50 tabular-nums">
+                                    <div className="text-xs md:text-sm font-mono text-white/72 tabular-nums">
                                         {formatTime(currentTime)} / {formatTime(duration)}
                                     </div>
 

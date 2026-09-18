@@ -102,7 +102,7 @@ export default function FoundationOffer() {
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.14 }}
-          className="text-white/45 text-sm md:text-base mb-12 md:mb-16 text-center max-w-2xl mx-auto leading-relaxed"
+          className="text-white/70 text-sm md:text-base mb-12 md:mb-16 text-center max-w-2xl mx-auto leading-relaxed"
           style={{ fontFamily: BODY }}
         >
           {isManager
@@ -126,7 +126,7 @@ export default function FoundationOffer() {
               Start here
             </span>
             <span
-              className="text-[11px] uppercase tracking-[0.2em] text-white/40 mb-4"
+              className="text-[11px] uppercase tracking-[0.2em] text-white/65 mb-4"
               style={{ fontFamily: BODY }}
             >
               Foundation · one time
@@ -179,13 +179,13 @@ export default function FoundationOffer() {
             </CalBookButton>
             <a
               href={checkoutHref("foundation")}
-              className="mt-3 block text-center text-white/40 hover:text-white/70 text-xs transition-colors"
+              className="mt-3 block text-center text-white/65 hover:text-white/70 text-xs transition-colors"
               style={{ fontFamily: BODY }}
             >
               Or send us your details
             </a>
             <p
-              className="mt-4 pt-4 border-t border-white/[0.07] text-white/35 text-[11px] leading-relaxed"
+              className="mt-4 pt-4 border-t border-white/[0.07] text-white/60 text-[11px] leading-relaxed"
               style={{ fontFamily: BODY }}
             >
               {SCOPE_NOTE}
@@ -200,7 +200,7 @@ export default function FoundationOffer() {
             className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 md:p-7 flex flex-col"
           >
             <span
-              className="text-[11px] uppercase tracking-[0.2em] text-white/40 mb-3"
+              className="text-[11px] uppercase tracking-[0.2em] text-white/65 mb-3"
               style={{ fontFamily: BODY }}
             >
               Release Cycle · per release
@@ -212,7 +212,7 @@ export default function FoundationOffer() {
               Every drop, handled
             </h3>
             <p
-              className="text-white/45 text-sm leading-relaxed flex-1 mb-5"
+              className="text-white/70 text-sm leading-relaxed flex-1 mb-5"
               style={{ fontFamily: BODY }}
             >
               Rollout calendar, cover art, clips, presave and links, DSP pitch, email flows,
@@ -236,7 +236,7 @@ export default function FoundationOffer() {
             className="rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 md:p-7 flex flex-col"
           >
             <span
-              className="text-[11px] uppercase tracking-[0.2em] text-white/40 mb-3"
+              className="text-[11px] uppercase tracking-[0.2em] text-white/65 mb-3"
               style={{ fontFamily: BODY }}
             >
               Development · monthly
@@ -248,7 +248,7 @@ export default function FoundationOffer() {
               The whole pipeline
             </h3>
             <p
-              className="text-white/45 text-sm leading-relaxed flex-1 mb-5"
+              className="text-white/70 text-sm leading-relaxed flex-1 mb-5"
               style={{ fontFamily: BODY }}
             >
               Release Cycle on a cadence, plus a quarterly report on where streams actually
@@ -273,7 +273,7 @@ export default function FoundationOffer() {
         >
           <div className="shrink-0">
             <span
-              className="block text-[11px] uppercase tracking-[0.25em] text-white/35 mb-1.5"
+              className="block text-[11px] uppercase tracking-[0.25em] text-white/60 mb-1.5"
               style={{ fontFamily: BODY }}
             >
               What we don&apos;t do
@@ -291,14 +291,14 @@ export default function FoundationOffer() {
               {NOT_OURS.map((n) => (
                 <span
                   key={n}
-                  className="text-[11px] uppercase tracking-[0.14em] px-3 py-1 rounded-full border border-white/10 text-white/40"
+                  className="text-[11px] uppercase tracking-[0.14em] px-3 py-1 rounded-full border border-white/10 text-white/65"
                   style={{ fontFamily: BODY }}
                 >
                   {n}
                 </span>
               ))}
             </div>
-            <p className="text-white/40 text-xs leading-relaxed" style={{ fontFamily: BODY }}>
+            <p className="text-white/65 text-xs leading-relaxed" style={{ fontFamily: BODY }}>
               We refer out for publishing admin and anything contractual. You want a lawyer
               for that, not a studio.
             </p>

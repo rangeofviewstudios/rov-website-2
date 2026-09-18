@@ -62,7 +62,7 @@ function Gallery() {
 
   return (
     <div
-      className="min-h-screen pt-16 rounded-t-[30px] md:rounded-t-[50px]"
+      className="pt-16 pb-16 md:pb-20 rounded-t-[30px] md:rounded-t-[50px]"
       style={{
         background: "linear-gradient(to bottom, #18130f 0%, #18130f 50%, #000000 100%)",
       }}
