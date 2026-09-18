@@ -40,13 +40,6 @@ const SECONDARY = [
     { title: "Who we are", to: "/authors" },
 ];
 
-// Curated, not a feed: this is a client component so it cannot read the posts
-// off disk. Add the newest post here when it is worth promoting.
-const READS = [
-    { kind: "Guide", title: "What it costs to mix a song in Atlanta", to: "/blog/how-much-does-it-cost-to-mix-a-song-in-atlanta" },
-    { kind: "Craft", title: "Can mastering fix a bad mix?", to: "/blog/can-mastering-fix-a-bad-mix" },
-];
-
 const FEATURED = credits.filter((c) => c.featured).slice(0, 2);
 
 // The music host's display face, matched to the studios menu.
@@ -245,7 +238,7 @@ export function MusicMenu({ className }: { className?: string }) {
                                         target="_blank"
                                         rel="noopener noreferrer"
                                         aria-label="Range of View Studios, the agency side"
-                                        className="group inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/[0.04] pl-4 pr-5 py-2.5 hover:border-[#EA9A61]/60 hover:bg-[#EA9A61]/[0.08] focus-visible:outline-none focus-visible:border-[#EA9A61] transition-all duration-300"
+                                        className="group -ml-4 inline-flex items-center gap-3 rounded-full border border-white/20 bg-white/[0.04] pl-4 pr-5 py-2.5 hover:border-[#EA9A61]/60 hover:bg-[#EA9A61]/[0.08] focus-visible:outline-none focus-visible:border-[#EA9A61] transition-all duration-300"
                                     >
                                         <Image
                                             src="/brand/rov-logo.webp"
@@ -343,32 +336,32 @@ export function MusicMenu({ className }: { className?: string }) {
                                 </Link>
 
                                 <p style={DISPLAY} className="mt-6 text-white/60 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-3">
-                                    Worth reading
+                                    Case study
                                 </p>
-                                <ul className="space-y-0">
-                                    {READS.map((r) => (
-                                        <li key={r.to}>
-                                            <Link
-                                                href={r.to}
-                                                onClick={close}
-                                                className="group flex items-baseline gap-4 border-b border-white/[0.10] py-2 focus-visible:outline-none focus-visible:text-white"
-                                            >
-                                                <span style={DISPLAY} className="shrink-0 w-[62px] text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#EA9A61]">
-                                                    {r.kind}
-                                                </span>
-                                                <span className="font-sans text-[13.5px] font-medium tracking-[0.01em] text-white/80 group-hover:text-white transition-colors">
-                                                    {r.title}
-                                                </span>
-                                            </Link>
-                                        </li>
-                                    ))}
-                                </ul>
                                 <Link
-                                    href="/blog"
+                                    href="/sam-suen"
+                                    onClick={close}
+                                    className="group relative block overflow-hidden rounded-xl border border-white/10 h-[110px]"
+                                >
+                                    <Image
+                                        src="/teammembers/samsuentm.webp"
+                                        alt="Sam Suen"
+                                        fill
+                                        sizes="(max-width: 1024px) 50vw, 420px"
+                                        className="object-cover opacity-[0.72] group-hover:opacity-95 group-hover:scale-[1.03] transition-all duration-500"
+                                    />
+                                    <span className="absolute inset-0 bg-gradient-to-t from-[#0B0603] via-[#0B0603]/45 to-transparent" />
+                                    <span className="absolute left-3.5 right-3.5 bottom-3">
+                                        <span style={DISPLAY} className="block text-white text-[14px] font-bold uppercase tracking-[0.12em]">Sam Suen</span>
+                                        <span className="block mt-1 font-sans text-white/75 text-[11.5px] font-medium leading-snug">One artist, every lane: brand, site, sound, stage</span>
+                                    </span>
+                                </Link>
+                                <Link
+                                    href="/sam-suen"
                                     onClick={close}
                                     className="group mt-3 flex items-center justify-between text-white/85 hover:text-white transition-colors focus-visible:outline-none focus-visible:text-[#EA9A61]"
                                 >
-                                    <span style={DISPLAY} className="text-[13px] font-bold uppercase tracking-[0.22em]">The journal</span>
+                                    <span style={DISPLAY} className="text-[13px] font-bold uppercase tracking-[0.22em]">Full case study</span>
                                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                                 </Link>
 

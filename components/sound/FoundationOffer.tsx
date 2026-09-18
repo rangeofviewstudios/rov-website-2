@@ -34,10 +34,10 @@ const FOUNDATION_INCLUDES = [
 ];
 
 // The boundary that keeps this from competing with rovstudios' web work.
-// Essentials is a fast, template-based artist site. Anything custom-designed,
-// multi-page, or transactional is a different job and gets quoted.
+// Foundation's site is a fast, template-based artist site. Anything
+// custom-designed, multi-page, or transactional is a different job and gets quoted.
 const SCOPE_NOTE =
-  "Essentials covers a clean artist site built on our template, up to five sections, with your domain connected. Custom design, storefronts, or anything multi-page is a bigger build and we'll quote it.";
+  "Foundation covers a clean artist site built on our template, up to five sections, with your domain connected. Custom design, storefronts, or anything multi-page is a bigger build and we'll quote it.";
 
 // What we deliberately don't sell. Saying it plainly is the differentiator.
 const NOT_OURS = [

@@ -84,7 +84,7 @@ const SoundHero: React.FC = () => {
                         {/* Right side - Description */}
                         <div className="max-w-sm pt-2">
                             <p className="text-[#FFF4E3] text-lg md:text-xl italic leading-tight text-right md:text-left drop-shadow-md" style={{ fontFamily: 'Norwige, sans-serif' }}>
-                                From bedroom demos to radio-<br />ready hits, your sound unleashed<br />in just 48 hours.
+                                From bedroom demos to radio-<br />ready hits, mixed and mastered<br />in just 48 hours.
                             </p>
                         </div>
                     </div>

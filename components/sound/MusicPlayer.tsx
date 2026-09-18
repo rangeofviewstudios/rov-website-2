@@ -268,8 +268,8 @@ export default function MusicPlayer() {
         <div className="w-full flex flex-col items-center bg-black">
             <div className="w-full max-w-[95%] md:max-w-7xl px-6 md:px-12 text-left py-12 md:py-16">
                 <h2 className="text-[#FFF4E3] text-3xl md:text-4xl lg:text-5xl leading-tight" style={{ fontFamily: 'NorwigeHeroItalic, sans-serif', fontWeight: 'normal' }}>
-                    Don&apos;t Believe Us.<br />
-                    Hear the Difference.
+                    Before and after our mix.<br />
+                    Raw take, final master.
                 </h2>
             </div>
 

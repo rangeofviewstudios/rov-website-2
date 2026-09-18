@@ -887,7 +887,7 @@ export default function SamSuenCaseStudy() {
               className="text-[clamp(2rem,4.5vw,3.4rem)] leading-tight"
               style={{ fontFamily: HEADING }}
             >
-              Start your journey.
+              Send your first song.
             </h2>
             <p
               className="text-sm md:text-base leading-relaxed max-w-xl"
@@ -907,7 +907,7 @@ export default function SamSuenCaseStudy() {
                   className="text-[13px] uppercase tracking-[0.22em] font-medium"
                   style={{ fontFamily: MONO, color: "#FFF4E3" }}
                 >
-                  Start your journey
+                  Send your first song
                 </span>
                 <span aria-hidden style={{ color: "#FFF4E3" }}>
                   →

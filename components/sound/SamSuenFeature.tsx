@@ -133,7 +133,7 @@ export default function SamSuenFeature() {
               className="text-sm md:text-base leading-relaxed -mt-3"
               style={{ fontFamily: BODY, color: "rgba(255,255,255,0.5)" }}
             >
-              Sam is our proof of concept. We grow his socials, built his brand
+              Sam is the proof. We grow his socials, built his brand
               from scratch, designed his website, mix and release his records,
               and put him on a festival stage. No outsourcing, no hand-offs.
               This is what artist development looks like when one team runs the

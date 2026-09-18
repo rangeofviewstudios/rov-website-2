@@ -125,9 +125,9 @@ export default function CareerGaps() {
           className="text-white text-3xl md:text-5xl lg:text-6xl font-bold italic leading-[1.02] mb-6 max-w-3xl"
           style={{ fontFamily: HEADING }}
         >
-          A mix is one piece.
+          A record needs more than a mix.
           <br />
-          We build the rest of it too.
+          We just don&apos;t split it five ways.
         </motion.h2>
 
         <motion.div

@@ -18,7 +18,7 @@ const valueProps = [
   },
   {
     label: "Industry-Standard Recording Equipment",
-    detail: "Our Atlanta recording studio is equipped with the same tools used on records you already listen to: UAD, Waves, FabFilter, Neumann microphones, and Focusrite preamps. Whether you're tracking vocals, mixing a full trackout, or mastering for distribution, every session is powered by professional-grade plugins and hardware.",
+    detail: "Our Atlanta recording studio runs UAD, Waves, FabFilter, Neumann microphones, and Focusrite preamps. Whether you're tracking vocals, mixing a full trackout, or mastering for distribution, every session is powered by professional-grade plugins and hardware.",
     tag: "Pro gear",
   },
   {
@@ -172,7 +172,7 @@ const recordingFeatures = [
   "A real engineer in the room, not a rented room",
   "UAD, Waves, FabFilter, Neumann mics, Focusrite pres",
   "Walk out with your labeled stems, same day",
-  "Mix and master available that week, from $100",
+  "Mix and master available that week, from $50",
 ];
 
 function RecordingRates() {

@@ -6,14 +6,14 @@
 // which means describing competitors fairly and sending some readers to them.
 //
 // ACCURACY RULES, non-negotiable, because these are real businesses:
-//   1. Only facts published on each studio's own site, checked 2026-08-05.
+//   1. Only facts published on each studio's own site, checked 2026-09-18.
 //   2. No invented rates. None of them publish rates; say exactly that.
 //   3. No disparagement. The comparison is "what is it for", not "who is worse".
 //   4. Re-check before any major update and move VERIFIED_ON.
 //
 // If a studio publishes rates later, add them with the source. Do not estimate.
 
-export const VERIFIED_ON = "August 2026";
+export const VERIFIED_ON = "September 2026";
 
 export interface StudioEntry {
     name: string;

@@ -19,7 +19,7 @@ const artistPaths = [
     kicker: "Come to the studio",
     title: "Record with us",
     body: "Book the room and an engineer. Track your song and leave with your stems and whatever we mixed in the session. Add a full mix and master the same week.",
-    price: "From $75/hr",
+    price: "From $80/hr",
     sub: "Stems included",
     cta: "See recording rates",
   },
