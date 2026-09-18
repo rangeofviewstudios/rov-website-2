@@ -92,11 +92,23 @@ export function NavigationDock({ className }: NavigationDockProps) {
     const handleKey = (e: KeyboardEvent) => {
       if (e.key === "Escape") close();
     };
-    // No scroll lock and no scroll container inside the panel: the wheel falls
-    // through to the document, so the page keeps scrolling behind the menu.
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
   }, [open, close]);
+
+  // Lock the page behind the panel while it's open. The panel scrolls on its
+  // own now (see the overflow-y-auto container below), so without this the
+  // body would also scroll underneath it on any viewport short enough that
+  // the content doesn't fit — which is common on real laptops and phones,
+  // not just the resize-to-check-it viewports.
+  useEffect(() => {
+    if (!open) return;
+    const prev = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = prev;
+    };
+  }, [open]);
 
   useEffect(() => clearTimers, []);
 
@@ -168,24 +180,24 @@ export function NavigationDock({ className }: NavigationDockProps) {
           }}
         />
 
-        <div
-          className={`relative h-full w-full overflow-hidden transition-transform duration-500 ease-out ${open ? "translate-y-0" : "-translate-y-2"}`}
-        >
-          {/* Wordmark sits on the grid's left edge and is optically centered
-              against the trigger pill opposite it */}
-          <div className="pointer-events-none absolute inset-x-0 top-4 md:top-6 z-10">
-            <div className="mx-auto w-full max-w-6xl px-5 md:px-10">
-              <Link
-                href="/"
-                onClick={close}
-                style={DISPLAY}
-                className="pointer-events-auto inline-flex h-11 md:h-12 items-center text-white text-[16px] md:text-[18px] font-bold uppercase tracking-[0.34em] hover:text-[#EA9A61] focus-visible:outline-none focus-visible:text-[#EA9A61] transition-colors"
-              >
-                R.O.V
-              </Link>
-            </div>
+        {/* Wordmark stays pinned to the viewport, outside the scroll
+            container below, so it never scrolls away on a short viewport. */}
+        <div className="pointer-events-none absolute inset-x-0 top-4 md:top-6 z-10">
+          <div className="mx-auto w-full max-w-6xl px-5 md:px-10">
+            <Link
+              href="/"
+              onClick={close}
+              style={DISPLAY}
+              className="pointer-events-auto inline-flex h-11 md:h-12 items-center text-white text-[16px] md:text-[18px] font-bold uppercase tracking-[0.34em] hover:text-[#EA9A61] focus-visible:outline-none focus-visible:text-[#EA9A61] transition-colors"
+            >
+              R.O.V
+            </Link>
           </div>
+        </div>
 
+        <div
+          className={`relative h-full w-full overflow-y-auto overscroll-contain transition-transform duration-500 ease-out ${open ? "translate-y-0" : "-translate-y-2"}`}
+        >
           <div className="mx-auto flex min-h-full w-full max-w-6xl [align-items:safe_center] px-5 md:px-10 pt-24 md:pt-20 pb-8">
             <div className="w-full grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-x-20 lg:gap-y-8">
               {/* ── Left: services first, everything else after. Every element
