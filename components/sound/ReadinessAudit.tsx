@@ -16,6 +16,7 @@
 
 import { useEffect, useMemo, useRef, useState } from "react";
 import { AnimatePresence, motion, useInView } from "framer-motion";
+import { Squiggle } from "@/components/sound/musicStory";
 import {
   FOUNDATION_PRICE,
   ROSTER_SIZES,
@@ -172,11 +173,14 @@ export default function ReadinessAudit() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.08 }}
-          className="text-white text-3xl md:text-4xl lg:text-5xl font-bold italic mb-3 text-center"
+          className="text-white uppercase text-3xl md:text-4xl lg:text-5xl font-bold italic mb-3 text-center"
           style={{ fontFamily: HEADING }}
         >
           {isManager ? "What's your roster missing?" : "What are you missing?"}
         </motion.h2>
+        <div className="mx-auto mb-3 max-w-[180px]">
+          <Squiggle />
+        </div>
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}

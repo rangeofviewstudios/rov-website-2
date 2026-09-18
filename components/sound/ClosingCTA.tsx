@@ -12,6 +12,7 @@ import { CONSULT_BOOKING_URL, checkoutHref } from "@/data/soundPricing";
 import CalBookButton from "@/components/sound/CalBookButton";
 import { useEffectiveRole } from "@/components/music/IntakeContext";
 import SessionPhoto, { PhotoCredit, SESSION } from "@/components/sound/SessionPhoto";
+import { Squiggle, Hand } from "@/components/sound/musicStory";
 
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
@@ -56,11 +57,15 @@ export default function ClosingCTA() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={spring}
-          className="text-white text-3xl md:text-5xl font-bold italic leading-[1.05] mb-5"
+          className="text-white uppercase text-3xl md:text-5xl font-bold italic leading-[1.05] mb-4"
           style={{ fontFamily: HEADING }}
         >
           {isManager ? "Send us one artist." : "Send us one song."}
         </motion.h2>
+
+        <div className="mx-auto mb-5 max-w-[200px]">
+          <Squiggle />
+        </div>
 
         <motion.p
           initial={{ opacity: 0, y: 10 }}
@@ -110,15 +115,16 @@ export default function ClosingCTA() {
           </CalBookButton>
         </motion.div>
 
-        <motion.p
+        <motion.div
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={{ ...spring, delay: 0.26 }}
-          className="text-white/25 text-xs mt-7"
-          style={{ fontFamily: BODY }}
+          className="mt-7 flex justify-center"
         >
-          Atlanta, GA · stems@rovstudios.com
-        </motion.p>
+          <Hand className="text-[1.1rem] md:text-[1.25rem]" tilt={-1}>
+            Atlanta, GA · stems@rovstudios.com
+          </Hand>
+        </motion.div>
       </div>
     </section>
   );

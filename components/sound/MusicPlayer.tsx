@@ -12,6 +12,7 @@ import {
     ListMusic,
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Squiggle } from "@/components/sound/musicStory";
 
 const songData = [
     {
@@ -267,10 +268,12 @@ export default function MusicPlayer() {
     return (
         <div className="w-full flex flex-col items-center bg-black">
             <div className="w-full max-w-[95%] md:max-w-7xl px-6 md:px-12 text-left py-12 md:py-16">
-                <h2 className="text-[#FFF4E3] text-3xl md:text-4xl lg:text-5xl leading-tight" style={{ fontFamily: 'NorwigeHeroItalic, sans-serif', fontWeight: 'normal' }}>
-                    Before and after our mix.<br />
-                    Raw take, final master.
+                <h2 className="text-[#FFF4E3] uppercase text-3xl md:text-4xl lg:text-5xl leading-tight" style={{ fontFamily: 'NorwigeHeroItalic, sans-serif', fontWeight: 'normal' }}>
+                    The same song, before and after our mix.
                 </h2>
+                <div className="mt-4 max-w-[220px]">
+                    <Squiggle />
+                </div>
             </div>
 
             <div className="w-full max-w-[95%] md:max-w-7xl px-6 md:px-12 pb-20">

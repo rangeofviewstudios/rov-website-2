@@ -6,6 +6,7 @@ import MusicFooter from "@/components/music/MusicFooter";
 import { IntakeProvider } from "@/components/music/IntakeContext";
 import { BreadcrumbSchema } from "@/components/schema/BreadcrumbSchema";
 import { credits, artistProfiles, stages } from "./credits-data";
+import { Squiggle, Hand } from "@/components/sound/musicStory";
 
 // rovmusic.com/credits — the proof layer.
 //
@@ -108,7 +109,7 @@ export default function CreditsPage() {
                             Atlanta · Discography
                         </span>
                         <h1
-                            className="mt-5 text-white"
+                            className="mt-5 text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2.5rem, 6.5vw, 5rem)",
@@ -117,6 +118,9 @@ export default function CreditsPage() {
                         >
                             Records, not adjectives.
                         </h1>
+                        <div className="mt-4 max-w-[220px]">
+                            <Squiggle />
+                        </div>
                         <p
                             className="mt-6 max-w-2xl text-lg leading-relaxed text-white/60"
                             style={{ fontFamily: BODY_FONT }}
@@ -178,16 +182,11 @@ export default function CreditsPage() {
                             ))}
                         </div>
 
-                        <p
-                            className="mt-8 text-sm text-white/35"
-                            style={{ fontFamily: BODY_FONT }}
-                        >
-                            Hear the before and after on{" "}
-                            <Link href="/" className="underline decoration-white/25 underline-offset-4 hover:text-white/60">
-                                the home page player
+                        <Hand className="mt-8 text-[1.1rem]" tilt={-0.8}>
+                            <Link href="/" className="hover:opacity-80">
+                                hear the before and after on the home page player →
                             </Link>
-                            .
-                        </p>
+                        </Hand>
                     </div>
                 </section>
 
@@ -201,7 +200,7 @@ export default function CreditsPage() {
                             In house
                         </span>
                         <h2
-                            className="mt-4 text-white"
+                            className="mt-4 text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2rem, 4.5vw, 3rem)",
@@ -210,6 +209,9 @@ export default function CreditsPage() {
                         >
                             We develop our own artists.
                         </h2>
+                        <div className="mt-3 max-w-[200px]">
+                            <Squiggle />
+                        </div>
                         <p
                             className="mt-5 max-w-2xl text-base leading-relaxed text-white/60"
                             style={{ fontFamily: BODY_FONT }}
@@ -268,7 +270,7 @@ export default function CreditsPage() {
                             Stages
                         </span>
                         <h2
-                            className="mt-4 text-white"
+                            className="mt-4 text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2rem, 4.5vw, 3rem)",
@@ -277,6 +279,9 @@ export default function CreditsPage() {
                         >
                             Where the work has played.
                         </h2>
+                        <div className="mt-3 mb-4 max-w-[200px]">
+                            <Squiggle />
+                        </div>
                         <ul className="mt-10 divide-y divide-white/10">
                             {stages.map((stage) => (
                                 <li
@@ -299,7 +304,7 @@ export default function CreditsPage() {
                 <section className="border-t border-white/10 px-6 py-24">
                     <div className="mx-auto max-w-5xl">
                         <h2
-                            className="text-white"
+                            className="text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2rem, 5vw, 3.5rem)",
@@ -308,6 +313,9 @@ export default function CreditsPage() {
                         >
                             Add yours to it.
                         </h2>
+                        <div className="mt-4 max-w-[200px]">
+                            <Squiggle />
+                        </div>
                         <p
                             className="mt-5 max-w-xl text-lg leading-relaxed text-white/60"
                             style={{ fontFamily: BODY_FONT }}

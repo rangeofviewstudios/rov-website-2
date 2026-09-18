@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import SessionPhoto, { SESSION } from "@/components/sound/SessionPhoto";
 import { BOOKING_URL, CAL_LINKS } from "@/data/soundPricing";
 import CalBookButton from "@/components/sound/CalBookButton";
+import { Squiggle } from "@/components/sound/musicStory";
 
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 
@@ -194,11 +195,14 @@ function RecordingRates() {
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ ...spring, delay: 0.1 }}
-        className="text-white text-3xl md:text-4xl lg:text-5xl font-bold italic mb-3"
+        className="uppercase text-white text-3xl md:text-4xl lg:text-5xl font-bold italic mb-3"
         style={{ fontFamily: HEADING_FONT }}
       >
         Published rates, stems in hand.
       </motion.h3>
+      <div className="mb-6 max-w-[200px]">
+        <Squiggle />
+      </div>
       <motion.p
         initial={{ opacity: 0, y: 10 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -350,6 +354,9 @@ export default function StudioSection() {
                 style={{ backgroundImage: "linear-gradient(112deg, #EA9A61 6.46%, #B16937 34.96%, #A64D2B 63.88%, #42201C 97.63%)" }}
               >Real Sound.</span>
             </motion.h2>
+            <div className="mt-5 max-w-[220px]">
+              <Squiggle />
+            </div>
           </div>
 
           {/* Right — supporting text */}

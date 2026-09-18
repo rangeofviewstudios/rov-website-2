@@ -7,6 +7,7 @@ import { BreadcrumbSchema } from "@/components/schema/BreadcrumbSchema";
 import { FAQPageSchema } from "@/components/schema/FAQPageSchema";
 import { HowToSchema } from "@/components/schema/HowToSchema";
 import { chainStages, beforeYouBook, sessionPrep, toolkitFaqs } from "./rig";
+import { Squiggle } from "@/components/sound/musicStory";
 
 // rovmusic.com/toolkit, served here via the host rewrite in middleware.ts.
 //
@@ -84,7 +85,7 @@ export default function MusicToolkitPage() {
                     <div className="mx-auto max-w-4xl">
                         <Label>Atlanta · Mixing &amp; Mastering</Label>
                         <h1
-                            className="mt-5 text-white"
+                            className="mt-5 text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2.5rem, 6.5vw, 5rem)",
@@ -93,6 +94,9 @@ export default function MusicToolkitPage() {
                         >
                             The chain we run on your record.
                         </h1>
+                        <div className="mt-4 max-w-[220px]">
+                            <Squiggle />
+                        </div>
                         <p
                             className="mt-6 max-w-2xl text-lg leading-relaxed text-white/60"
                             style={{ fontFamily: BODY_FONT }}
@@ -209,7 +213,7 @@ export default function MusicToolkitPage() {
                     <div className="mx-auto max-w-4xl">
                         <Label>Before you book</Label>
                         <h2
-                            className="mt-4 text-white"
+                            className="mt-4 text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2rem, 4.5vw, 3rem)",
@@ -218,6 +222,9 @@ export default function MusicToolkitPage() {
                         >
                             Four things we say in almost every first session.
                         </h2>
+                        <div className="mt-3 max-w-[200px]">
+                            <Squiggle />
+                        </div>
 
                         <div className="mt-12 grid gap-10 sm:grid-cols-2">
                             {beforeYouBook.map((item) => (
@@ -245,7 +252,7 @@ export default function MusicToolkitPage() {
                     <div className="mx-auto max-w-4xl">
                         <Label>Session prep</Label>
                         <h2
-                            className="mt-4 text-white"
+                            className="mt-4 text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2rem, 4.5vw, 3rem)",
@@ -254,6 +261,9 @@ export default function MusicToolkitPage() {
                         >
                             {sessionPrep.title}
                         </h2>
+                        <div className="mt-3 max-w-[200px]">
+                            <Squiggle />
+                        </div>
 
                         <ol className="mt-12 space-y-8">
                             {sessionPrep.steps.map((step, i) => (
@@ -293,7 +303,7 @@ export default function MusicToolkitPage() {
                     <div className="mx-auto max-w-4xl">
                         <Label>Questions</Label>
                         <h2
-                            className="mt-4 text-white"
+                            className="mt-4 text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2rem, 4.5vw, 3rem)",
@@ -302,6 +312,9 @@ export default function MusicToolkitPage() {
                         >
                             What artists ask us first.
                         </h2>
+                        <div className="mt-3 max-w-[200px]">
+                            <Squiggle />
+                        </div>
 
                         <div className="mt-10">
                             {toolkitFaqs.map((faq) => (
@@ -331,7 +344,7 @@ export default function MusicToolkitPage() {
                 <section className="border-t border-white/10 px-6 py-24">
                     <div className="mx-auto max-w-4xl">
                         <h2
-                            className="text-white"
+                            className="text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2rem, 5vw, 3.5rem)",
@@ -340,6 +353,9 @@ export default function MusicToolkitPage() {
                         >
                             Send us the record.
                         </h2>
+                        <div className="mt-4 max-w-[200px]">
+                            <Squiggle />
+                        </div>
                         <p
                             className="mt-5 max-w-xl text-lg leading-relaxed text-white/60"
                             style={{ fontFamily: BODY_FONT }}

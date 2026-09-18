@@ -5,6 +5,7 @@ import { BreadcrumbSchema } from "@/components/schema/BreadcrumbSchema";
 import { MusicMenu } from "@/components/music/MusicMenu";
 import MusicFooter from "@/components/music/MusicFooter";
 import { IntakeProvider } from "@/components/music/IntakeContext";
+import { Squiggle } from "@/components/sound/musicStory";
 
 // rovmusic.com/blog is served from here via the host rewrite in middleware.ts.
 // Every URL in this tree canonicals to the music host, never to studios.
@@ -54,7 +55,7 @@ export default function MusicBlogPage() {
             <section className="bg-black px-6 pb-16 pt-28 sm:pt-36">
                 <div className="mx-auto max-w-6xl">
                     <h1
-                        className="text-white"
+                        className="text-white uppercase font-bold italic"
                         style={{
                             fontFamily: "Norwige, sans-serif",
                             fontSize: "clamp(2.5rem, 6vw, 5rem)",
@@ -63,6 +64,9 @@ export default function MusicBlogPage() {
                     >
                         How the sound gets made.
                     </h1>
+                    <div className="mt-4 max-w-[220px]">
+                        <Squiggle />
+                    </div>
                     <p
                         className="mt-4 max-w-lg text-base text-gray-400 sm:text-lg"
                         style={{ fontFamily: "'Roboto', sans-serif" }}

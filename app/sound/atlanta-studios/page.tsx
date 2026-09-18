@@ -12,6 +12,7 @@ import {
     studiosFaqs,
     VERIFIED_ON,
 } from "./studios-data";
+import { Squiggle } from "@/components/sound/musicStory";
 
 // rovmusic.com/atlanta-studios — the comparison resource.
 //
@@ -74,7 +75,7 @@ export default function AtlantaStudiosPage() {
                     <div className="mx-auto max-w-4xl">
                         <Label>Atlanta · Guide</Label>
                         <h1
-                            className="mt-5 text-white"
+                            className="mt-5 text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2.4rem, 6vw, 4.5rem)",
@@ -83,6 +84,9 @@ export default function AtlantaStudiosPage() {
                         >
                             Nobody in Atlanta tells you what a record costs.
                         </h1>
+                        <div className="mt-4 max-w-[220px]">
+                            <Squiggle />
+                        </div>
                         <p
                             className="mt-6 max-w-2xl text-lg leading-relaxed text-white/60"
                             style={{ fontFamily: BODY_FONT }}
@@ -210,7 +214,7 @@ export default function AtlantaStudiosPage() {
                     <div className="mx-auto max-w-4xl">
                         <Label>Published in full</Label>
                         <h2
-                            className="mt-4 text-white"
+                            className="mt-4 text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2rem, 4.5vw, 3rem)",
@@ -219,6 +223,9 @@ export default function AtlantaStudiosPage() {
                         >
                             What we charge.
                         </h2>
+                        <div className="mt-3 max-w-[200px]">
+                            <Squiggle />
+                        </div>
                         <p
                             className="mt-4 max-w-2xl text-base leading-relaxed text-white/55"
                             style={{ fontFamily: BODY_FONT }}
@@ -341,7 +348,7 @@ export default function AtlantaStudiosPage() {
                 <section className="border-t border-white/10 px-6 py-24">
                     <div className="mx-auto max-w-4xl">
                         <h2
-                            className="text-white"
+                            className="text-white uppercase font-bold italic"
                             style={{
                                 fontFamily: HEADING_FONT,
                                 fontSize: "clamp(2rem, 5vw, 3.5rem)",
@@ -350,6 +357,9 @@ export default function AtlantaStudiosPage() {
                         >
                             If the first-record tier is you.
                         </h2>
+                        <div className="mt-4 max-w-[200px]">
+                            <Squiggle />
+                        </div>
                         <p
                             className="mt-5 max-w-xl text-lg leading-relaxed text-white/60"
                             style={{ fontFamily: BODY_FONT }}

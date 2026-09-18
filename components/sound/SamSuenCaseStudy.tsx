@@ -8,6 +8,7 @@ import { motion, useInView } from "framer-motion";
 // quote call rather than the generic 15-minute booking.
 import { CONSULT_BOOKING_URL } from "@/data/soundPricing";
 import CalBookButton from "@/components/sound/CalBookButton";
+import { Squiggle, Hand } from "@/components/sound/musicStory";
 
 const HEADING = "Norwige, sans-serif";
 const MONO = "'DM Mono', monospace";
@@ -184,19 +185,24 @@ export default function SamSuenCaseStudy() {
             <div className="max-w-7xl mx-auto flex flex-col gap-5">
               <Eyebrow>In-House Case Study · Artist Development</Eyebrow>
               <h1
-                className="text-[clamp(2.6rem,7vw,5.5rem)] leading-[0.95] text-white"
+                className="uppercase font-bold italic text-[clamp(2.6rem,7vw,5.5rem)] leading-[0.95] text-white"
                 style={{ fontFamily: HEADING }}
               >
                 Sam Suen
               </h1>
+              <div className="max-w-[220px]">
+                <Squiggle />
+              </div>
               <p
                 className="max-w-xl text-base md:text-lg leading-relaxed"
                 style={{ fontFamily: BODY, color: "rgba(255,255,255,0.65)" }}
               >
                 One artist, every lane. We grow the socials, built the brand,
-                shipped the website, boosted the streams, and produced the
-                shows. This page is the receipts.
+                shipped the website, boosted the streams, and produced the shows.
               </p>
+              <Hand className="text-[1.15rem] md:text-[1.35rem]" tilt={-1.5}>
+                this page is the receipts
+              </Hand>
             </div>
           </div>
         </div>
@@ -244,11 +250,14 @@ export default function SamSuenCaseStudy() {
           <Reveal className="flex flex-col gap-6">
             <Eyebrow>The Setup</Eyebrow>
             <h2
-              className="text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight"
+              className="uppercase font-bold italic text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight"
               style={{ fontFamily: HEADING }}
             >
               From bedroom sessions to a festival headline.
             </h2>
+            <div className="max-w-[200px]">
+              <Squiggle />
+            </div>
             <div
               className="flex flex-col gap-4 text-sm md:text-base leading-relaxed"
               style={{ fontFamily: BODY, color: "rgba(255,255,255,0.55)" }}
@@ -378,11 +387,14 @@ export default function SamSuenCaseStudy() {
           <Reveal className="flex flex-col gap-6">
             <Eyebrow>Behind the Scenes · In-House</Eyebrow>
             <h2
-              className="text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight"
+              className="uppercase font-bold italic text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight"
               style={{ fontFamily: HEADING }}
             >
               None of the ugly steps skipped.
             </h2>
+            <div className="max-w-[200px]">
+              <Squiggle />
+            </div>
             <p
               className="text-sm md:text-base leading-relaxed"
               style={{ fontFamily: BODY, color: "rgba(255,255,255,0.55)" }}
@@ -490,11 +502,14 @@ export default function SamSuenCaseStudy() {
           <Reveal delay={0.1} className="flex flex-col gap-6">
             <Eyebrow>The Record</Eyebrow>
             <h2
-              className="text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight"
+              className="uppercase font-bold italic text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight"
               style={{ fontFamily: HEADING }}
             >
               Stars Collide: 20k streams and counting.
             </h2>
+            <div className="max-w-[200px]">
+              <Squiggle />
+            </div>
             <p
               className="text-sm md:text-base leading-relaxed"
               style={{ fontFamily: BODY, color: "rgba(255,255,255,0.55)" }}
@@ -533,7 +548,7 @@ export default function SamSuenCaseStudy() {
             <Eyebrow>The Catalog · Released In-House</Eyebrow>
             <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
               <h2
-                className="text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight max-w-xl"
+                className="uppercase font-bold italic text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight max-w-xl"
                 style={{ fontFamily: HEADING }}
               >
                 Eight songs,{" "}
@@ -541,6 +556,9 @@ export default function SamSuenCaseStudy() {
                   a hundred thousand streams.
                 </span>
               </h2>
+              <div className="max-w-[200px]">
+                <Squiggle />
+              </div>
               <a
                 href={SPOTIFY_ARTIST}
                 target="_blank"
@@ -611,11 +629,14 @@ export default function SamSuenCaseStudy() {
             <div className="flex flex-col gap-5">
               <Eyebrow>Live · Shows Produced</Eyebrow>
               <h2
-                className="text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight"
+                className="uppercase font-bold italic text-[clamp(1.8rem,3.4vw,2.8rem)] leading-tight"
                 style={{ fontFamily: HEADING }}
               >
                 From club stages to a two-state festival.
               </h2>
+              <div className="max-w-[200px]">
+                <Squiggle />
+              </div>
             </div>
             <div className="flex flex-col">
               {SHOWS.map((show, i) => (
@@ -884,11 +905,14 @@ export default function SamSuenCaseStudy() {
         <div className="max-w-3xl mx-auto text-center flex flex-col items-center gap-7 relative z-10">
           <Reveal className="flex flex-col items-center gap-7">
             <h2
-              className="text-[clamp(2rem,4.5vw,3.4rem)] leading-tight"
+              className="uppercase font-bold italic text-[clamp(2rem,4.5vw,3.4rem)] leading-tight"
               style={{ fontFamily: HEADING }}
             >
               Send your first song.
             </h2>
+            <div className="max-w-[200px]">
+              <Squiggle />
+            </div>
             <p
               className="text-sm md:text-base leading-relaxed max-w-xl"
               style={{ fontFamily: BODY, color: "rgba(255,255,255,0.5)" }}

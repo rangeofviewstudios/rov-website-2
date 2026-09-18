@@ -4,6 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
+import { Squiggle } from "@/components/sound/musicStory";
 
 const HEADING = "Norwige, sans-serif";
 const MONO = "'DM Mono', monospace";
@@ -121,7 +122,7 @@ export default function SamSuenFeature() {
 
             {/* Headline copy */}
             <h2
-              className="text-[clamp(1.6rem,3vw,2.4rem)] leading-tight text-white"
+              className="uppercase text-[clamp(1.6rem,3vw,2.4rem)] leading-tight text-white"
               style={{ fontFamily: HEADING }}
             >
               One artist. Every lane.{" "}
@@ -129,6 +130,9 @@ export default function SamSuenFeature() {
                 Brand, site, sound, stage.
               </span>
             </h2>
+            <div className="max-w-[180px]">
+              <Squiggle />
+            </div>
             <p
               className="text-sm md:text-base leading-relaxed -mt-3"
               style={{ fontFamily: BODY, color: "rgba(255,255,255,0.5)" }}

@@ -15,6 +15,7 @@ import { CONSULT_BOOKING_URL, CONTACT_EMAIL } from "@/data/soundPricing";
 import CalBookButton from "@/components/sound/CalBookButton";
 import { useEffectiveRole } from "@/components/music/IntakeContext";
 import RoleInline from "@/components/music/RoleInline";
+import { Squiggle } from "@/components/sound/musicStory";
 
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
@@ -83,11 +84,14 @@ export default function CollaboratorCard() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.08 }}
-          className="text-white text-3xl md:text-4xl font-bold italic mb-3 text-center"
+          className="text-white uppercase text-3xl md:text-4xl font-bold italic mb-3 text-center"
           style={{ fontFamily: HEADING }}
         >
           We collaborate, and we credit.
         </motion.h2>
+        <div className="mx-auto mb-3 max-w-[180px]">
+          <Squiggle />
+        </div>
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}

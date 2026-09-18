@@ -18,6 +18,7 @@ import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import Gallery from "@/components/sections/Gallery";
 import VideoShowcaseSection from "@/components/sound/VideoShowcaseSection";
+import { Squiggle } from "@/components/sound/musicStory";
 
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
@@ -122,13 +123,17 @@ export default function CareerGaps() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.08 }}
-          className="text-white text-3xl md:text-5xl lg:text-6xl font-bold italic leading-[1.02] mb-6 max-w-3xl"
+          className="text-white uppercase text-3xl md:text-5xl lg:text-6xl font-bold italic leading-[1.02] mb-3 max-w-3xl"
           style={{ fontFamily: HEADING }}
         >
           A record needs more than a mix.
           <br />
           We just don&apos;t split it five ways.
         </motion.h2>
+
+        <div className="mb-6 max-w-[220px]">
+          <Squiggle />
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 10 }}

@@ -13,6 +13,7 @@ import { CONSULT_BOOKING_URL, checkoutHref } from "@/data/soundPricing";
 import { FOUNDATION_PRICE } from "@/data/artistReadiness";
 import CalBookButton from "@/components/sound/CalBookButton";
 import { useEffectiveRole } from "@/components/music/IntakeContext";
+import { Squiggle } from "@/components/sound/musicStory";
 
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
@@ -82,7 +83,7 @@ export default function FoundationOffer() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.08 }}
-          className="text-white text-3xl md:text-5xl font-bold italic mb-4 text-center leading-[1.05]"
+          className="text-white uppercase text-3xl md:text-5xl font-bold italic mb-3 text-center leading-[1.05]"
           style={{ fontFamily: HEADING }}
         >
           A mix makes one song better.
@@ -94,6 +95,9 @@ export default function FoundationOffer() {
             This makes a catalog worth something.
           </span>
         </motion.h2>
+        <div className="mx-auto mb-6 max-w-[220px]">
+          <Squiggle />
+        </div>
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}

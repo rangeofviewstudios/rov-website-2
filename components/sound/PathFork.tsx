@@ -4,6 +4,7 @@ import { motion, useInView } from "framer-motion";
 import { useRef } from "react";
 import { Mic, Waves, Layers, Users } from "lucide-react";
 import { useEffectiveRole } from "@/components/music/IntakeContext";
+import { Squiggle } from "@/components/sound/musicStory";
 
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
@@ -91,11 +92,15 @@ export default function PathFork() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.1 }}
-          className="text-center text-white text-3xl md:text-4xl lg:text-5xl font-bold italic mb-10 md:mb-12"
+          className="text-center text-white uppercase text-3xl md:text-4xl lg:text-5xl font-bold italic mb-3"
           style={{ fontFamily: HEADING }}
         >
           {isManager ? "How do you want to begin?" : "Where are you starting?"}
         </motion.h2>
+
+        <div className="mx-auto mb-10 md:mb-12 max-w-[200px]">
+          <Squiggle />
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
           {paths.map((p, i) => {

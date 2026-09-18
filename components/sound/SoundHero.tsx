@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { Squiggle } from "@/components/sound/musicStory";
 
 const SoundHero: React.FC = () => {
     // Only mount/autoplay the heavy hero video on >=768px. On mobile we render
@@ -80,6 +81,9 @@ const SoundHero: React.FC = () => {
                                 RELEASED.
                             </span>
                         </h1>
+                        <div className="mt-4 max-w-[220px] hidden md:block">
+                            <Squiggle />
+                        </div>
 
                         {/* Right side - Description */}
                         <div className="max-w-sm pt-2">

@@ -22,6 +22,7 @@ import {
 } from "@/data/soundPricing";
 import { FOUNDATION_PRICE } from "@/data/artistReadiness";
 import CalBookButton from "@/components/sound/CalBookButton";
+import { Squiggle } from "@/components/sound/musicStory";
 
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
@@ -117,11 +118,14 @@ function Hero() {
           Pricing
         </span>
         <h1
-          className="text-white text-4xl md:text-6xl font-bold italic leading-[1.02] mb-5"
+          className="text-white uppercase text-4xl md:text-6xl font-bold italic leading-[1.02] mb-4"
           style={{ fontFamily: HEADING }}
         >
           Every rate, on one page.
         </h1>
+        <div className="mx-auto mb-5 max-w-[220px]">
+          <Squiggle />
+        </div>
         <p
           className="text-white/45 text-base md:text-lg leading-relaxed max-w-xl mx-auto"
           style={{ fontFamily: BODY }}
@@ -173,11 +177,14 @@ function Section({
           initial={{ opacity: 0, y: 16 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.06 }}
-          className="text-white text-2xl md:text-4xl font-bold italic mb-3"
+          className="text-white uppercase text-2xl md:text-4xl font-bold italic mb-3"
           style={{ fontFamily: HEADING }}
         >
           {title}
         </motion.h2>
+        <div className="mb-6 max-w-[180px]">
+          <Squiggle height={11} />
+        </div>
         <motion.p
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -349,12 +356,17 @@ function FoundationRow() {
             The backend
           </span>
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-5 mb-6">
-            <h2
-              className="text-white text-2xl md:text-4xl font-bold italic leading-tight max-w-lg"
-              style={{ fontFamily: HEADING }}
-            >
-              Foundation. Everything a career needs that a mix doesn&apos;t cover.
-            </h2>
+            <div className="max-w-lg">
+              <h2
+                className="text-white uppercase text-2xl md:text-4xl font-bold italic leading-tight"
+                style={{ fontFamily: HEADING }}
+              >
+                Foundation. Everything a career needs that a mix doesn&apos;t cover.
+              </h2>
+              <div className="mt-3 max-w-[180px]">
+                <Squiggle height={11} />
+              </div>
+            </div>
             <div className="shrink-0">
               <span
                 className="text-white text-4xl md:text-5xl font-bold italic tabular-nums"

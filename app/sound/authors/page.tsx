@@ -5,6 +5,7 @@ import { MusicMenu } from "@/components/music/MusicMenu";
 import MusicFooter from "@/components/music/MusicFooter";
 import { IntakeProvider } from "@/components/music/IntakeContext";
 import { BreadcrumbSchema } from "@/components/schema/BreadcrumbSchema";
+import { Squiggle } from "@/components/sound/musicStory";
 
 // rovmusic.com/authors — the people behind the writing.
 //
@@ -119,11 +120,14 @@ export default function AuthorsPage() {
                             Atlanta · The people
                         </span>
                         <h1
-                            className="mt-5 text-white"
+                            className="mt-5 text-white uppercase font-bold italic"
                             style={{ fontFamily: HEADING_FONT, fontSize: "clamp(2.5rem, 6.5vw, 5rem)", lineHeight: 1.05 }}
                         >
                             Who actually writes this.
                         </h1>
+                        <div className="mt-4 max-w-[220px]">
+                            <Squiggle />
+                        </div>
                         <p className="mt-6 max-w-2xl text-lg leading-relaxed text-white/60" style={{ fontFamily: BODY_FONT }}>
                             Two people, both of whom mix records for a living. Everything on
                             this site is written by one of them, and you can go check the
@@ -180,9 +184,12 @@ export default function AuthorsPage() {
 
                 <section className="border-t border-white/10 px-6 py-24">
                     <div className="mx-auto max-w-4xl">
-                        <h2 className="text-white" style={{ fontFamily: HEADING_FONT, fontSize: "clamp(2rem, 5vw, 3.5rem)", lineHeight: 1.1 }}>
+                        <h2 className="text-white uppercase font-bold italic" style={{ fontFamily: HEADING_FONT, fontSize: "clamp(2rem, 5vw, 3.5rem)", lineHeight: 1.1 }}>
                             Read the work.
                         </h2>
+                        <div className="mt-3 mb-6 max-w-[200px]">
+                            <Squiggle />
+                        </div>
                         <div className="mt-9 flex flex-wrap gap-4">
                             <Link
                                 href="/blog"

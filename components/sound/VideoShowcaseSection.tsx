@@ -2,6 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { motion, useInView } from "framer-motion";
+import { Squiggle } from "@/components/sound/musicStory";
 
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 const HEADING_FONT = "Norwige, sans-serif";
@@ -164,11 +165,14 @@ export default function VideoShowcaseSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={headerInView ? { opacity: 1, y: 0 } : {}}
             transition={spring}
-            className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold italic"
+            className="uppercase text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold italic"
             style={{ fontFamily: HEADING_FONT, color: "#FFF4E3" }}
           >
             Music Videos
           </motion.h2>
+          <div className="mt-4 max-w-[220px]">
+            <Squiggle />
+          </div>
         </div>
 
         {/* Layout: Featured left + stacked right */}
