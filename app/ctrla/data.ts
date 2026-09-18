@@ -220,7 +220,7 @@ const musicTools: Tool[] = [
   {
     name: "Logic Pro",
     category: "DAW",
-    description: "Apple's flagship DAW. Clean interface, powerful stock plugins, and seamless integration with macOS. The go-to for most of our sessions.",
+    description: "Apple's flagship DAW. The stock plugins are good enough to finish a record on, and it's what most of our sessions run on.",
     url: "https://www.apple.com/logic-pro/",
     tags: ["Production", "Mixing", "macOS"],
     favoriteBy: "Founder & audio engineer",
@@ -307,7 +307,7 @@ const musicTools: Tool[] = [
   {
     name: "Soundtoys Little AlterBoy",
     category: "Pitch / formant",
-    description: "Pitch and formant shifting for vocals, from subtle thickening to octave stacks, gender-bending, and robotic transformer effects. A hard-tune mode and built-in drive make it a creative vocal weapon, not just a corrector.",
+    description: "Pitch and formant shifting for vocals: thickening, octave stacks, gender-bending, full robot. Most people open it to fix a vocal. Hard-tune mode and built-in drive make it good for building one that couldn't exist without the plugin.",
     url: "https://www.soundtoys.com/product/little-alterboy/",
     tags: ["Pitch", "Formant", "Vocals"],
     level: "Intermediate",

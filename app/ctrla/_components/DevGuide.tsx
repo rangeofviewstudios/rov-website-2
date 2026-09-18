@@ -117,8 +117,8 @@ const TRAP = [
   },
   {
     n: "03",
-    title: "Faster is not better",
-    body: "An AI building the wrong thing faster is not progress. Speed without direction gets you to the wrong place sooner.",
+    title: "Speed only helps if you're aimed right",
+    body: "An AI that builds the wrong thing faster just gets you to the wrong place sooner. Point it before you let it run.",
   },
 ];
 
@@ -127,7 +127,7 @@ const COURSE = [
   { k: "one keystroke", title: "Slash commands", body: "Your repeatable moves saved as a command. A paragraph of setup becomes one word." },
   { k: "hand it off", title: "Subagents", body: "Send a whole task to a focused agent, and run several at once while you keep moving." },
   { k: "scripted jobs", title: "Workflows", body: "Multi step work scripted to run the same way every time, no babysitting required." },
-  { k: "wire it in", title: "MCP tools", body: "Connect it to the apps you already use, so it can act, not just talk." },
+  { k: "wire it in", title: "MCP tools", body: "Connect it to the apps you already use so it can read your database, open a GitHub issue, pull a Figma file, directly." },
   { k: "more for less", title: "Efficiency patterns", body: "Better output for fewer tokens and less back and forth. The line between a tool and a money pit." },
 ];
 
