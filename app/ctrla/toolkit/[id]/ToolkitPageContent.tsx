@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import EditorialFooter from "../../_components/EditorialFooter";
 import ToolkitAtmosphere from "../../_components/ToolkitAtmosphere";
 import { ToolkitDetail } from "../../_components/Toolkits";
@@ -10,6 +10,7 @@ import DesignGuide from "../../_components/DesignGuide";
 import DevGuide from "../../_components/DevGuide";
 import VideoGuide from "../../_components/VideoGuide";
 import MedicineCabinet from "../../_components/MedicineCabinet";
+import ToolkitEssentials from "../../_components/ToolkitEssentials";
 import { Component as MusicReactiveHero } from "@/components/ui/music-reactive-hero-section";
 // Toolkit pages run the LIGHT theme — the airy, cream reveal from the loader.
 import { edLight as ed, Bleed, Rule, Label, Kicker, legibleAccent } from "../../_components/editorial";
@@ -19,7 +20,7 @@ import VueHandoff from "../../_components/vue/VueHandoff";
 import { vueNarration } from "../../_components/vue/narration";
 import { toolkitSections } from "../../data";
 import { markDone } from "@/lib/ctrla/progress";
-import type { CraftSlug } from "@/lib/ctrla/profile";
+import { useCtrlAProfile, type CraftSlug, type Level } from "@/lib/ctrla/profile";
 import YourPath from "../../_components/YourPath";
 import Contributors from "../../_components/Contributors";
 import { currentVolume } from "../../_volumes";
@@ -29,6 +30,14 @@ export default function ToolkitPageContent({ id }: { id: string }) {
   const section = toolkitSections[index];
   const prev = toolkitSections[(index - 1 + toolkitSections.length) % toolkitSections.length];
   const next = toolkitSections[(index + 1) % toolkitSections.length];
+
+  // Beginner mode: the quiz's answer picks the default, a manual flip
+  // overrides it for the rest of this visit. Nobody with no profile yet
+  // (or before the client hydrates) sees anything different from today.
+  const { profile, ready } = useCtrlAProfile();
+  const [modeOverride, setModeOverride] = useState<Level | null>(null);
+  const mode: Level = modeOverride ?? (ready && profile ? profile.level : "expert");
+  const simplified = mode === "beginner";
 
   // The path: reading to the end marks the "Learn" stop for this craft.
   useEffect(() => {
@@ -89,6 +98,25 @@ export default function ToolkitPageContent({ id }: { id: string }) {
         <Bleed style={{ padding: "10px clamp(18px,5vw,64px)" }}>
           <YourPath variant="strip" theme="light" craft={id as CraftSlug} />
         </Bleed>
+        <Rule color={ed.hair} />
+        <Bleed style={{ padding: "10px clamp(18px,5vw,64px)" }}>
+          <button
+            onClick={() => setModeOverride(simplified ? "expert" : "beginner")}
+            style={{
+              background: "none",
+              border: "none",
+              padding: 0,
+              cursor: "pointer",
+              fontFamily: ed.mono,
+            }}
+          >
+            <Label color={ed.inkFaint}>
+              <span style={{ color: simplified ? pageAccent : ed.inkFaint }}>Simplified</span>
+              {" / "}
+              <span style={{ color: simplified ? ed.inkFaint : pageAccent }}>Full toolkit</span>
+            </Label>
+          </button>
+        </Bleed>
       </div>
 
       {/* Music sector: slim inline audio strip — the Fold loop, reactive */}
@@ -101,7 +129,7 @@ export default function ToolkitPageContent({ id }: { id: string }) {
       {/* BEAT 1 — Vue opens the sector. She stands before the craft guide, so
           the first voice on the page is the guide's, not the tool list's. The
           thread draws from her palm to the line she is saying. */}
-      {vue && (
+      {vue && !simplified && (
         <section style={{ background: "transparent", padding: "clamp(20px,3vw,40px) 0 clamp(8px,1.5vw,20px)" }}>
           <Bleed>
             <VueHandoff pose="showing" theme={ed} height={240}>
@@ -137,7 +165,7 @@ export default function ToolkitPageContent({ id }: { id: string }) {
           experience; the rest fall back to the editorial detail for now.
           `tk-stations` is the shared jump-nav anchor for Part 02. */}
       {/* BEAT 2 — Vue hands over to the tool list itself. */}
-      {vue && (
+      {vue && !simplified && (
         <section style={{ background: "transparent", padding: "clamp(18px,2.6vw,34px) 0 0" }}>
           <Bleed>
             <VueAside theme={ed} eyebrow="Vue · on the kit">{vue.stations}</VueAside>
@@ -145,15 +173,19 @@ export default function ToolkitPageContent({ id }: { id: string }) {
         </section>
       )}
 
-      <div id="tk-stations" style={{ scrollMarginTop: 56 }}>
-        {section.signals ? <ToolkitStations section={section} theme={ed} hideKicker={id === "music" || id === "design" || id === "web-dev" || id === "video"} /> : <ToolkitDetail section={section} />}
-      </div>
+      {simplified ? (
+        <ToolkitEssentials section={section} accent={pageAccent} />
+      ) : (
+        <div id="tk-stations" style={{ scrollMarginTop: 56 }}>
+          {section.signals ? <ToolkitStations section={section} theme={ed} hideKicker={id === "music" || id === "design" || id === "web-dev" || id === "video"} /> : <ToolkitDetail section={section} />}
+        </div>
+      )}
 
       {/* Web Dev · Part 03 — the medicine cabinet of custom Claude Code skills */}
-      {id === "web-dev" && <MedicineCabinet accent={pageAccent} />}
+      {id === "web-dev" && !simplified && <MedicineCabinet accent={pageAccent} />}
 
       {/* History lesson — accent-tinted entry strip into the immersive story */}
-      {section.history && (
+      {section.history && !simplified && (
         <section style={{ background: "transparent", padding: "0 0 clamp(40px,6vw,72px)" }}>
           <Bleed>
             <a
@@ -185,7 +217,7 @@ export default function ToolkitPageContent({ id }: { id: string }) {
           the signal chain we run in paid sessions, written for an artist choosing
           an engineer; this one is the open library. Different questions, so both
           stay self-canonical and simply point at each other. */}
-      {id === "music" && (
+      {id === "music" && !simplified && (
         <section style={{ background: "transparent", padding: "0 0 clamp(40px,6vw,72px)" }}>
           <Bleed>
             <Rule color={ed.hair} />
@@ -210,7 +242,7 @@ export default function ToolkitPageContent({ id }: { id: string }) {
       {/* BEAT 3 — Vue signs off the sector, leaning in from the page edge the
           way she closes the magazine. `bleed` is not optional on this pose:
           the art has no arm on the side the edge is meant to cover. */}
-      {vue && (
+      {vue && !simplified && (
         <section style={{ background: "transparent", padding: "clamp(24px,4vw,56px) 0 0" }}>
           <div className="ctrla-vue-close">
           <Bleed>
@@ -229,7 +261,7 @@ export default function ToolkitPageContent({ id }: { id: string }) {
       )}
 
       {/* Who improved this kit, and what to hand back first. */}
-      <Contributors craft={id as CraftSlug} />
+      {!simplified && <Contributors craft={id as CraftSlug} />}
 
       {/* Prev / next toolkit */}
       <section style={{ background: "transparent", padding: "clamp(40px,6vw,88px) 0 clamp(56px,8vw,104px)" }}>

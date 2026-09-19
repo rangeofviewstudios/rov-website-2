@@ -7,11 +7,13 @@ import YourPath from "../_components/YourPath";
 // The intake quiz, set as part of the magazine rather than as a form.
 //
 // Two questions, not four: what do you make, and where did your last
-// thing end up. Question 01 is the four full-bleed accent panels with
-// the issue's own cosmic marks. Question 02 is a row ladder — the same
-// language as the reveal below it. No cards, no boxes, no icon set.
-// Layout and motion live in globals.css under .ctrla-panel and
-// .ctrla-row; only the per-craft accent is passed down, as --acc.
+// thing end up. Both questions are the same row language — a circle
+// node, the issue's own cosmic mark, a label, a right-aligned status —
+// so the two screens read as one system instead of two different UI
+// ideas. Question 01 is multi-select with an order stamp; question 02
+// is single-select. No cards, no boxes, no icon set. Layout and motion
+// live in globals.css under .ctrla-craft-row and .ctrla-row; only the
+// per-craft accent is passed down, as --acc.
 //
 // The reveal offers two equal, real doors instead of one primary door
 // with secondary asides bolted on: someone who hasn't shipped anything
@@ -234,8 +236,15 @@ function Sub({ children }: { children: React.ReactNode }) {
   );
 }
 
-/** Question 01's panel. Vertical name, cosmic mark, order stamp once picked. */
-function CraftPanel({
+/**
+ * Question 01's row. Same row language as the ladder question right
+ * after it (`Row`, below) — a circle node, the craft's own cosmic mark,
+ * a label, a right-aligned status — so the two screens read as one
+ * system instead of two different UI ideas. Multi-select and an order
+ * stamp ("Picked · 01") are the only differences from the single-select
+ * version.
+ */
+function CraftRow({
   option,
   order,
   onClick,
@@ -250,39 +259,31 @@ function CraftPanel({
       type="button"
       onClick={onClick}
       aria-pressed={selected}
-      aria-label={option.label}
-      className="ctrla-panel"
+      className="ctrla-craft-row"
       style={{ ["--acc" as string]: option.accent }}
     >
-      <Image src={option.art} alt="" width={68} height={68} unoptimized className="ctrla-panel-art" />
-
-      <span
-        className="ctrla-panel-name"
-        style={{ fontFamily: ed.grotesque, color: selected ? option.accent : ed.ink }}
-      >
-        {option.label}
-      </span>
-
-      {/* Meta and the order stamp sit at the foot of the panel. On a phone
-          the panel is a bar, so they tuck to the right of the name. */}
-      {/* Layout lives in .ctrla-panel-meta, not here: inline styles beat the
-          stylesheet, so anything set here could not be re-placed for the
-          phone layout where the panel becomes a bar. */}
-      <span className="ctrla-panel-meta">
-        {selected && (
-          <span style={{ fontFamily: ed.mono, fontSize: 11, letterSpacing: "0.2em", color: option.accent }}>
-            {String(order + 1).padStart(2, "0")}
-          </span>
-        )}
+      <span aria-hidden className="ctrla-craft-row-node" />
+      <Image src={option.art} alt="" width={36} height={36} unoptimized className="ctrla-craft-row-art" />
+      <span style={{ minWidth: 0 }}>
         <span
-          aria-hidden
           style={{
-            width: selected ? 34 : 14,
-            height: 2,
-            background: selected ? option.accent : "rgba(240,230,224,0.3)",
-            transition: "width 320ms cubic-bezier(0.22,1,0.36,1), background 320ms ease",
+            display: "block",
+            fontFamily: ed.grotesque,
+            fontWeight: 800,
+            fontSize: "clamp(26px,4.4vw,58px)",
+            letterSpacing: "-0.03em",
+            lineHeight: 1,
+            color: ed.ink,
           }}
-        />
+        >
+          {option.label}
+        </span>
+        <span style={{ display: "block", marginTop: 10 }}>
+          <Label color={option.accent}>{option.meta}</Label>
+        </span>
+      </span>
+      <span className="ctrla-craft-row-cta">
+        <Label color={option.accent}>{selected ? `Picked · ${String(order + 1).padStart(2, "0")}` : "Select"} →</Label>
       </span>
     </button>
   );
@@ -556,10 +557,10 @@ export default function StartContent() {
                   <Sub>Tap all that apply. The first one leads.</Sub>
                 </Bleed>
 
-                <div className="ctrla-panels">
+                <div className="ctrla-craft-rows">
                   {CRAFTS.map((c) => {
                     const i = crafts.indexOf(c.value);
-                    return <CraftPanel key={c.value} option={c} order={i === -1 ? null : i} onClick={() => toggleCraft(c.value)} />;
+                    return <CraftRow key={c.value} option={c} order={i === -1 ? null : i} onClick={() => toggleCraft(c.value)} />;
                   })}
                 </div>
               </motion.div>

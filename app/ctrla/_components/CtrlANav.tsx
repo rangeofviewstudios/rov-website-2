@@ -8,14 +8,14 @@
 // Two parts:
 //   · A persistent glass bar. CTRL-A mark on the left; Start here, Sign
 //     up, and the Menu trigger on the right.
-//   · A cream panel that opens on hover (fine pointers) and pins on
-//     click. Cream is the point: the ROV menu is a dark panel with light
-//     type, so CTRL-A takes the inverse and opening it reads as turning
-//     a page rather than dimming the lights. Small text goes dark plum
-//     here, the standard inversion of the gold used on night grounds.
+//   · A full-screen overlay that opens on hover (fine pointers) and pins
+//     on click: an aggressive blur + scrim over the whole page, then a
+//     centered list, no cards, no icons. Toolkits and ATL are the two
+//     real destinations and carry the type scale; Lock In and The
+//     Magazine sit underneath as a quieter secondary tier.
 //
-// The way back to the studio lives at the foot of the panel as the
-// R.O.V wordmark, matching how the reference parks its legal row.
+// The way back to the studio lives in the footer row as the R.O.V
+// wordmark, matching how the reference parks its legal row.
 // ═══════════════════════════════════════════════════════
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -25,7 +25,7 @@ import { usePathname } from "next/navigation";
 import { Instagram, Linkedin, Mail } from "lucide-react";
 import GoogleLoginButton from "@/components/providers/GoogleLoginButton";
 import CtrlASignup from "./CtrlASignup";
-import { ed, edLight, legibleAccent } from "./editorial";
+import { ed } from "./editorial";
 import { toolkitSections } from "../data";
 import YourPath from "./YourPath";
 import { useCtrlAPath } from "@/lib/ctrla/progress";
@@ -36,10 +36,11 @@ const ROV_DISPLAY = { fontFamily: "'Norwige Light', sans-serif" } as const;
 /** Routes that own the whole screen and get no site chrome. */
 const CHROMELESS = ["/ctrla/pitchdeck"];
 
-const PRIMARY = [
-  { title: "Lock In", to: "/ctrla/the-fold", note: "A place to actually work" },
-  { title: "ATL", to: "/ctrla/atl", note: "The Atlanta field guide" },
-  { title: "The Magazine", to: "/ctrla/vol/1", note: "This volume, front to back" },
+// Toolkits and ATL are the two real destinations and carry the big type
+// in the menu's center; these two sit underneath as the quieter tier.
+const SECONDARY_PRIMARY = [
+  { title: "Lock In", to: "/ctrla/the-fold" },
+  { title: "The Magazine", to: "/ctrla/vol/1" },
 ];
 
 const SECONDARY = [
@@ -129,7 +130,6 @@ export default function CtrlANav() {
 
   if (CHROMELESS.some((r) => pathname === r || pathname.startsWith(`${r}/`))) return null;
 
-  const accent = legibleAccent(ed.gold); // gold is illegible on cream
   const isActive = (to: string) => pathname === to || pathname.startsWith(`${to}/`);
 
   return (
@@ -202,7 +202,7 @@ export default function CtrlANav() {
         </div>
       </div>
 
-      {/* ── The panel ───────────────────────────────────── */}
+      {/* ── The overlay ─────────────────────────────────── */}
       <div
         className={`ctrla-nav-shell${open ? " is-open" : ""}`}
         aria-hidden={!open}
@@ -211,104 +211,106 @@ export default function CtrlANav() {
       >
         <button type="button" aria-label="Close menu" tabIndex={-1} onClick={close} className="ctrla-nav-scrim" />
 
-        <div ref={panelRef} className="ctrla-nav-panel" role="dialog" aria-modal="false" aria-label="CTRL-A menu">
-          <div className="ctrla-nav-panel-inner">
-            <span className="ctrla-nav-eyebrow" style={{ color: edLight.inkFaint }}>
-              Menu
-            </span>
-
-            {/* The path, first. Nothing renders without a profile. */}
-            <YourPath variant="strip" theme="light" onNavigate={close} />
-
-            {/* Toolkits, expanding in place to the four crafts */}
-            <button
-              type="button"
-              className="ctrla-nav-item ctrla-nav-item-btn"
-              aria-expanded={kitsOpen}
-              onClick={() => setKitsOpen((v) => !v)}
-            >
-              <span className="ctrla-nav-item-title">Toolkits</span>
-              <span className="ctrla-nav-item-meta">[{toolkitSections.length}]</span>
+        <div ref={panelRef} className="ctrla-nav-overlay" role="dialog" aria-modal="false" aria-label="CTRL-A menu">
+          <div className="ctrla-nav-overlay-top">
+            <Link href="/ctrla" onClick={close} aria-label="CTRL-A home" className="ctrla-nav-mark">
+              <Image
+                src="/ctrla/ctrla-flat-logo-white.svg"
+                alt="CTRL-A"
+                width={40}
+                height={29}
+                unoptimized
+                style={{ height: "clamp(16px,2vw,20px)", width: "auto" }}
+              />
+            </Link>
+            <button type="button" onClick={close} className="ctrla-nav-close">
+              Close
             </button>
+          </div>
 
-            {kitsOpen && (
-              <div className="ctrla-nav-kits">
-                {toolkitSections.map((s) => (
-                  <Link key={s.id} href={`/ctrla/toolkit/${s.id}`} className="ctrla-nav-kit" onClick={close}>
-                    <span
-                      aria-hidden
-                      className="ctrla-nav-kit-dot"
-                      style={{ background: legibleAccent(s.accentColor) }}
-                    />
-                    {s.title}
-                  </Link>
-                ))}
-              </div>
-            )}
+          <div className="ctrla-nav-overlay-center">
+            {hasPath && <YourPath variant="strip" onNavigate={close} />}
 
-            {PRIMARY.map((item) => (
-              <Link
-                key={item.to}
-                href={item.to}
-                onClick={close}
-                className={`ctrla-nav-item${isActive(item.to) ? " is-active" : ""}`}
+            <div className="ctrla-nav-primary">
+              {/* Toolkits, expanding in place to the four crafts */}
+              <button
+                type="button"
+                className={`ctrla-nav-primary-item${kitsOpen ? " is-active" : ""}`}
+                aria-expanded={kitsOpen}
+                onClick={() => setKitsOpen((v) => !v)}
               >
-                <span className="ctrla-nav-item-title">{item.title}</span>
-                <span className="ctrla-nav-item-meta">{item.note}</span>
-              </Link>
-            ))}
+                Toolkits
+                {isActive("/ctrla/toolkit") && <span className="ctrla-nav-here">you&rsquo;re here</span>}
+              </button>
 
-            <div className="ctrla-nav-secondary">
+              {kitsOpen && (
+                <div className="ctrla-nav-kits">
+                  {toolkitSections.map((s) => (
+                    <Link key={s.id} href={`/ctrla/toolkit/${s.id}`} className="ctrla-nav-kit" onClick={close}>
+                      {s.title}
+                    </Link>
+                  ))}
+                </div>
+              )}
+
+              <Link href="/ctrla/atl" onClick={close} className={`ctrla-nav-primary-item${isActive("/ctrla/atl") ? " is-active" : ""}`}>
+                ATL
+                {isActive("/ctrla/atl") && <span className="ctrla-nav-here">you&rsquo;re here</span>}
+              </Link>
+            </div>
+
+            <span aria-hidden className="ctrla-nav-rule" />
+
+            <div className="ctrla-nav-secondary-row">
+              {SECONDARY_PRIMARY.map((item, i) => (
+                <span key={item.to}>
+                  {i > 0 && <span aria-hidden className="ctrla-nav-dot">·</span>}
+                  <Link href={item.to} onClick={close} className={isActive(item.to) ? "is-active" : ""}>
+                    {item.title}
+                  </Link>
+                </span>
+              ))}
+            </div>
+
+            <div className="ctrla-nav-links-row">
               {SECONDARY.map((item) => (
                 <Link key={item.to} href={item.to} onClick={close} className="ctrla-nav-sub">
                   {item.title}
                 </Link>
               ))}
             </div>
+          </div>
 
-            {/* Join the drop */}
-            <div className="ctrla-nav-block">
-              <span className="ctrla-nav-eyebrow" style={{ color: edLight.inkFaint }}>
-                Join the drop
-              </span>
-              <CtrlASignup
-                source="ctrla:nav"
-                theme="light"
-                variant="stacked"
-                accent={accent}
-                cta="Join"
-                note="One email a month. Nothing else."
-                style={{ marginTop: 12 }}
-              />
-            </div>
-
-            {/* Local time + socials */}
-            <div className="ctrla-nav-block ctrla-nav-meta-row">
-              <span className="ctrla-nav-eyebrow" style={{ color: edLight.inkFaint }}>
-                Atlanta {time ? `· ${time}` : ""}
-              </span>
-              <div className="ctrla-nav-socials">
-                <a href="https://www.instagram.com/rangeofview/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
-                  <Instagram size={17} strokeWidth={1.6} />
-                </a>
-                <a href="https://www.linkedin.com/company/range-of-view/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
-                  <Linkedin size={17} strokeWidth={1.6} />
-                </a>
-                <a href="mailto:contact@rovstudios.com" aria-label="Email">
-                  <Mail size={17} strokeWidth={1.6} />
-                </a>
-              </div>
-            </div>
-
-            {/* The way back to the studio */}
-            <div className="ctrla-nav-foot">
+          <div className="ctrla-nav-overlay-foot">
+            <div className="ctrla-nav-foot-left">
               <Link href="/" onClick={close} className="ctrla-nav-rov" style={ROV_DISPLAY}>
                 <span aria-hidden>←</span> R.O.V
               </Link>
+              <span className="ctrla-nav-eyebrow">Atlanta {time ? `· ${time}` : ""}</span>
+              <div className="ctrla-nav-socials">
+                <a href="https://www.instagram.com/rangeofview/" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+                  <Instagram size={16} strokeWidth={1.6} />
+                </a>
+                <a href="https://www.linkedin.com/company/range-of-view/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn">
+                  <Linkedin size={16} strokeWidth={1.6} />
+                </a>
+                <a href="mailto:contact@rovstudios.com" aria-label="Email">
+                  <Mail size={16} strokeWidth={1.6} />
+                </a>
+              </div>
               <div className="ctrla-nav-login">
                 <GoogleLoginButton />
               </div>
             </div>
+
+            <CtrlASignup
+              source="ctrla:nav"
+              theme="dark"
+              variant="inline"
+              accent={ed.gold}
+              cta="Join"
+              note="One email a month."
+            />
           </div>
         </div>
       </div>
