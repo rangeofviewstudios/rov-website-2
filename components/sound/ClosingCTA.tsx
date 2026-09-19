@@ -103,7 +103,7 @@ export default function ClosingCTA() {
 
           <CalBookButton
             calLink={CONSULT_BOOKING_URL}
-            className="inline-flex items-center justify-center text-white/80 hover:text-white font-semibold rounded-full border border-white/12 hover:border-[#EA9A61]/50 hover:bg-[#EA9A61]/[0.06] transition-all duration-300 w-full sm:w-auto"
+            className="inline-flex items-center justify-center text-white/80 hover:text-white font-semibold rounded-full border border-white/10 hover:border-[#EA9A61]/50 hover:bg-[#EA9A61]/[0.06] transition-all duration-300 w-full sm:w-auto"
             style={{
               fontFamily: HEADING,
               padding: "clamp(0.95rem, 1.4vw, 1.1rem) clamp(2rem, 3.5vw, 2.6rem)",

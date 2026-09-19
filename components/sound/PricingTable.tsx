@@ -291,7 +291,7 @@ function PriceRow({ row, delay, inView }: { row: Row; delay: number; inView: boo
             className={`block w-full sm:w-auto text-center whitespace-nowrap font-semibold rounded-full transition-all duration-300 ${
               row.featured
                 ? "cta-shine text-white hover:scale-[1.03]"
-                : "text-white/80 hover:text-white border border-white/12 hover:border-[#EA9A61]/50"
+                : "text-white/80 hover:text-white border border-white/10 hover:border-[#EA9A61]/50"
             }`}
             style={{
               fontFamily: HEADING,
@@ -311,7 +311,7 @@ function PriceRow({ row, delay, inView }: { row: Row; delay: number; inView: boo
             className={`block w-full sm:w-auto text-center whitespace-nowrap font-semibold rounded-full transition-all duration-300 ${
               row.featured
                 ? "cta-shine text-white hover:scale-[1.03]"
-                : "text-white/80 hover:text-white border border-white/12 hover:border-[#EA9A61]/50"
+                : "text-white/80 hover:text-white border border-white/10 hover:border-[#EA9A61]/50"
             }`}
             style={{
               fontFamily: HEADING,
@@ -407,7 +407,7 @@ function FoundationRow() {
             </CalBookButton>
             <Link
               href="/#audit"
-              className="block text-center text-white/80 hover:text-white font-semibold rounded-full border border-white/12 hover:border-[#EA9A61]/50 transition-all duration-300"
+              className="block text-center text-white/80 hover:text-white font-semibold rounded-full border border-white/10 hover:border-[#EA9A61]/50 transition-all duration-300"
               style={{
                 fontFamily: HEADING,
                 padding: "13px 30px",

@@ -68,11 +68,13 @@ export default function DDKFeatureTestimonial() {
       >
         {Array.from({ length: 64 }).map((_, i) => {
           const x = (i / 64) * 420;
-          const h =
+          const h = Math.max(
+            2,
             12 +
-            Math.sin(i * 0.52) * 28 +
-            Math.sin(i * 0.27 + 1) * 18 +
-            Math.cos(i * 0.18) * 10;
+              Math.sin(i * 0.52) * 28 +
+              Math.sin(i * 0.27 + 1) * 18 +
+              Math.cos(i * 0.18) * 10
+          );
           return (
             <rect
               key={i}

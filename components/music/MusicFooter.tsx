@@ -22,7 +22,7 @@ export default function MusicFooter() {
             alt="Range of View Music"
             width={120}
             height={60}
-            className="object-contain w-[80px] md:w-[120px]"
+            className="object-contain h-auto w-[80px] md:w-[120px]"
           />
           <h2
             className="text-3xl md:text-5xl uppercase tracking-wider font-bold"
@@ -154,7 +154,7 @@ export default function MusicFooter() {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="Back to Range of View Studios"
-          className="group inline-flex items-center gap-3 pl-3 pr-4 py-2 rounded-full border border-white/12 hover:border-white/30 hover:bg-white/5 transition-colors"
+          className="group inline-flex items-center gap-3 pl-3 pr-4 py-2 rounded-full border border-white/10 hover:border-white/30 hover:bg-white/5 transition-colors"
         >
           <Image
             src="/brand/rov-logo.webp"

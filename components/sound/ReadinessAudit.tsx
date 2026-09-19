@@ -485,7 +485,7 @@ export default function ReadinessAudit() {
                   {CONSULT_BOOKING_URL && (
                     <CalBookButton
                       calLink={CONSULT_BOOKING_URL}
-                      className="block w-full text-center text-white font-semibold rounded-full border border-white/12 hover:border-[#EA9A61]/50 hover:bg-[#EA9A61]/[0.06] transition-all duration-300"
+                      className="block w-full text-center text-white font-semibold rounded-full border border-white/10 hover:border-[#EA9A61]/50 hover:bg-[#EA9A61]/[0.06] transition-all duration-300"
                       style={{
                         fontFamily: HEADING,
                         padding: "14px",
