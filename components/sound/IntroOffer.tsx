@@ -163,7 +163,7 @@ function FlyerCredit() {
       <span>
         Designed by <span className="text-white font-semibold">Karina</span>
       </span>
-      {KARINA_PORTFOLIO_URL && <span className="text-white/72 group-hover:text-[#EA9A61] transition-colors">&#8599;</span>}
+      {KARINA_PORTFOLIO_URL && <span className="text-white/75 group-hover:text-[#EA9A61] transition-colors">&#8599;</span>}
     </>
   );
 

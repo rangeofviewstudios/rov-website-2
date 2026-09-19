@@ -7,9 +7,6 @@
 // product; this asks what's missing and says we fill it, which is the business
 // the strategy doc actually describes.
 //
-// The capability list used to be static words at three sizes, which read as
-// placeholder rather than design. It's now two counter-scrolling marquees of
-// kinetic type, which suits a studio and turns a list into a thing you watch.
 // Pricing lives on /pricing, linked from the header, so no stray numbers float
 // around after the visuals.
 
@@ -23,69 +20,6 @@ import { Squiggle } from "@/components/sound/musicStory";
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
-
-// Split across two rows that travel in opposite directions. Ordered so the
-// heaviest hitters lead each row rather than clustering.
-const ROW_A = [
-  "Cover art systems",
-  "Short-form content",
-  "Lyric visualizers",
-  "Release rollouts",
-  "Press photos",
-];
-
-const ROW_B = [
-  "Artist websites",
-  "EPKs",
-  "Split sheets",
-  "Merch design",
-  "Tracklists",
-  "Email flows",
-];
-
-function MarqueeRow({
-  items,
-  reverse,
-  duration,
-}: {
-  items: string[];
-  reverse?: boolean;
-  duration: number;
-}) {
-  return (
-    <div className="rov-marquee relative overflow-hidden">
-      <div
-        className={`rov-marquee-track ${reverse ? "rov-marquee-track--reverse" : ""}`}
-        style={{ animationDuration: `${duration}s` }}
-      >
-        {/* Rendered twice so the -50% translate loops seamlessly. */}
-        {[0, 1].map((copy) => (
-          <div key={copy} className="flex shrink-0" aria-hidden={copy === 1}>
-            {items.map((label) => (
-              <span key={`${copy}-${label}`} className="flex items-center shrink-0">
-                <span
-                  className="whitespace-nowrap font-bold italic leading-none text-[clamp(1.75rem,5vw,3.75rem)] text-transparent bg-clip-text px-[clamp(0.6rem,1.6vw,1.4rem)]"
-                  style={{
-                    fontFamily: HEADING,
-                    backgroundImage:
-                      "linear-gradient(180deg, #FFF4E3 0%, rgba(255,244,227,0.62) 100%)",
-                  }}
-                >
-                  {label}
-                </span>
-                <span
-                  aria-hidden
-                  className="shrink-0 rounded-full bg-[#EA9A61]"
-                  style={{ width: "7px", height: "7px" }}
-                />
-              </span>
-            ))}
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
 
 export default function CareerGaps() {
   const ref = useRef<HTMLElement>(null);
@@ -164,27 +98,8 @@ export default function CareerGaps() {
         </motion.div>
       </div>
 
-      {/* ── The kinetic capability spread ── */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={inView ? { opacity: 1 } : {}}
-        transition={{ ...spring, delay: 0.2 }}
-        className="relative z-10 flex flex-col gap-2 md:gap-4"
-        style={{
-          // Fade both ends so the type slides out of the page rather than
-          // stopping at a hard edge.
-          maskImage:
-            "linear-gradient(to right, transparent 0%, black 9%, black 91%, transparent 100%)",
-          WebkitMaskImage:
-            "linear-gradient(to right, transparent 0%, black 9%, black 91%, transparent 100%)",
-        }}
-      >
-        <MarqueeRow items={ROW_A} duration={46} />
-        <MarqueeRow items={ROW_B} duration={58} reverse />
-      </motion.div>
-
       {/* ── The evidence ── */}
-      <div className="relative z-10 mt-14 md:mt-20">
+      <div className="relative z-10 mt-10 md:mt-14">
         <div className="bg-black">
           <Gallery />
         </div>

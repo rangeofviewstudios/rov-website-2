@@ -250,7 +250,7 @@ export default function CreditsPage() {
                                                 Apple Music →
                                             </a>
                                         )}
-                                        <Link href="/sam-suen" className="text-white/72 hover:text-white/80">
+                                        <Link href="/sam-suen" className="text-white/75 hover:text-white/80">
                                             Read the full case study →
                                         </Link>
                                     </div>

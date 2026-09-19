@@ -123,7 +123,7 @@ export default function AtlantaStudiosPage() {
                                     {tier.title}
                                 </h2>
                                 <p
-                                    className="mt-3 max-w-2xl text-base leading-relaxed text-white/72"
+                                    className="mt-3 max-w-2xl text-base leading-relaxed text-white/75"
                                     style={{ fontFamily: BODY_FONT }}
                                 >
                                     {tier.who}
@@ -227,7 +227,7 @@ export default function AtlantaStudiosPage() {
                             <Squiggle />
                         </div>
                         <p
-                            className="mt-4 max-w-2xl text-base leading-relaxed text-white/76"
+                            className="mt-4 max-w-2xl text-base leading-relaxed text-white/80"
                             style={{ fontFamily: BODY_FONT }}
                         >
                             Every rate is published. You leave with your stems and whatever

@@ -185,7 +185,7 @@ export default function ReadinessAudit() {
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.14 }}
-          className="text-white/72 text-sm md:text-base mb-3 text-center max-w-lg mx-auto"
+          className="text-white/75 text-sm md:text-base mb-3 text-center max-w-lg mx-auto"
           style={{ fontFamily: BODY }}
         >
           A mix makes one song better. These are the things that decide whether a
@@ -345,7 +345,7 @@ export default function ReadinessAudit() {
                 </div>
 
                 <p
-                  className="text-white/72 text-sm leading-relaxed mb-7 border-b border-white/[0.08] pb-7"
+                  className="text-white/75 text-sm leading-relaxed mb-7 border-b border-white/[0.08] pb-7"
                   style={{ fontFamily: BODY }}
                 >
                   {tier.body}
@@ -820,7 +820,7 @@ function PlanModal({
               type="button"
               onClick={onClose}
               aria-label="Close"
-              className="absolute top-4 right-4 text-white/72 hover:text-white transition-colors cursor-pointer"
+              className="absolute top-4 right-4 text-white/75 hover:text-white transition-colors cursor-pointer"
             >
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M18 6 6 18M6 6l12 12" />
@@ -837,7 +837,7 @@ function PlanModal({
                 <h4 className="text-white text-xl font-bold italic mb-2" style={{ fontFamily: HEADING }}>
                   That&apos;s in.
                 </h4>
-                <p className="text-white/72 text-sm" style={{ fontFamily: BODY }}>
+                <p className="text-white/75 text-sm" style={{ fontFamily: BODY }}>
                   Your plan comes back within one business day, with the gaps in the order
                   we&apos;d close them.
                 </p>
@@ -855,7 +855,7 @@ function PlanModal({
                 <h4 className="text-white text-2xl font-bold italic mb-1" style={{ fontFamily: HEADING }}>
                   Send me the plan
                 </h4>
-                <p className="text-white/72 text-sm mb-5 leading-relaxed" style={{ fontFamily: BODY }}>
+                <p className="text-white/75 text-sm mb-5 leading-relaxed" style={{ fontFamily: BODY }}>
                   Your {context.score} and every gap, written up in the order we&apos;d close
                   them. No call required.
                 </p>

@@ -233,13 +233,13 @@ function RecordingRates() {
           </span>
           <ul className="flex-1 space-y-2 mb-6">
             {recordingFeatures.map((f) => (
-              <li key={f} className="flex items-start gap-2 text-white/72 text-sm" style={{ fontFamily: BODY_FONT }}>
+              <li key={f} className="flex items-start gap-2 text-white/75 text-sm" style={{ fontFamily: BODY_FONT }}>
                 <span className="text-[#EA9A61] mt-0.5 shrink-0">&#10003;</span>
                 {f}
               </li>
             ))}
           </ul>
-          <p className="text-white/76 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
+          <p className="text-white/80 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
             Comparable Atlanta rooms run <span className="text-white/70 not-italic line-through">$75&ndash;120/hr</span>. You leave with your labeled stems the same day.
           </p>
           <CalBookButton
@@ -277,13 +277,13 @@ function RecordingRates() {
           </span>
           <ul className="flex-1 space-y-2 mb-6">
             {["Four hours in the room, your lowest rate", "Your stems plus whatever we mixed in the session", "48-hour turnaround", "Usually two to three songs tracked"].map((f) => (
-              <li key={f} className="flex items-start gap-2 text-white/72 text-sm" style={{ fontFamily: BODY_FONT }}>
+              <li key={f} className="flex items-start gap-2 text-white/75 text-sm" style={{ fontFamily: BODY_FONT }}>
                 <span className="text-[#EA9A61] mt-0.5 shrink-0">&#10003;</span>
                 {f}
               </li>
             ))}
           </ul>
-          <p className="text-white/76 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
+          <p className="text-white/80 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
             Atlanta rooms average around <span className="text-white/70 not-italic">$102 an hour</span> on rental marketplaces, so four hours elsewhere usually runs <span className="text-white/70 not-italic">$400+</span> before anyone touches a mix.
           </p>
           <CalBookButton
@@ -367,7 +367,7 @@ export default function StudioSection() {
             transition={{ ...spring, delay: 0.2 }}
           >
             <p
-              className="text-white/72 text-base md:text-lg leading-relaxed mb-6"
+              className="text-white/75 text-base md:text-lg leading-relaxed mb-6"
               style={{ fontFamily: BODY_FONT }}
             >
               We don&apos;t just mix files from a laptop. Artists record in our Atlanta studio, stand behind real mics,

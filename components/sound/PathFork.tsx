@@ -122,7 +122,7 @@ export default function PathFork() {
                 <h3 className="text-white text-2xl md:text-3xl font-bold italic mb-3" style={{ fontFamily: HEADING }}>
                   {p.title}
                 </h3>
-                <p className="text-white/72 text-sm leading-relaxed mb-6 flex-1" style={{ fontFamily: BODY }}>
+                <p className="text-white/75 text-sm leading-relaxed mb-6 flex-1" style={{ fontFamily: BODY }}>
                   {p.body}
                 </p>
                 <div className="flex items-baseline gap-2 mb-5">

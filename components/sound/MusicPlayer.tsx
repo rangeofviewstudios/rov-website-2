@@ -423,7 +423,7 @@ export default function MusicPlayer() {
                                             <h3 className="text-white text-base font-bold tracking-wide truncate group-hover/info:text-[#EA9A61] transition-colors">
                                                 {songData[currentIndex].title}
                                             </h3>
-                                            <p className="text-white/72 text-sm font-medium truncate mt-0.5">
+                                            <p className="text-white/75 text-sm font-medium truncate mt-0.5">
                                                 {songData[currentIndex].artist}
                                             </p>
                                         </div>
@@ -452,7 +452,7 @@ export default function MusicPlayer() {
                                 {/* Right: Time, Playlist, Volume */}
                                 <div className="flex flex-row items-center justify-between md:justify-end gap-6 md:gap-8 w-full md:w-1/3 order-2 md:order-3">
                                     {/* Time Display */}
-                                    <div className="text-xs md:text-sm font-mono text-white/72 tabular-nums">
+                                    <div className="text-xs md:text-sm font-mono text-white/75 tabular-nums">
                                         {formatTime(currentTime)} / {formatTime(duration)}
                                     </div>
 

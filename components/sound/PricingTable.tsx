@@ -381,7 +381,7 @@ function FoundationRow() {
           </div>
 
           <p
-            className="text-white/72 text-sm md:text-base leading-relaxed max-w-2xl mb-7"
+            className="text-white/75 text-sm md:text-base leading-relaxed max-w-2xl mb-7"
             style={{ fontFamily: BODY }}
           >
             Website, EPK, release hub with email capture, booking and lead forms, your
