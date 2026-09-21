@@ -172,11 +172,15 @@ export default function GoogleLoginButton() {
   }, [signInOpen, confirmOpen]);
 
   async function handleGoogleLogin() {
-    // CTRL-A sign-ins land back on the CTRL-A page they came from; everywhere
-    // else returns home.
+    // CTRL-A sign-ins land back on the CTRL-A page they came from. On the
+    // music host (rovmusic.com) clients sign in to reach the stems portal, so
+    // they land there. Everywhere else returns home.
+    const isMusicHost = window.location.host.includes("rovmusic");
     const redirectTo = isCtrlA
       ? `${window.location.origin}${window.location.pathname}`
-      : `${window.location.origin}/`;
+      : isMusicHost
+        ? `${window.location.origin}/portal`
+        : `${window.location.origin}/`;
     const { error } = await supabase.auth.signInWithOAuth({
       provider: "google",
       options: { redirectTo },

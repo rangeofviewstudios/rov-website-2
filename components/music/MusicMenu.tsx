@@ -38,6 +38,8 @@ const SECONDARY = [
     { title: "Sam Suen", to: "/sam-suen" },
     { title: "Guides", to: "/blog" },
     { title: "Who we are", to: "/authors" },
+    // The stems portal: where paying clients upload, listen, and leave notes.
+    { title: "Client portal", to: "/portal" },
 ];
 
 const FEATURED = credits.filter((c) => c.featured).slice(0, 2);

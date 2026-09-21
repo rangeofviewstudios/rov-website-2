@@ -35,6 +35,9 @@ interface ClientProject {
   deliverables_needed: string[] | null;
   final_project_url: string | null;
   folder_link: string | null;
+  songs_included: number;
+  revisions_included: number;
+  closed_at: string | null;
 }
 
 interface RevisionRequest {
@@ -187,11 +190,15 @@ export default function AdminDashboard() {
   const [launchDeliveryDate, setLaunchDeliveryDate] = useState('');
   const [launchDeliverables, setLaunchDeliverables] = useState<string[]>([]);
   const [launchDeliverableInput, setLaunchDeliverableInput] = useState('');
+  // What the client paid for. Drives the upload and revision caps in /portal.
+  const [launchSongs, setLaunchSongs] = useState(1);
+  const [launchRevisions, setLaunchRevisions] = useState(2);
 
   // Mixed Audio Tracks Upload state
   const [mixedUploadModalOpen, setMixedUploadModalOpen] = useState(false);
   const [mixedUploadTarget, setMixedUploadTarget] = useState<ClientProfile | null>(null);
   const [mixedUploadTitle, setMixedUploadTitle] = useState('');
+  const [mixedUploadNotes, setMixedUploadNotes] = useState('');
   const [mixedUploadFile, setMixedUploadFile] = useState<File | null>(null);
   const [isUploadingMixed, setIsUploadingMixed] = useState(false);
   const [mixedUploadProgress, setMixedUploadProgress] = useState(0);
@@ -209,6 +216,9 @@ export default function AdminDashboard() {
   const [editDeliverableInput, setEditDeliverableInput] = useState('');
   const [editFinalUrl, setEditFinalUrl] = useState('');
   const [editFolderLink, setEditFolderLink] = useState('');
+  const [editSongs, setEditSongs] = useState(1);
+  const [editRevisions, setEditRevisions] = useState(2);
+  const [isClosingProject, setIsClosingProject] = useState(false);
   const [isSavingProject, setIsSavingProject] = useState(false);
   const [isUploadingDoc, setIsUploadingDoc] = useState(false);
   const [docUploadProgress, setDocUploadProgress] = useState(0);
@@ -302,7 +312,7 @@ export default function AdminDashboard() {
 
       const { data: projects } = await supabase
         .from('projects')
-        .select('id, client_id, project_name, status, delivery_date, deliverables_needed, final_project_url, folder_link');
+        .select('id, client_id, project_name, status, delivery_date, deliverables_needed, final_project_url, folder_link, songs_included, revisions_included, closed_at');
 
       const projMap: Record<string, ClientProject> = {};
       (projects || []).forEach((p) => {
@@ -315,6 +325,9 @@ export default function AdminDashboard() {
             deliverables_needed: p.deliverables_needed,
             final_project_url: p.final_project_url,
             folder_link: p.folder_link,
+            songs_included: p.songs_included ?? 1,
+            revisions_included: p.revisions_included ?? 2,
+            closed_at: p.closed_at ?? null,
           };
         }
       });
@@ -436,8 +449,10 @@ export default function AdminDashboard() {
           requirements_met: false,
           delivery_date: launchDeliveryDate || null,
           deliverables_needed: launchDeliverables.length > 0 ? launchDeliverables : null,
+          songs_included: Math.max(1, launchSongs),
+          revisions_included: Math.max(0, launchRevisions),
         }])
-        .select('id, client_id, project_name, status, delivery_date, deliverables_needed, final_project_url, folder_link')
+        .select('id, client_id, project_name, status, delivery_date, deliverables_needed, final_project_url, folder_link, songs_included, revisions_included, closed_at')
         .single();
 
       if (!error && proj) {
@@ -451,6 +466,9 @@ export default function AdminDashboard() {
             deliverables_needed: proj.deliverables_needed,
             final_project_url: proj.final_project_url,
             folder_link: proj.folder_link,
+            songs_included: proj.songs_included ?? 1,
+            revisions_included: proj.revisions_included ?? 2,
+            closed_at: proj.closed_at ?? null,
           },
         }));
         setLaunchModalOpen(false);
@@ -474,6 +492,8 @@ export default function AdminDashboard() {
     setEditDeliverableInput('');
     setEditFinalUrl(proj.final_project_url || '');
     setEditFolderLink(proj.folder_link || '');
+    setEditSongs(proj.songs_included ?? 1);
+    setEditRevisions(proj.revisions_included ?? 2);
     setDetailModalOpen(true);
   };
 
@@ -539,6 +559,8 @@ export default function AdminDashboard() {
           deliverables_needed: editDeliverables.length > 0 ? editDeliverables : null,
           final_project_url: editFinalUrl.trim() || null,
           folder_link: editFolderLink || null,
+          songs_included: Math.max(1, editSongs),
+          revisions_included: Math.max(0, editRevisions),
         })
         .eq('id', projectId);
 
@@ -554,6 +576,8 @@ export default function AdminDashboard() {
           deliverables_needed: editDeliverables.length > 0 ? editDeliverables : null,
           final_project_url: editFinalUrl.trim() || null,
           folder_link: editFolderLink || null,
+          songs_included: Math.max(1, editSongs),
+          revisions_included: Math.max(0, editRevisions),
         }
       }));
       setDetailModalOpen(false);
@@ -597,6 +621,42 @@ export default function AdminDashboard() {
     } else {
       audio.pause();
       setCurrentlyPlaying(null);
+    }
+  };
+
+  // Close out: marks the project Completed, stamps closed_at, and resolves any
+  // open revision so the portal locks uploads and revisions for the client.
+  const handleCloseProject = async () => {
+    if (!detailTarget || !clientProjects[detailTarget.id]) return;
+    const proj = clientProjects[detailTarget.id];
+    if (!confirm(`Close out "${proj.project_name}" for ${detailTarget.full_name}? The client will no longer be able to upload stems or request revisions.`)) return;
+
+    setIsClosingProject(true);
+    try {
+      const closedAt = new Date().toISOString();
+      const { error } = await supabase
+        .from('projects')
+        .update({ status: 'Completed', closed_at: closedAt, final_project_url: editFinalUrl.trim() || null })
+        .eq('id', proj.id);
+      if (error) throw error;
+
+      await supabase
+        .from('mixed_track_revisions')
+        .update({ status: 'resolved' })
+        .eq('project_id', proj.id)
+        .eq('status', 'pending');
+
+      setClientProjects((prev) => ({
+        ...prev,
+        [detailTarget.id]: { ...prev[detailTarget.id], status: 'Completed', closed_at: closedAt, final_project_url: editFinalUrl.trim() || null },
+      }));
+      await fetchAllRevisions();
+      setDetailModalOpen(false);
+    } catch (err) {
+      console.error('Error closing project:', err);
+      alert('Failed to close out the project.');
+    } finally {
+      setIsClosingProject(false);
     }
   };
 
@@ -644,6 +704,7 @@ export default function AdminDashboard() {
         .insert([{
           client_id: mixedUploadTarget.id,
           title: mixedUploadTitle.trim(),
+          notes: mixedUploadNotes.trim() || null,
           file_path: storageData.path,
           file_url: publicUrl
         }]);
@@ -685,6 +746,7 @@ export default function AdminDashboard() {
         setMixedUploadModalOpen(false);
         setMixedUploadFile(null);
         setMixedUploadTitle('');
+        setMixedUploadNotes('');
         setActiveRevisionId(null);
         setIsUploadingMixed(false);
         setMixedUploadProgress(0);
@@ -2017,6 +2079,28 @@ export default function AdminDashboard() {
                 />
               </div>
 
+              {/* What they paid for */}
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div>
+                  <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(240,230,224,0.4)', marginBottom: '8px' }}>Songs paid for</label>
+                  <input type="number" min={1} value={launchSongs} onChange={(e) => setLaunchSongs(Number(e.target.value) || 1)} style={{
+                    width: '100%', padding: '12px 14px', boxSizing: 'border-box',
+                    borderRadius: '10px', border: '1px solid rgba(240,230,224,0.1)',
+                    background: 'rgba(255,255,255,0.04)', color: '#F0E6E0',
+                    fontFamily: "'Neue Montreal', 'Roboto', sans-serif", fontSize: '14px', outline: 'none',
+                  }} />
+                </div>
+                <div>
+                  <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(240,230,224,0.4)', marginBottom: '8px' }}>Revisions included</label>
+                  <input type="number" min={0} value={launchRevisions} onChange={(e) => setLaunchRevisions(Number(e.target.value) || 0)} style={{
+                    width: '100%', padding: '12px 14px', boxSizing: 'border-box',
+                    borderRadius: '10px', border: '1px solid rgba(240,230,224,0.1)',
+                    background: 'rgba(255,255,255,0.04)', color: '#F0E6E0',
+                    fontFamily: "'Neue Montreal', 'Roboto', sans-serif", fontSize: '14px', outline: 'none',
+                  }} />
+                </div>
+              </div>
+
               {/* Deliverables */}
               <div>
                 <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(240,230,224,0.4)', marginBottom: '8px' }}>
@@ -2186,6 +2270,24 @@ export default function AdminDashboard() {
 
               <div>
                 <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(240,230,224,0.4)', marginBottom: '8px' }}>
+                  Notes to client <span style={{ color: 'rgba(240,230,224,0.2)' }}>(optional)</span>
+                </label>
+                <textarea
+                  rows={3}
+                  placeholder="What changed in this mix, what to listen for, anything you need from them."
+                  value={mixedUploadNotes}
+                  onChange={(e) => setMixedUploadNotes(e.target.value)}
+                  style={{
+                    width: '100%', padding: '12px 14px', boxSizing: 'border-box',
+                    borderRadius: '10px', border: '1px solid rgba(240,230,224,0.1)',
+                    background: 'rgba(255,255,255,0.04)', color: '#F0E6E0',
+                    fontFamily: "'Neue Montreal', 'Roboto', sans-serif", fontSize: '14px', outline: 'none', resize: 'vertical',
+                  }}
+                />
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(240,230,224,0.4)', marginBottom: '8px' }}>
                   Audio File (.mp3)
                 </label>
                 <div style={{ position: 'relative' }}>
@@ -2337,6 +2439,27 @@ export default function AdminDashboard() {
                   </select>
                 </div>
 
+                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(240,230,224,0.4)', marginBottom: '8px' }}>Songs paid for</label>
+                    <input type="number" min={1} value={editSongs} onChange={(e) => setEditSongs(Number(e.target.value) || 1)} style={{
+                    width: '100%', padding: '12px 14px', boxSizing: 'border-box',
+                    borderRadius: '10px', border: '1px solid rgba(240,230,224,0.1)',
+                    background: 'rgba(255,255,255,0.04)', color: '#F0E6E0',
+                    fontFamily: "'Neue Montreal', 'Roboto', sans-serif", fontSize: '14px', outline: 'none',
+                  }} />
+                  </div>
+                  <div>
+                    <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(240,230,224,0.4)', marginBottom: '8px' }}>Revisions included</label>
+                    <input type="number" min={0} value={editRevisions} onChange={(e) => setEditRevisions(Number(e.target.value) || 0)} style={{
+                    width: '100%', padding: '12px 14px', boxSizing: 'border-box',
+                    borderRadius: '10px', border: '1px solid rgba(240,230,224,0.1)',
+                    background: 'rgba(255,255,255,0.04)', color: '#F0E6E0',
+                    fontFamily: "'Neue Montreal', 'Roboto', sans-serif", fontSize: '14px', outline: 'none',
+                  }} />
+                  </div>
+                </div>
+
                 {/* Delivery Date */}
                 <div>
                   <label style={{ display: 'block', fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.15em', color: 'rgba(240,230,224,0.4)', marginBottom: '8px' }}>
@@ -2475,6 +2598,23 @@ export default function AdminDashboard() {
               >
                 Cancel
               </button>
+              {detailTarget && clientProjects[detailTarget.id] && !clientProjects[detailTarget.id].closed_at && (
+                <button
+                  type="button"
+                  onClick={handleCloseProject}
+                  disabled={isClosingProject || isSavingProject}
+                  title="Marks the project Completed and locks uploads and revisions for the client"
+                  style={{
+                    flex: 1, padding: '14px', borderRadius: '9999px',
+                    border: '1px solid rgba(227,194,74,0.35)',
+                    background: 'rgba(227,194,74,0.08)', color: '#E3C24A',
+                    fontSize: '14px', fontWeight: 600, cursor: isClosingProject ? 'not-allowed' : 'pointer',
+                    opacity: isClosingProject ? 0.6 : 1,
+                  }}
+                >
+                  {isClosingProject ? 'Closing...' : 'Close Out'}
+                </button>
+              )}
               <button
                 type="button"
                 onClick={handleUpdateProject}

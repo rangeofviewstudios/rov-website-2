@@ -18,6 +18,9 @@ interface Project {
   final_project_url?: string | null;
   delivery_date?: string | null;
   folder_link?: string | null;
+  songs_included?: number | null;
+  revisions_included?: number | null;
+  closed_at?: string | null;
 }
 
 interface AudioTrack {
@@ -188,6 +191,14 @@ export default function ClientPortal() {
 
 
 
+  // Limits come from the project row, set by staff when the project launches.
+  // Fallbacks match the old hardcoded caps so existing projects behave the same.
+  const songLimit = project?.songs_included ?? 6;
+  const revisionLimit = project?.revisions_included ?? 2;
+  const isClosed = !!project?.closed_at || project?.status === 'Completed';
+  const atSongLimit = audioTracks.length >= songLimit;
+  const atRevisionLimit = revisions.length >= revisionLimit;
+
   const handleAudioFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
       setAudioFile(e.target.files[0]);
@@ -217,8 +228,12 @@ export default function ClientPortal() {
     e.preventDefault();
     if (!audioFile || !trackTitle || !userId) return;
     
-    if (audioTracks.length >= 6) {
-      alert("Maximum limit of 6 tracks reached.");
+    if (isClosed) {
+      alert("This project is closed. Reach out if you want to start another.");
+      return;
+    }
+    if (atSongLimit) {
+      alert(`Your project covers ${songLimit} song${songLimit === 1 ? '' : 's'}. Reach out if you'd like to add more.`);
       return;
     }
 
@@ -280,8 +295,12 @@ export default function ClientPortal() {
     e.preventDefault();
     if (!revisionNotes.trim() || !project || !userId || isSubmittingRevision) return;
 
-    if (revisions.length >= 2) {
-      alert("Maximum of 2 revisions allowed.");
+    if (isClosed) {
+      alert("This project is closed, so revisions are no longer open.");
+      return;
+    }
+    if (atRevisionLimit) {
+      alert(`You've used all ${revisionLimit} revision${revisionLimit === 1 ? '' : 's'} included in this project.`);
       return;
     }
 
@@ -352,7 +371,9 @@ export default function ClientPortal() {
     const step = getStepIndex();
     if (step === 0) return "Let\u2019s get your agreements signed to kick things off.";
     if (step === 1) return 'Agreements signed. Next up \u2014 your invoice.';
-    if (step === 3) return 'Your project is complete!';
+    if (step === 3) return project.closed_at
+      ? 'Your project is closed out. Your final mixes stay available here.'
+      : 'Your project is complete!';
     return 'Your project is in progress. Here\u2019s what we need from you.';
   }
 
@@ -989,13 +1010,13 @@ export default function ClientPortal() {
                Audio Tracks
                <span style={{ 
                  fontSize: '11px', 
-                 color: audioTracks.length >= 6 ? '#E3C24A' : 'rgba(240,230,224,0.35)',
+                 color: (atSongLimit || isClosed) ? '#E3C24A' : 'rgba(240,230,224,0.35)',
                  marginLeft: '8px',
                  fontWeight: 400,
                  fontStyle: 'normal',
                  fontFamily: "'Neue Montreal', 'Roboto', sans-serif"
                }}>
-                 ({audioTracks.length}/6 used)
+                 ({audioTracks.length}/{songLimit} used)
                </span>
               </h3>
               <div style={{ color: 'rgba(240,230,224,0.25)', transition: 'transform 0.3s ease', transform: isAudioTracksExpanded ? 'rotate(180deg)' : 'rotate(0)' }}>
@@ -1004,38 +1025,38 @@ export default function ClientPortal() {
             </div>
             <button
                 onClick={() => setIsUploadModalOpen(true)}
-                disabled={audioTracks.length >= 6}
+                disabled={(atSongLimit || isClosed)}
                 style={{
                   display: 'flex',
                   alignItems: 'center',
                   gap: '8px',
                   padding: '8px 16px',
                   borderRadius: '9999px',
-                  background: audioTracks.length >= 6 ? 'rgba(255,255,255,0.02)' : 'transparent',
+                  background: (atSongLimit || isClosed) ? 'rgba(255,255,255,0.02)' : 'transparent',
                   border: '1px solid rgba(240,230,224,0.15)',
-                  color: audioTracks.length >= 6 ? 'rgba(240,230,224,0.2)' : '#F0E6E0',
+                  color: (atSongLimit || isClosed) ? 'rgba(240,230,224,0.2)' : '#F0E6E0',
                   fontSize: '12px',
                   fontFamily: "'Neue Montreal', 'Roboto', sans-serif",
                   textTransform: 'uppercase',
                   letterSpacing: '0.05em',
-                  cursor: audioTracks.length >= 6 ? 'not-allowed' : 'pointer',
+                  cursor: (atSongLimit || isClosed) ? 'not-allowed' : 'pointer',
                   transition: 'all 0.2s',
-                  opacity: audioTracks.length >= 6 ? 0.6 : 1
+                  opacity: (atSongLimit || isClosed) ? 0.6 : 1
                 }}
                 onMouseEnter={(e) => {
-                    if (audioTracks.length < 6) {
+                    if (!(atSongLimit || isClosed)) {
                       e.currentTarget.style.background = 'rgba(255,255,255,0.05)';
                       e.currentTarget.style.borderColor = 'rgba(240,230,224,0.3)';
                     }
                 }}
                 onMouseLeave={(e) => {
-                    if (audioTracks.length < 6) {
+                    if (!(atSongLimit || isClosed)) {
                       e.currentTarget.style.background = 'transparent';
                       e.currentTarget.style.borderColor = 'rgba(240,230,224,0.15)';
                     }
                 }}
             >
-                <UploadCloud size={14} /> {audioTracks.length >= 6 ? 'Limit Reached' : 'Upload'}
+                <UploadCloud size={14} /> {isClosed ? 'Closed' : atSongLimit ? 'Limit Reached' : 'Upload'}
             </button>
           </div>
 
@@ -1169,7 +1190,7 @@ export default function ClientPortal() {
                     <div style={{ width: '6px', height: '6px', borderRadius: '50%', background: '#E3C24A', animation: 'subtlePulse 1.5s infinite' }} />
                     Review Pending
                   </div>
-                ) : revisions.length < 2 ? (
+                ) : !isClosed && !atRevisionLimit ? (
                   <button
                     onClick={() => setIsRevisionModalOpen(true)}
                     style={{
@@ -1197,7 +1218,7 @@ export default function ClientPortal() {
                         e.currentTarget.style.borderColor = 'rgba(240,230,224,0.15)';
                     }}
                   >
-                    <MessageSquare size={14} /> Request Review ({revisions.length}/2)
+                    <MessageSquare size={14} /> Request Review ({revisions.length}/{revisionLimit})
                   </button>
                 ) : (
                   <div style={{
@@ -1246,6 +1267,11 @@ export default function ClientPortal() {
                       <span style={{ fontSize: '11px', color: 'rgba(240,230,224,0.3)' }}>
                         Available since {new Date(track.created_at).toLocaleDateString()}
                       </span>
+                      {track.notes && (
+                        <p style={{ margin: '8px 0 0', fontSize: '13px', lineHeight: 1.5, color: 'rgba(240,230,224,0.6)', whiteSpace: 'pre-wrap' }}>
+                          {track.notes}
+                        </p>
+                      )}
                       <audio 
                         ref={(el) => { if (el) audioRefs.current[track.id] = el; }}
                         src={track.file_url} 
@@ -1489,22 +1515,22 @@ export default function ClientPortal() {
                         ) : (
                            <button
                               type="submit"
-                              disabled={!audioFile || !trackTitle || audioTracks.length >= 6}
+                              disabled={!audioFile || !trackTitle || (atSongLimit || isClosed)}
                               style={{
                                  width: '100%',
                                  padding: '16px',
                                  borderRadius: '12px',
-                                 background: (!audioFile || !trackTitle || audioTracks.length >= 6) ? 'rgba(227,194,74,0.1)' : '#E3C24A',
-                                 color: (!audioFile || !trackTitle || audioTracks.length >= 6) ? 'rgba(227,194,74,0.3)' : '#0F0820',
+                                 background: (!audioFile || !trackTitle || (atSongLimit || isClosed)) ? 'rgba(227,194,74,0.1)' : '#E3C24A',
+                                 color: (!audioFile || !trackTitle || (atSongLimit || isClosed)) ? 'rgba(227,194,74,0.3)' : '#0F0820',
                                  border: 'none',
                                  fontSize: '15px',
                                  fontFamily: "'Neue Montreal', 'Roboto', sans-serif",
                                  fontWeight: 600,
-                                 cursor: (!audioFile || !trackTitle || audioTracks.length >= 6) ? 'not-allowed' : 'pointer',
+                                 cursor: (!audioFile || !trackTitle || (atSongLimit || isClosed)) ? 'not-allowed' : 'pointer',
                                  transition: 'all 0.2s',
                               }}
                            >
-                              {audioTracks.length >= 6 ? 'Limit Reached' : 'Upload Track'}
+                              {(atSongLimit || isClosed) ? 'Limit Reached' : 'Upload Track'}
                            </button>
                         )}
                     </div>
@@ -1678,7 +1704,7 @@ export default function ClientPortal() {
 
             <div style={{ marginBottom: '24px' }}>
               <p style={{ fontSize: '11px', textTransform: 'uppercase', letterSpacing: '0.2em', color: 'rgba(227,194,74,0.6)', marginBottom: '8px' }}>
-                Revision {revisions.length + 1} of 2
+                Revision {revisions.length + 1} of {revisionLimit}
               </p>
               <h2 style={{
                 fontSize: '24px',
@@ -1735,7 +1761,7 @@ export default function ClientPortal() {
               </button>
               
               <p style={{ fontSize: '12px', color: 'rgba(240,230,224,0.3)', textAlign: 'center', margin: 0 }}>
-                This will count as revision {revisions.length + 1} out of 2.
+                This will count as revision {revisions.length + 1} out of {revisionLimit}.
               </p>
             </form>
           </div>
