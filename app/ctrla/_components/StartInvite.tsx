@@ -34,6 +34,7 @@ const QUIET_ROUTES = [
   "/ctrla/submit",
   "/ctrla/pitchdeck",
   "/ctrla/u/",
+  "/ctrla/beatup",
 ];
 
 export default function StartInvite() {

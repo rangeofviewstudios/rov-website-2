@@ -140,7 +140,12 @@ export default function EditorialFooter() {
         <Rule color="rgba(240,230,224,0.14)" />
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 12, flexWrap: "wrap", paddingTop: 16 }}>
           <Label color={paperSoft}>CTRL-A · {issueMeta.volume} · {issueMeta.edition}</Label>
-          <Label color={paperFaint}>© Range of View Studios</Label>
+          <Label color={paperFaint}>
+            <Link href="/ctrla/beatup" style={{ color: "inherit", textDecoration: "none" }}>
+              ©
+            </Link>{" "}
+            Range of View Studios
+          </Label>
         </div>
       </Bleed>
       </div>
