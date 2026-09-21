@@ -1628,6 +1628,27 @@ input[type="range"]::-webkit-slider-thumb {
 }
 .ctrla-nav-sub:hover { color: #e3c24a; }
 
+/* The one real conversion action in the menu, so it gets an actual
+   button instead of joining the quiet link row. */
+.ctrla-nav-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: clamp(4px, 1vw, 10px);
+  padding: 10px clamp(16px, 2vw, 22px);
+  border: 1px solid rgba(227, 194, 74, 0.5);
+  border-radius: 999px;
+  font-family: "Neue Montreal", "Helvetica Neue", Arial, sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: #e3c24a;
+  text-decoration: none;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.ctrla-nav-submit:hover { background: #e3c24a; color: #20120a; border-color: #e3c24a; }
+
 .ctrla-nav-overlay-foot {
   flex-shrink: 0;
   border-top: 1px solid rgba(240, 230, 224, 0.14);
@@ -1654,16 +1675,10 @@ input[type="range"]::-webkit-slider-thumb {
 .ctrla-nav-rov {
   display: inline-flex;
   align-items: center;
-  gap: 9px;
-  font-size: clamp(12px, 1.3vw, 14px);
-  font-weight: 700;
-  letter-spacing: 0.3em;
-  text-transform: uppercase;
-  color: #f0e6e0;
-  text-decoration: none;
-  transition: color 0.2s ease;
+  opacity: 0.85;
+  transition: opacity 0.2s ease;
 }
-.ctrla-nav-rov:hover { color: #e3c24a; }
+.ctrla-nav-rov:hover { opacity: 1; }
 .ctrla-nav-login button {
   color: rgba(240, 230, 224, 0.65) !important;
   font-family: "Neue Montreal", "Helvetica Neue", Arial, sans-serif !important;
@@ -1712,10 +1727,12 @@ input[type="range"]::-webkit-slider-thumb {
   padding: clamp(18px, 2.6vw, 34px) clamp(2px, 0.6vw, 8px);
   cursor: pointer;
   color: var(--acc);
-  transition: background 0.3s ease, padding-left 0.3s ease;
+  /* transform, not padding-left: a layout property under transition
+     forces reflow on every animation frame. Compositor-only from here. */
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 .ctrla-craft-row:first-of-type { border-top: 1px solid rgba(240, 230, 224, 0.16); }
-.ctrla-craft-row:hover { background: rgba(240, 230, 224, 0.045); padding-left: clamp(8px, 1.4vw, 18px); }
+.ctrla-craft-row:hover { background: rgba(240, 230, 224, 0.045); transform: translateX(clamp(6px, 1vw, 12px)); }
 .ctrla-craft-row:focus-visible { outline: 2px solid #e3c24a; outline-offset: -3px; }
 .ctrla-craft-row-node {
   width: clamp(13px, 1.4vw, 17px);
@@ -1758,10 +1775,10 @@ input[type="range"]::-webkit-slider-thumb {
   padding: clamp(18px, 2.6vw, 34px) clamp(2px, 0.6vw, 8px);
   cursor: pointer;
   color: inherit;
-  transition: background 0.3s ease, padding-left 0.3s ease;
+  transition: background 0.3s ease, transform 0.3s ease;
 }
 .ctrla-row:first-of-type { border-top: 1px solid rgba(240, 230, 224, 0.16); }
-.ctrla-row:hover { background: rgba(240, 230, 224, 0.045); padding-left: clamp(8px, 1.4vw, 18px); }
+.ctrla-row:hover { background: rgba(240, 230, 224, 0.045); transform: translateX(clamp(6px, 1vw, 12px)); }
 .ctrla-row:focus-visible { outline: 2px solid #e3c24a; outline-offset: -3px; }
 .ctrla-row-node {
   width: clamp(13px, 1.4vw, 17px);
@@ -1818,7 +1835,7 @@ input[type="range"]::-webkit-slider-thumb {
   .ctrla-row,
   .ctrla-row-cta { transition: none; }
   .ctrla-craft-row:hover,
-  .ctrla-row:hover { padding-left: clamp(2px, 0.6vw, 8px); }
+  .ctrla-row:hover { transform: none; }
   .ctrla-start-door:hover .ctrla-start-door-arrow { transform: none; }
   .ctrla-invite-backdrop,
   .ctrla-invite-card { animation: none; }

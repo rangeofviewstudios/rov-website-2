@@ -10,12 +10,14 @@
 //     up, and the Menu trigger on the right.
 //   · A full-screen overlay that opens on hover (fine pointers) and pins
 //     on click: an aggressive blur + scrim over the whole page, then a
-//     centered list, no cards, no icons. Toolkits and ATL are the two
-//     real destinations and carry the type scale; Lock In and The
-//     Magazine sit underneath as a quieter secondary tier.
+//     centered list, no cards, no icons. Nobody with no path yet sees
+//     "Start here" first, big, ahead of everything else; once they have
+//     one, Toolkits and ATL take that top spot instead and the path
+//     itself shows in the strip above. The Magazine sits underneath as
+//     a quieter secondary tier (Lock In is off the menu for now).
 //
-// The way back to the studio lives in the footer row as the R.O.V
-// wordmark, matching how the reference parks its legal row.
+// The way back to the studio lives in the footer row as the real ROV
+// logo, matching how the reference parks its legal row.
 // ═══════════════════════════════════════════════════════
 
 import { useCallback, useEffect, useRef, useState } from "react";
@@ -30,27 +32,18 @@ import { toolkitSections } from "../data";
 import YourPath from "./YourPath";
 import { useCtrlAPath } from "@/lib/ctrla/progress";
 
-/** The ROV wordmark is type, not an asset — matched to the main nav. */
-const ROV_DISPLAY = { fontFamily: "'Norwige Light', sans-serif" } as const;
-
 /** Routes that own the whole screen and get no site chrome. */
 const CHROMELESS = ["/ctrla/pitchdeck"];
 
 // Toolkits and ATL are the two real destinations and carry the big type
-// in the menu's center; these two sit underneath as the quieter tier.
-const SECONDARY_PRIMARY = [
-  { title: "Lock In", to: "/ctrla/the-fold" },
-  { title: "The Magazine", to: "/ctrla/vol/1" },
-];
+// in the menu's center; this sits underneath as the quieter tier. Lock In
+// is off the menu for now, not gone for good.
+const SECONDARY_PRIMARY = [{ title: "The Magazine", to: "/ctrla/vol/1" }];
 
 const SECONDARY = [
-  // First, because the bar's "Start here" link hides on narrow screens and
-  // this is the only other door to the quiz.
-  { title: "Start here", to: "/ctrla/start" },
   { title: "Brand Kit Generator", to: "/ctrla/brand-kit" },
   { title: "The Daily Taste Test", to: "/ctrla/daily" },
   { title: "Cookbook", to: "/ctrla/cookbook" },
-  { title: "Submit your work", to: "/ctrla/submit" },
 ];
 
 /** Atlanta clock, the way the reference shows its studio's local time. */
@@ -232,6 +225,15 @@ export default function CtrlANav() {
             {hasPath && <YourPath variant="strip" onNavigate={close} />}
 
             <div className="ctrla-nav-primary">
+              {/* Nobody's taken the quiz yet: that's the first door, ahead
+                  of Toolkits and ATL, not a footnote below them. Someone
+                  who has a path already sees it in the strip above instead. */}
+              {!hasPath && (
+                <Link href="/ctrla/start" onClick={close} className="ctrla-nav-primary-item is-active">
+                  Start here
+                </Link>
+              )}
+
               {/* Toolkits, expanding in place to the four crafts */}
               <button
                 type="button"
@@ -279,12 +281,16 @@ export default function CtrlANav() {
                 </Link>
               ))}
             </div>
+
+            <Link href="/ctrla/submit" onClick={close} className="ctrla-nav-submit">
+              Submit your work →
+            </Link>
           </div>
 
           <div className="ctrla-nav-overlay-foot">
             <div className="ctrla-nav-foot-left">
-              <Link href="/" onClick={close} className="ctrla-nav-rov" style={ROV_DISPLAY}>
-                <span aria-hidden>←</span> R.O.V
+              <Link href="/" onClick={close} className="ctrla-nav-rov" aria-label="Range Of View Studios">
+                <Image src="/brand/rov-logo.webp" alt="" width={140} height={36} unoptimized style={{ height: 28, width: "auto" }} />
               </Link>
               <span className="ctrla-nav-eyebrow">Atlanta {time ? `· ${time}` : ""}</span>
               <div className="ctrla-nav-socials">

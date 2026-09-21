@@ -203,12 +203,12 @@ function Question({ children }: { children: React.ReactNode }) {
       style={{
         fontFamily: ed.grotesque,
         fontWeight: 800,
-        fontSize: "clamp(34px, 6.4vw, 88px)",
-        lineHeight: 0.92,
-        letterSpacing: "-0.035em",
+        fontSize: "clamp(28px, 4.8vw, 60px)",
+        lineHeight: 0.94,
+        letterSpacing: "-0.03em",
         color: ed.ink,
-        margin: "clamp(14px,1.8vw,22px) 0 0",
-        maxWidth: 960,
+        margin: "clamp(12px,1.6vw,18px) 0 0",
+        maxWidth: 820,
         outline: "none",
       }}
     >
@@ -224,11 +224,11 @@ function Sub({ children }: { children: React.ReactNode }) {
       style={{
         fontFamily: ed.serif,
         fontStyle: "italic",
-        fontSize: "clamp(17px,2.2vw,28px)",
-        lineHeight: 1.24,
+        fontSize: "clamp(15px,1.7vw,20px)",
+        lineHeight: 1.3,
         color: ed.gold,
-        margin: "clamp(12px,1.5vw,18px) 0 0",
-        maxWidth: 640,
+        margin: "clamp(10px,1.3vw,14px) 0 0",
+        maxWidth: 560,
       }}
     >
       {children}
@@ -263,14 +263,14 @@ function CraftRow({
       style={{ ["--acc" as string]: option.accent }}
     >
       <span aria-hidden className="ctrla-craft-row-node" />
-      <Image src={option.art} alt="" width={36} height={36} unoptimized className="ctrla-craft-row-art" />
+      <Image src={option.art} alt="" width={28} height={28} unoptimized className="ctrla-craft-row-art" />
       <span style={{ minWidth: 0 }}>
         <span
           style={{
             display: "block",
             fontFamily: ed.grotesque,
             fontWeight: 800,
-            fontSize: "clamp(26px,4.4vw,58px)",
+            fontSize: "clamp(20px,3.2vw,40px)",
             letterSpacing: "-0.03em",
             lineHeight: 1,
             color: ed.ink,
@@ -278,12 +278,15 @@ function CraftRow({
         >
           {option.label}
         </span>
-        <span style={{ display: "block", marginTop: 10 }}>
-          <Label color={option.accent}>{option.meta}</Label>
+        <span style={{ display: "block", marginTop: 8 }}>
+          {/* Small text stays gold on dark, like everywhere else on the
+              site — the craft's own accent is for the icon and the node
+              only, never for text, or four rows read as four palettes. */}
+          <Label color={ed.gold}>{option.meta}</Label>
         </span>
       </span>
       <span className="ctrla-craft-row-cta">
-        <Label color={option.accent}>{selected ? `Picked · ${String(order + 1).padStart(2, "0")}` : "Select"} →</Label>
+        <Label color={ed.gold}>{selected ? `Picked · ${String(order + 1).padStart(2, "0")}` : "Select"} →</Label>
       </span>
     </button>
   );
@@ -316,7 +319,7 @@ function Row({
             display: "block",
             fontFamily: ed.grotesque,
             fontWeight: 800,
-            fontSize: "clamp(26px,4.4vw,58px)",
+            fontSize: "clamp(20px,3.2vw,40px)",
             letterSpacing: "-0.03em",
             lineHeight: 1,
             color: ed.ink,
@@ -324,7 +327,7 @@ function Row({
         >
           {label}
         </span>
-        <span style={{ display: "block", marginTop: 10 }}>
+        <span style={{ display: "block", marginTop: 8 }}>
           <Label color={ed.gold}>{meta}</Label>
         </span>
       </span>
@@ -365,7 +368,7 @@ function OutcomeRow({ opt, accent }: { opt: Outcome; accent: string }) {
             style={{
               fontFamily: ed.grotesque,
               fontWeight: 800,
-              fontSize: "clamp(28px,4.6vw,60px)",
+              fontSize: "clamp(22px,3.6vw,42px)",
               letterSpacing: "-0.03em",
               lineHeight: 0.98,
               color: opt.emph ? accent : ed.ink,
@@ -601,12 +604,12 @@ export default function StartContent() {
                     style={{
                       fontFamily: ed.grotesque,
                       fontWeight: 800,
-                      fontSize: "clamp(30px, 5.4vw, 76px)",
-                      lineHeight: 0.94,
-                      letterSpacing: "-0.035em",
+                      fontSize: "clamp(26px, 4.2vw, 54px)",
+                      lineHeight: 0.96,
+                      letterSpacing: "-0.03em",
                       color: ed.ink,
-                      margin: "clamp(14px,1.8vw,22px) 0 0",
-                      maxWidth: 1040,
+                      margin: "clamp(12px,1.6vw,18px) 0 0",
+                      maxWidth: 820,
                       outline: "none",
                     }}
                   >
