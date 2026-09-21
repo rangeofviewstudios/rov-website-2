@@ -92,6 +92,19 @@ export function MusicMenu({ className }: { className?: string }) {
         return () => window.removeEventListener("keydown", handleKey);
     }, [open, close]);
 
+    // Lock the page behind the panel while it's open. The panel scrolls on its
+    // own now (see the overflow-y-auto container below), so without this the
+    // body would also scroll underneath it on any viewport short enough that
+    // the content doesn't fit.
+    useEffect(() => {
+        if (!open) return;
+        const prev = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
+        return () => {
+            document.body.style.overflow = prev;
+        };
+    }, [open]);
+
     useEffect(() => clearTimers, []);
 
     // The music host serves /sound/* paths at clean top-level URLs, so match
@@ -159,20 +172,31 @@ export function MusicMenu({ className }: { className?: string }) {
                     }}
                 />
 
-                <div className={`relative h-full w-full overflow-hidden transition-transform duration-500 ease-out ${open ? "translate-y-0" : "-translate-y-2"}`}>
-                    <div className="pointer-events-none absolute inset-x-0 top-4 md:top-6 z-10">
-                        <div className="mx-auto w-full max-w-6xl px-5 md:px-10">
-                            <Link
-                                href="/"
-                                onClick={close}
-                                style={DISPLAY}
-                                className="pointer-events-auto inline-flex h-11 md:h-12 items-center text-white text-[16px] md:text-[18px] font-bold uppercase tracking-[0.34em] hover:text-[#EA9A61] focus-visible:outline-none focus-visible:text-[#EA9A61] transition-colors"
-                            >
-                                R.O.V Music
-                            </Link>
-                        </div>
+                {/* Wordmark stays pinned to the viewport, outside the scroll
+                    container below, so it never scrolls away on a short viewport. */}
+                <div className="pointer-events-none absolute inset-x-0 top-4 md:top-6 z-10">
+                    <div className="mx-auto w-full max-w-6xl px-5 md:px-10">
+                        <Link
+                            href="/"
+                            onClick={close}
+                            className="pointer-events-auto -ml-2 inline-flex h-11 md:h-12 items-center gap-2.5 opacity-90 hover:opacity-100 focus-visible:outline-none focus-visible:opacity-100 transition-opacity"
+                        >
+                            <Image
+                                src="/brand/rov-logo.webp"
+                                alt="Range Of View"
+                                width={140}
+                                height={36}
+                                priority
+                                className="h-[26px] md:h-[30px] w-auto"
+                            />
+                            <span style={DISPLAY} className="text-white text-[16px] md:text-[18px] font-bold uppercase tracking-[0.34em]">
+                                Music
+                            </span>
+                        </Link>
                     </div>
+                </div>
 
+                <div className={`relative h-full w-full overflow-y-auto overscroll-contain transition-transform duration-500 ease-out ${open ? "translate-y-0" : "-translate-y-2"}`}>
                     <div className="mx-auto flex min-h-full w-full max-w-6xl [align-items:safe_center] px-5 md:px-10 pt-24 md:pt-20 pb-8">
                         <div className="w-full grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-x-20 lg:gap-y-8">
                             {/* Left */}
@@ -194,7 +218,7 @@ export function MusicMenu({ className }: { className?: string }) {
                                                 />
                                                 <span
                                                     style={DISPLAY}
-                                                    className={`block text-[24px] leading-[1.25] md:text-[38px] md:leading-[1.2] font-bold uppercase tracking-[0.1em] transition-colors duration-300 ${isActive(s.to) ? "text-white" : "text-white/90 group-hover:text-white"}`}
+                                                    className={`block text-[24px] leading-[1.25] md:text-[38px] md:leading-[1.2] font-black uppercase tracking-[0.1em] transition-colors duration-300 ${isActive(s.to) ? "text-white" : "text-white/90 group-hover:text-white"}`}
                                                 >
                                                     {s.title}
                                                 </span>
@@ -298,8 +322,10 @@ export function MusicMenu({ className }: { className?: string }) {
                                 </div>
                             </div>
 
-                            {/* Right: proof, then the one CTA */}
-                            <div className="hidden lg:block">
+                            {/* Right: proof, then the one CTA. lg:self-end drops
+                                the whole group to the bottom of the column, level
+                                with the socials row on the left. */}
+                            <div className="hidden lg:block lg:self-end">
                                 <p style={DISPLAY} className="text-white/60 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-6 md:mb-7">
                                     Recent records
                                 </p>
@@ -368,7 +394,7 @@ export function MusicMenu({ className }: { className?: string }) {
                                 </Link>
 
                                 <div className="mt-6 rounded-xl border border-[#EA9A61]/25 bg-[#EA9A61]/[0.07] p-4 md:p-5">
-                                    <p style={DISPLAY} className="text-white text-[16px] md:text-[18px] font-bold uppercase tracking-[0.08em] leading-snug">
+                                    <p style={DISPLAY} className="text-white text-[16px] md:text-[18px] font-black uppercase tracking-[0.08em] leading-snug">
                                         Got a record to finish?
                                     </p>
                                     <p className="mt-3 font-sans text-white/75 text-[13.5px] font-medium leading-[1.65]">
