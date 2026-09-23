@@ -52,11 +52,7 @@ const MusicPlayer = dynamic(() => import("@/components/sound/MusicPlayer"), {
     ssr: false,
 });
 
-const PathFork = dynamic(() => import("@/components/sound/PathFork"));
-
-const ReadinessAudit = dynamic(() => import("@/components/sound/ReadinessAudit"));
-
-const IntroOffer = dynamic(() => import("@/components/sound/IntroOffer"));
+const StartHere = dynamic(() => import("@/components/sound/StartHere"));
 
 const FoundationOffer = dynamic(() => import("@/components/sound/FoundationOffer"));
 
@@ -191,17 +187,17 @@ export default function Page() {
                 tilt={-1.4}
             />
 
-            {/* 04 — Two-path fork (record vs send stems) */}
-            <PathFork />
-
-            {/* 05 — $50 Intro Offer                         [#mixing] */}
-            <IntroOffer />
+            {/* 04 — Start Here: one offer ($50 first mix), visible Artist/Manager
+                toggle, secondary path to recording/Foundation. Replaces the old
+                PathFork + IntroOffer pair, which stated the same $50 offer twice
+                back-to-back with no way for a newcomer to tell the second one
+                wasn't new.                                    [#start] */}
+            <StartHere />
 
             {/* 06 — Studio rates, the room, value props     [#record]
                 The quote estimator used to sit after this. Retired: /pricing
                 answers "what does it cost" better than a four-question
-                ballpark, and two quizzes on one page was one too many. The
-                readiness audit below is now the only quiz. */}
+                ballpark. */}
             <StudioSection />
 
             {/* ════ ACT 3 · THE CAREER ═══════════════════════════════
@@ -227,8 +223,12 @@ export default function Page() {
                 the video showcase, which had no job in the old tail. */}
             <CareerGaps />
 
-            {/* 09 — Artist Readiness Audit                  [#audit]  */}
-            <ReadinessAudit />
+            {/* 09 — Artist Readiness Audit: pulled off the home page for now.
+                Six questions was too much to ask mid-scroll on top of the
+                RoleGate popup's three. It's parked here, not deleted — the
+                plan is to surface it on /pricing instead, where someone who
+                wants "what do I actually need" can opt into it on purpose.
+                ReadinessAudit.tsx and its API route are untouched. */}
 
             {/* 09.5 — Collaborators get routes instead of a quiz. Self-hides
                 for artists and managers.            [#collaborate] */}

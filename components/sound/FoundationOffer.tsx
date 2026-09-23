@@ -10,7 +10,6 @@
 import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 import { CONSULT_BOOKING_URL, checkoutHref } from "@/data/soundPricing";
-import { FOUNDATION_PRICE } from "@/data/artistReadiness";
 import CalBookButton from "@/components/sound/CalBookButton";
 import { useEffectiveRole } from "@/components/music/IntakeContext";
 import { Squiggle } from "@/components/sound/musicStory";
@@ -133,17 +132,20 @@ export default function FoundationOffer() {
             </span>
             <div className="flex items-baseline gap-2 mb-1">
               <span
-                className="text-white text-4xl md:text-5xl font-bold italic"
+                className="text-white text-2xl md:text-3xl font-bold italic"
                 style={{ fontFamily: HEADING }}
               >
-                ${FOUNDATION_PRICE}
+                One flat rate
               </span>
             </div>
             <span
               className="text-[#EA9A61] text-xs uppercase tracking-[0.15em] mb-6"
               style={{ fontFamily: BODY }}
             >
-              Yours forever
+              Yours forever &mdash;{" "}
+              <a href="/pricing#foundation" className="underline underline-offset-2 decoration-[#EA9A61]/40 hover:text-white transition-colors">
+                see the number
+              </a>
             </span>
 
             <ul className="flex-1 space-y-2.5 mb-7">

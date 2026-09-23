@@ -72,18 +72,25 @@ export function PinTag({ children, tilt = -2.5 }: { children: React.ReactNode; t
   );
 }
 
-/** Handwritten link with a drawn arrow, for the "go look" routes. */
+/** Route-out CTA. Was hand-lettered like the note above it, which read as
+ * one more scribble instead of the one thing on the page you can click.
+ * Now it's a solid pill in ink orange, still set in the hand font for
+ * voice, so it stands apart from both the note and the display headline. */
 export function HandLink({ href, children, tilt = 0.8 }: { href: string; children: React.ReactNode; tilt?: number }) {
   return (
     <a
       href={href}
-      className="group inline-flex items-center gap-2 text-[1.35rem] leading-none transition-colors md:text-[1.6rem]"
-      style={{ fontFamily: M.hand, fontWeight: 600, color: M.cream, transform: `rotate(${tilt}deg)` }}
+      className="group inline-flex items-center gap-2.5 rounded-full pl-5 pr-4 py-2.5 text-[1.15rem] leading-none transition-transform duration-300 hover:scale-105 md:text-[1.3rem]"
+      style={{
+        fontFamily: M.hand,
+        fontWeight: 700,
+        color: "#0B0603",
+        background: M.ink,
+        transform: `rotate(${tilt}deg)`,
+      }}
     >
-      <span className="underline decoration-[2px] underline-offset-[6px] transition-colors" style={{ textDecorationColor: "rgba(234,154,97,0.6)" }}>
-        {children}
-      </span>
-      <svg viewBox="0 0 60 30" aria-hidden fill="none" className="h-5 w-10 transition-transform duration-300 group-hover:translate-x-1" stroke={M.ink} strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round">
+      {children}
+      <svg viewBox="0 0 60 30" aria-hidden fill="none" className="h-4 w-8 shrink-0 transition-transform duration-300 group-hover:translate-x-1" stroke="#0B0603" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
         <path d="M4,17 C18,10 30,22 54,14" />
         <path d="M54,14 L44,7 M54,14 L45,23" />
       </svg>

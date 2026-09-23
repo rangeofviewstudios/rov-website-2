@@ -6,7 +6,7 @@ import MusicFooter from "@/components/music/MusicFooter";
 import { IntakeProvider } from "@/components/music/IntakeContext";
 import { BreadcrumbSchema } from "@/components/schema/BreadcrumbSchema";
 import { credits, artistProfiles, stages } from "./credits-data";
-import { Squiggle, Hand } from "@/components/sound/musicStory";
+import { Squiggle, HandLink } from "@/components/sound/musicStory";
 
 // rovmusic.com/credits — the proof layer.
 //
@@ -173,7 +173,7 @@ export default function CreditsPage() {
                                         {credit.role}
                                     </p>
                                     <span
-                                        className="mt-4 inline-block text-xs text-white/60 group-hover:text-white/60"
+                                        className="mt-4 inline-block text-xs text-white/60 group-hover:text-[#EA9A61] transition-colors"
                                         style={{ fontFamily: BODY_FONT }}
                                     >
                                         Listen on Spotify →
@@ -182,11 +182,9 @@ export default function CreditsPage() {
                             ))}
                         </div>
 
-                        <Hand className="mt-8 text-[1.1rem]" tilt={-0.8}>
-                            <Link href="/" className="hover:opacity-80">
-                                hear the before and after on the home page player →
-                            </Link>
-                        </Hand>
+                        <div className="mt-8">
+                            <HandLink href="/">hear the before and after on the home page player</HandLink>
+                        </div>
                     </div>
                 </section>
 
@@ -326,8 +324,12 @@ export default function CreditsPage() {
                         <div className="mt-9 flex flex-wrap gap-4">
                             <Link
                                 href="/pricing"
-                                className="rounded-full px-7 py-3 text-sm uppercase tracking-wide text-black transition-opacity hover:opacity-90"
-                                style={{ fontFamily: BODY_FONT, background: ACCENT }}
+                                className="cta-shine rounded-full px-7 py-3 text-sm font-semibold uppercase tracking-wide text-white transition-transform duration-300 hover:scale-105"
+                                style={{
+                                    fontFamily: HEADING_FONT,
+                                    background: "linear-gradient(112deg, #42201C 6.46%, #A64D2B 34.96%, #B16937 63.88%, #EA9A61 97.63%)",
+                                    boxShadow: "3px 4px 4px 0 rgba(255, 244, 227, 0.15) inset, 0 4.385px 4.385px 0 rgba(0, 0, 0, 0.25)",
+                                }}
                             >
                                 See pricing
                             </Link>

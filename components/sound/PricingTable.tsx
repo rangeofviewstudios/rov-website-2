@@ -9,7 +9,7 @@
 // Everything here reads from data/soundPricing.ts, so the rate card has exactly
 // one source of truth and this page can never drift from what the CTAs charge.
 
-import { useRef } from "react";
+import { useRef, type ReactNode } from "react";
 import Link from "next/link";
 import { motion, useInView } from "framer-motion";
 import {
@@ -23,6 +23,9 @@ import {
 import { FOUNDATION_PRICE } from "@/data/artistReadiness";
 import CalBookButton from "@/components/sound/CalBookButton";
 import { Squiggle } from "@/components/sound/musicStory";
+import { SESSION } from "@/components/sound/SessionPhoto";
+import { useEffectiveRole } from "@/components/music/IntakeContext";
+import OfferCard from "@/components/sound/OfferCard";
 
 const HEADING = "Norwige, sans-serif";
 const BODY = "'Roboto', sans-serif";
@@ -47,8 +50,12 @@ interface Row {
   calLink?: string;
 }
 
+// mix_first and rec_4hr are each promoted to a split-screen OfferCard above
+// their list (FeaturedMix / FeaturedRecording), the same "price justified by
+// proof" treatment those two offers already get on the home page. Keeping
+// them in a plain PriceRow here too would just restate the number without
+// the guarantee that makes it worth leading with.
 const MIXING: Row[] = [
-  { key: "mix_first", name: "Your first mix", note: "One song, so you can hear it before committing to anything. Once per artist.", featured: true, tag: "Start here" },
   { key: "mix_single", name: "Single song", note: "Mix and master, 48-hour turnaround, 2 revisions." },
   { key: "mix_3", name: "3-pack", note: "Prepaid, no expiry. Use them whenever you're ready." },
   { key: "mix_6", name: "6-pack", note: "Buying five singles? This costs less than that." },
@@ -58,7 +65,6 @@ const MIXING: Row[] = [
 const RECORDING: Row[] = [
   { key: "rec_hour", name: "Hourly", note: "Room, engineer, and every stem from the session.", calLink: CAL_LINKS.hourlySession },
   { key: "rec_2hr", name: "2-hour block", note: "Enough to track one song and leave with the stems.", calLink: CAL_LINKS.hourlySession },
-  { key: "rec_4hr", name: "4-hour block", note: "Usually two to three songs tracked. Our lowest hourly rate.", featured: true, tag: "Best value", calLink: CAL_LINKS.finishedSingle },
 ];
 
 const CREATIVE: Row[] = [
@@ -77,6 +83,7 @@ export default function PricingTable() {
         blurb="Everything includes the master and two revisions. Packs are prepaid and never expire, so you're buying a rate, not a deadline."
         rows={MIXING}
         anchor="mixing"
+        featured={<FeaturedMix />}
       />
       <Section
         eyebrow="Recording"
@@ -85,6 +92,7 @@ export default function PricingTable() {
         rows={RECORDING}
         anchor="recording"
         footnote="Students may be eligible for additional discounts. Get in touch."
+        featured={<FeaturedRecording />}
       />
       <Section
         eyebrow="Creative"
@@ -145,6 +153,7 @@ function Section({
   rows,
   anchor,
   footnote,
+  featured,
 }: {
   eyebrow: string;
   title: string;
@@ -152,6 +161,9 @@ function Section({
   rows: Row[];
   anchor: string;
   footnote?: string;
+  /** A split-screen OfferCard rendered above the list, for the one row that
+   * deserves a guarantee instead of just a number. */
+  featured?: ReactNode;
 }) {
   const ref = useRef<HTMLElement>(null);
   const inView = useInView(ref, { once: true, margin: "-60px" });
@@ -195,6 +207,8 @@ function Section({
           {blurb}
         </motion.p>
 
+        {featured && <div className="mb-6">{featured}</div>}
+
         <div className="flex flex-col gap-2.5">
           {rows.map((row, i) => (
             <PriceRow key={row.key} row={row} delay={0.14 + i * 0.05} inView={inView} />
@@ -214,6 +228,79 @@ function Section({
         )}
       </div>
     </section>
+  );
+}
+
+// Same offer, same copy as StartHere on the home page. It's promoted here
+// too because it's the row everyone lands on from the home page's "see the
+// full pricing page" link, and a plain PriceRow would drop the guarantee
+// that made it worth leading with in the first place.
+function FeaturedMix() {
+  const role = useEffectiveRole();
+  const isManager = role === "manager";
+
+  return (
+    <OfferCard
+      numeral="01"
+      tag="Start here"
+      headline={isManager ? "Your first artist's first mix. No roster commitment." : "Your first mix. No commitment."}
+      price="$50"
+      priceUnit="/song"
+      priceNote="one song, once per artist"
+      features={["Full mix & master, not just mastering", "48-hour turnaround", "2 revisions included", "Nothing else to buy first"]}
+      cta={{ label: isManager ? "Send their stems" : "Send your stems", href: checkoutHref("mix_first") }}
+      guaranteeTag="The guarantee"
+      guaranteeHeadline={isManager ? "Hear the work before you commit the roster." : "Hear it before you commit to anything."}
+      guaranteeBody={
+        isManager
+          ? "One artist, one song, the same $50 you'd pay for any single mix. If it holds up, Foundation covers the backend the same way for everyone else on the roster."
+          : "This is the only tier you can buy once. If the mix doesn't hold up, you're out fifty dollars and two days, not a catalogue. Every tier after this one exists because people heard this one first."
+      }
+      stats={["48 HRS", "2 REVISIONS", "NO SUBSCRIPTION"]}
+      photo={SESSION.midPhrase}
+    />
+  );
+}
+
+// Same offer as StudioSection's home-page card, reused here as the featured
+// row in the Recording section rather than restated as a plain price line.
+function FeaturedRecording() {
+  return (
+    <OfferCard
+      numeral="02"
+      tag="Best deal"
+      headline="Four hours in the room."
+      price="$300"
+      priceUnit="/session"
+      priceNote="your lowest rate per hour"
+      features={[
+        "Your stems plus whatever we mixed in the session",
+        "48-hour turnaround",
+        "Usually two to three songs tracked",
+        "A real engineer in the room, UAD, Waves, FabFilter, Neumann mics",
+      ]}
+      ctaSlot={
+        <CalBookButton
+          calLink={CAL_LINKS.finishedSingle}
+          className="cta-shine block w-full text-center text-white font-semibold rounded-full transition-all duration-300 hover:scale-[1.03]"
+          style={{
+            fontFamily: HEADING,
+            padding: "14px",
+            fontSize: "14px",
+            letterSpacing: "0.05em",
+            background: GRADIENT,
+            boxShadow: GRADIENT_SHADOW,
+          }}
+        >
+          Book your session &rarr;
+        </CalBookButton>
+      }
+      guaranteeTag="Why it's the best deal"
+      guaranteeHeadline="Cheaper than booking the hour, anywhere in town."
+      guaranteeBody="Atlanta rooms average well over $100 an hour on rental marketplaces, so four hours elsewhere usually costs more than this block, before anyone touches a mix. You leave with your labeled stems the same day."
+      stats={["4 HRS", "STEMS INCLUDED", "SAME DAY"]}
+      photo={SESSION.knit}
+    />
   );
 }
 
@@ -406,7 +493,7 @@ function FoundationRow() {
               Start with a call &rarr;
             </CalBookButton>
             <Link
-              href="/#audit"
+              href="#audit"
               className="block text-center text-white/80 hover:text-white font-semibold rounded-full border border-white/10 hover:border-[#EA9A61]/50 transition-all duration-300"
               style={{
                 fontFamily: HEADING,

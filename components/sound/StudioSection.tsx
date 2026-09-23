@@ -5,6 +5,7 @@ import SessionPhoto, { SESSION } from "@/components/sound/SessionPhoto";
 import { BOOKING_URL, CAL_LINKS } from "@/data/soundPricing";
 import CalBookButton from "@/components/sound/CalBookButton";
 import { Squiggle } from "@/components/sound/musicStory";
+import OfferCard from "@/components/sound/OfferCard";
 
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 
@@ -14,7 +15,7 @@ const BODY_FONT = "'Roboto', sans-serif";
 const valueProps = [
   {
     label: "Professional Mixing & Mastering in Atlanta",
-    detail: "Record in our Atlanta studio and leave with your labeled stems and whatever we mixed during the session. When you are ready, we finish it: vocals balanced, cleaned, and enhanced, then mastered to streaming loudness for Spotify, Apple Music, and every major platform. Mix and master from $58 a song, first one $50.",
+    detail: "Record in our Atlanta studio and leave with your labeled stems and whatever we mixed during the session. When you are ready, we finish it: vocals balanced, cleaned, and enhanced, then mastered to streaming loudness for Spotify, Apple Music, and every major platform.",
     tag: "Record, then finish",
   },
   {
@@ -24,7 +25,7 @@ const valueProps = [
   },
   {
     label: "Published Rates, No Quote Call",
-    detail: "$80 an hour, $160 for two hours, $300 for four. Every number is on the pricing page before you book, and the mix and master is a separate line you can see in full. Same pro gear, radio-ready results, no surprise invoices.",
+    detail: "Every number is on the pricing page before you book, and the mix and master is a separate line you can see in full. Same pro gear, radio-ready results, no surprise invoices.",
     tag: "No surprises",
   },
 ];
@@ -169,19 +170,12 @@ function ValueAccordion() {
   );
 }
 
-const recordingFeatures = [
-  "A real engineer in the room, not a rented room",
-  "UAD, Waves, FabFilter, Neumann mics, Focusrite pres",
-  "Walk out with your labeled stems, same day",
-  "Mix and master available that week, from $50",
-];
-
 function RecordingRates() {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
 
   return (
-    <div ref={ref} id="record" className="scroll-mt-24 max-w-7xl mx-auto mb-16 md:mb-24">
+    <div ref={ref} id="record" className="scroll-mt-24 max-w-5xl mx-auto mb-16 md:mb-24">
       <motion.span
         initial={{ opacity: 0, x: -20 }}
         animate={inView ? { opacity: 1, x: 0 } : {}}
@@ -200,92 +194,24 @@ function RecordingRates() {
       >
         Published rates, stems in hand.
       </motion.h3>
-      <div className="mb-6 max-w-[200px]">
+      <div className="mb-10 max-w-[200px]">
         <Squiggle />
       </div>
-      <motion.p
-        initial={{ opacity: 0, y: 10 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
-        transition={{ ...spring, delay: 0.15 }}
-        className="text-white/65 text-sm md:text-base mb-10 max-w-xl"
-        style={{ fontFamily: BODY_FONT }}
-      >
-        You book the hour and leave with your files and whatever we mixed. The full mix and master is a separate line, and both numbers are on this page.
-      </motion.p>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
-        {/* Hourly */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ ...spring, delay: 0.2 }}
-          className="relative rounded-2xl border border-white/[0.06] bg-white/[0.02] p-6 md:p-8 flex flex-col"
-        >
-          <span className="text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-white/65 mb-4" style={{ fontFamily: BODY_FONT }}>
-            Studio Time
-          </span>
-          <div className="flex items-baseline gap-1 mb-1">
-            <span className="text-white text-4xl md:text-5xl font-bold italic" style={{ fontFamily: HEADING_FONT }}>$80</span>
-            <span className="text-white/30 text-sm" style={{ fontFamily: BODY_FONT }}>/hr</span>
-          </div>
-          <span className="text-[#EA9A61] text-xs uppercase tracking-[0.15em] mb-6" style={{ fontFamily: BODY_FONT }}>
-            Stems included
-          </span>
-          <ul className="flex-1 space-y-2 mb-6">
-            {recordingFeatures.map((f) => (
-              <li key={f} className="flex items-start gap-2 text-white/75 text-sm" style={{ fontFamily: BODY_FONT }}>
-                <span className="text-[#EA9A61] mt-0.5 shrink-0">&#10003;</span>
-                {f}
-              </li>
-            ))}
-          </ul>
-          <p className="text-white/80 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
-            Comparable Atlanta rooms run <span className="text-white/70 not-italic line-through">$75&ndash;120/hr</span>. You leave with your labeled stems the same day.
-          </p>
-          <CalBookButton
-            calLink={CAL_LINKS.hourlySession}
-            fallbackHref={BOOKING_URL}
-            className="block w-full text-center text-white font-semibold rounded-full border border-white/10 hover:border-white/25 transition-all duration-300 hover:scale-[1.03]"
-            style={{ fontFamily: HEADING_FONT, padding: "14px", fontSize: "13px", letterSpacing: "0.05em", background: "rgba(255,255,255,0.03)" }}
-          >
-            Book a session &rarr;
-          </CalBookButton>
-        </motion.div>
-
-        {/* 4-hour block — featured */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ ...spring, delay: 0.3 }}
-          className="relative rounded-2xl border border-[#EA9A61]/30 bg-[#EA9A61]/[0.04] p-6 md:p-8 flex flex-col"
-        >
-          <span
-            className="absolute -top-3 left-6 rounded-full border border-[#EA9A61]/40 bg-[#EA9A61]/15 px-3 py-0.5 text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-[#EA9A61]"
-            style={{ fontFamily: BODY_FONT }}
-          >
-            Best Deal
-          </span>
-          <span className="text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.2em] text-white/65 mb-4" style={{ fontFamily: BODY_FONT }}>
-            4-Hour Block
-          </span>
-          <div className="flex items-baseline gap-2 mb-1">
-            <span className="text-white text-4xl md:text-5xl font-bold italic" style={{ fontFamily: HEADING_FONT }}>$300</span>
-            <span className="text-white/30 text-sm line-through" style={{ fontFamily: BODY_FONT }}>$320</span>
-          </div>
-          <span className="text-[#EA9A61] text-xs uppercase tracking-[0.15em] mb-6" style={{ fontFamily: BODY_FONT }}>
-            $75/hr, stems included
-          </span>
-          <ul className="flex-1 space-y-2 mb-6">
-            {["Four hours in the room, your lowest rate", "Your stems plus whatever we mixed in the session", "48-hour turnaround", "Usually two to three songs tracked"].map((f) => (
-              <li key={f} className="flex items-start gap-2 text-white/75 text-sm" style={{ fontFamily: BODY_FONT }}>
-                <span className="text-[#EA9A61] mt-0.5 shrink-0">&#10003;</span>
-                {f}
-              </li>
-            ))}
-          </ul>
-          <p className="text-white/80 text-xs italic mb-6 leading-relaxed" style={{ fontFamily: BODY_FONT }}>
-            Atlanta rooms average around <span className="text-white/70 not-italic">$102 an hour</span> on rental marketplaces, so four hours elsewhere usually runs <span className="text-white/70 not-italic">$400+</span> before anyone touches a mix.
-          </p>
+      <OfferCard
+        numeral="02"
+        tag="Best deal"
+        headline="Four hours in the room."
+        price="$300"
+        priceUnit="/session"
+        priceNote="your lowest rate per hour"
+        features={[
+          "Your stems plus whatever we mixed in the session",
+          "48-hour turnaround",
+          "Usually two to three songs tracked",
+          "A real engineer in the room, UAD, Waves, FabFilter, Neumann mics",
+        ]}
+        ctaSlot={
           <CalBookButton
             calLink={CAL_LINKS.finishedSingle}
             fallbackHref={BOOKING_URL}
@@ -293,7 +219,7 @@ function RecordingRates() {
             style={{
               fontFamily: HEADING_FONT,
               padding: "14px",
-              fontSize: "13px",
+              fontSize: "14px",
               letterSpacing: "0.05em",
               background: "linear-gradient(112deg, #42201C 6.46%, #A64D2B 34.96%, #B16937 63.88%, #EA9A61 97.63%)",
               boxShadow: "3px 4px 4px 0 rgba(255, 244, 227, 0.15) inset, 0 4.385px 4.385px 0 rgba(0, 0, 0, 0.25)",
@@ -301,11 +227,19 @@ function RecordingRates() {
           >
             Book your session &rarr;
           </CalBookButton>
-        </motion.div>
-      </div>
+        }
+        guaranteeTag="Why it's the best deal"
+        guaranteeHeadline="Cheaper than booking the hour, anywhere in town."
+        guaranteeBody="Atlanta rooms average well over $100 an hour on rental marketplaces, so four hours elsewhere usually costs more than this block, before anyone touches a mix. You leave with your labeled stems the same day."
+        stats={["4 HRS", "STEMS INCLUDED", "SAME DAY"]}
+        photo={SESSION.knit}
+      />
 
-      <p className="text-white/65 text-xs md:text-sm mt-6" style={{ fontFamily: BODY_FONT }}>
-        Students may be eligible for additional discounts. <span className="text-[#EA9A61]">Get in touch.</span>
+      <p className="text-white/45 text-xs md:text-sm mt-6" style={{ fontFamily: BODY_FONT }}>
+        Booking by the hour, mixing packs, and student rates are all on{" "}
+        <a href="/pricing" className="text-[#EA9A61]/85 hover:text-[#EA9A61] underline underline-offset-2 decoration-[#EA9A61]/30">
+          the pricing page
+        </a>.
       </p>
     </div>
   );

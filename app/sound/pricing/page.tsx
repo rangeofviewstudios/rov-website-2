@@ -3,6 +3,7 @@ import { MusicMenu } from "@/components/music/MusicMenu";
 import MusicFooter from "@/components/music/MusicFooter";
 import { IntakeProvider } from "@/components/music/IntakeContext";
 import PricingTable from "@/components/sound/PricingTable";
+import ReadinessAudit from "@/components/sound/ReadinessAudit";
 import { BreadcrumbSchema } from "@/components/schema/BreadcrumbSchema";
 import { MusicOfferSchema } from "@/components/schema/MusicOfferSchema";
 import FAQSection from "@/components/common/FAQSection";
@@ -47,6 +48,13 @@ export default function Page() {
                 still renders visibly below, where a pricing page wants it. */}
             <MusicOfferSchema baseUrl={MUSIC_URL} />
             <PricingTable />
+            {/* Moved here from the home page: six questions was too much to ask
+                mid-scroll on top of the RoleGate popup's three. Here it's opt-in
+                — someone who's browsed the rate card and still isn't sure what
+                they need can go find out, instead of everyone being asked
+                whether they like it or not. The "See what you're missing"
+                button in PricingTable's Foundation row scrolls to this by id. */}
+            <ReadinessAudit />
             <FAQSection items={soundFaqItems} />
             <MusicFooter />
             <MusicMenu />

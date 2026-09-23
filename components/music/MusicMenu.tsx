@@ -30,7 +30,10 @@ const PRIMARY = [
     { title: "Hear the difference", to: "/credits", note: "Every record named and linked. Go listen for yourself" },
     { title: "How we make records", to: "/toolkit", note: "Produced, written, mixed, mastered. The whole path" },
     { title: "What it costs", to: "/pricing", note: "Published in full, because you should not have to ask" },
-    { title: "Free record audit", to: "/#audit", note: "Tell us where the song is stuck. We will tell you honestly" },
+    // Was "/#audit" on the home page — pulled off there (too much to ask
+    // mid-scroll on top of the RoleGate popup) and now lives on /pricing,
+    // opt-in for whoever wants it after browsing the rate card.
+    { title: "Free record audit", to: "/pricing#audit", note: "Tell us where the song is stuck. We will tell you honestly" },
 ];
 
 const SECONDARY = [
