@@ -1382,6 +1382,66 @@ input[type="range"]::-webkit-slider-thumb {
   .dash-hero::after { animation: none; }
 }
 
+/* rovmusic client portal only. Same cosmic-ground/hero-band mechanics as
+   .dash-ground/.dash-hero above (shared by admin, account, and ctrla), but
+   in rovmusic's black/orange instead of CTRL·A's purple/gold, so the portal
+   matches the site it's actually part of. Deliberately a separate class,
+   not an edit to .dash-ground: admin/account/ctrla keep their own look. */
+.music-portal-ground {
+  background-color: #080807;
+  background-image:
+    radial-gradient(150% 38% at 50% 84%,
+      rgba(234,154,97,0.14) 0%,
+      rgba(166,77,43,0.20) 24%,
+      rgba(66,32,28,0.16) 50%,
+      transparent 78%),
+    radial-gradient(130% 50% at 50% -12%, rgba(36,18,12,0.70) 0%, transparent 60%),
+    linear-gradient(180deg, #080807 0%, #080807 34%, #1B0E0A 64%, #080807 100%);
+  background-attachment: fixed;
+}
+.music-portal-hero {
+  position: relative;
+  overflow: hidden;
+  background: linear-gradient(180deg,
+    #080807 0%,
+    #150C09 20%,
+    #241209 34%,
+    #3B1D12 45%,
+    #52281A 54%,
+    #6E3720 61%,
+    #8C4726 68%,
+    #A85830 74%,
+    #C06E3D 78%,
+    #EA9A61 81%,
+    #D0844F 84%,
+    #9C5F3A 89%,
+    #5C3420 93%,
+    #241209 97%,
+    #080807 100%);
+}
+.music-portal-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(to top,
+    rgba(8,8,7,0.82) 0%,
+    rgba(8,8,7,0.46) 26%,
+    rgba(8,8,7,0) 54%);
+}
+.music-portal-hero::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(150% 60% at 50% 80%, rgba(234,154,97,0.12), transparent 74%);
+  animation: ctrla-cosmic-breathe 22s ease-in-out infinite alternate;
+}
+@media (prefers-reduced-motion: reduce) {
+  .music-portal-hero::after { animation: none; }
+}
+
 /* Reusable paper grain — overlay on any gradient surface for bokashi richness */
 .ctrla-grain {
   position: absolute;
