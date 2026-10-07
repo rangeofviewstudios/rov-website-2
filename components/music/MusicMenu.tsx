@@ -200,32 +200,32 @@ export function MusicMenu({ className }: { className?: string }) {
                 </div>
 
                 <div className={`relative h-full w-full overflow-y-auto overscroll-contain transition-transform duration-500 ease-out ${open ? "translate-y-0" : "-translate-y-2"}`}>
-                    <div className="mx-auto flex min-h-full w-full max-w-6xl [align-items:safe_center] px-5 md:px-10 pt-24 md:pt-20 pb-8">
-                        <div className="w-full grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-10 lg:gap-x-20 lg:gap-y-8">
+                    <div className="mx-auto flex min-h-full w-full max-w-6xl [align-items:safe_center] px-5 md:px-10 pt-[clamp(4.25rem,11dvh,6rem)] md:pt-[clamp(4.25rem,10dvh,5.5rem)] pb-[clamp(1rem,4dvh,2rem)]">
+                        <div className="w-full grid grid-cols-1 lg:grid-cols-[1.15fr_0.85fr] gap-[clamp(1.5rem,4dvh,2.5rem)] lg:gap-x-20 lg:gap-y-8">
                             {/* Left */}
                             <div className="-ml-4 md:-ml-7 pl-4 md:pl-7">
-                                <p style={DISPLAY} className="text-[#EA9A61] text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-6 md:mb-7">
+                                <p style={DISPLAY} className="text-[#EA9A61] text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-[clamp(0.75rem,2.6dvh,1.75rem)]">
                                     The studio
                                 </p>
 
-                                <ul className="space-y-1.5 md:space-y-2">
+                                <ul className="space-y-[clamp(0.125rem,0.8dvh,0.5rem)]">
                                     {PRIMARY.map((s) => (
                                         <li key={s.to}>
                                             <Link
                                                 href={s.to}
                                                 onClick={close}
-                                                className="group relative -ml-4 md:-ml-7 block pl-4 md:pl-7 py-1 rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#EA9A61]/60"
+                                                className="group relative -ml-4 md:-ml-7 block pl-4 md:pl-7 py-[clamp(0.125rem,0.5dvh,0.25rem)] rounded-sm focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#EA9A61]/60"
                                             >
                                                 <span
                                                     className={`absolute left-0 top-[0.68em] md:top-[0.74em] h-2 w-2 rounded-full bg-[#EA9A61] transition-all duration-300 ${isActive(s.to) ? "opacity-100 scale-100" : "opacity-0 scale-50 group-hover:opacity-100 group-hover:scale-100"}`}
                                                 />
                                                 <span
                                                     style={DISPLAY}
-                                                    className={`block text-[24px] leading-[1.25] md:text-[38px] md:leading-[1.2] font-black uppercase tracking-[0.1em] transition-colors duration-300 ${isActive(s.to) ? "text-white" : "text-white/90 group-hover:text-white"}`}
+                                                    className={`block text-[clamp(20px,3.4dvh,26px)] leading-[1.2] md:text-[clamp(24px,4.6dvh,38px)] font-black uppercase tracking-[0.1em] transition-colors duration-300 ${isActive(s.to) ? "text-white" : "text-white/90 group-hover:text-white"}`}
                                                 >
                                                     {s.title}
                                                 </span>
-                                                <span className="block mt-1.5 font-sans text-[12.5px] md:text-[13px] font-medium tracking-[0.01em] text-white/55 md:opacity-0 md:-translate-y-1 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
+                                                <span className="block mt-1 font-sans text-[12.5px] md:text-[13px] font-medium tracking-[0.01em] text-white/55 [@media(max-height:820px)]:hidden md:opacity-0 md:-translate-y-1 md:group-hover:opacity-100 md:group-hover:translate-y-0 transition-all duration-300">
                                                     {s.note}
                                                 </span>
                                             </Link>
@@ -233,9 +233,9 @@ export function MusicMenu({ className }: { className?: string }) {
                                     ))}
                                 </ul>
 
-                                <div className="mt-8 md:mt-9 h-px w-full max-w-lg bg-white/[0.14]" />
+                                <div className="mt-[clamp(1rem,3dvh,2.25rem)] h-px w-full max-w-lg bg-white/[0.14]" />
 
-                                <ul className="mt-6 flex flex-wrap items-center gap-x-8 gap-y-3.5 max-w-lg">
+                                <ul className="mt-[clamp(0.75rem,2.2dvh,1.5rem)] flex flex-wrap items-center gap-x-8 gap-y-[clamp(0.5rem,1.6dvh,0.875rem)] max-w-lg">
                                     {SECONDARY.map((l) => (
                                         <li key={l.to}>
                                             <Link
@@ -261,7 +261,7 @@ export function MusicMenu({ className }: { className?: string }) {
                                 </ul>
 
                                 {/* The studios door, mirroring CTRL A's on the other side */}
-                                <div className="mt-7 flex flex-wrap items-center gap-3">
+                                <div className="mt-[clamp(0.875rem,2.6dvh,1.75rem)] flex flex-wrap items-center gap-3">
                                     <a
                                         href="https://www.rovstudios.com"
                                         target="_blank"
@@ -294,7 +294,7 @@ export function MusicMenu({ className }: { className?: string }) {
                                     </span>
                                 </div>
 
-                                <div className="mt-7 flex items-center gap-6">
+                                <div className="mt-[clamp(0.875rem,2.6dvh,1.75rem)] flex items-center gap-6">
                                     <a
                                         href="https://www.instagram.com/rangeofviewstudios/"
                                         target="_blank"
@@ -329,17 +329,17 @@ export function MusicMenu({ className }: { className?: string }) {
                                 the whole group to the bottom of the column, level
                                 with the socials row on the left. */}
                             <div className="hidden lg:block lg:self-end">
-                                <p style={DISPLAY} className="text-white/60 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-6 md:mb-7">
+                                <p style={DISPLAY} className="text-white/60 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-[clamp(0.75rem,2.6dvh,1.75rem)]">
                                     Recent records
                                 </p>
 
-                                <div className="grid grid-cols-2 gap-3.5">
+                                <div className="grid grid-cols-2 gap-[clamp(0.5rem,1.4dvh,0.875rem)]">
                                     {FEATURED.map((f) => (
                                         <Link
                                             key={f.spotifyUrl}
                                             href="/credits"
                                             onClick={close}
-                                            className="group relative block overflow-hidden rounded-xl border border-white/10 h-[94px] md:h-[96px]"
+                                            className="group relative block overflow-hidden rounded-xl border border-white/10 h-[clamp(64px,11dvh,96px)]"
                                         >
                                             <Image
                                                 src={f.cover}
@@ -360,19 +360,19 @@ export function MusicMenu({ className }: { className?: string }) {
                                 <Link
                                     href="/credits"
                                     onClick={close}
-                                    className="group mt-3 flex items-center justify-between border-b border-white/[0.14] pb-3 text-white/85 hover:text-white transition-colors focus-visible:outline-none focus-visible:text-[#EA9A61]"
+                                    className="group mt-[clamp(0.5rem,1.2dvh,0.75rem)] flex items-center justify-between border-b border-white/[0.14] pb-[clamp(0.5rem,1.2dvh,0.75rem)] text-white/85 hover:text-white transition-colors focus-visible:outline-none focus-visible:text-[#EA9A61]"
                                 >
                                     <span style={DISPLAY} className="text-[13px] font-bold uppercase tracking-[0.22em]">All credits</span>
                                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                                 </Link>
 
-                                <p style={DISPLAY} className="mt-6 text-white/60 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-3">
+                                <p style={DISPLAY} className="mt-[clamp(0.75rem,2.4dvh,1.5rem)] text-white/60 text-[11px] md:text-[12px] font-bold uppercase tracking-[0.34em] mb-[clamp(0.5rem,1.2dvh,0.75rem)]">
                                     Case study
                                 </p>
                                 <Link
                                     href="/sam-suen"
                                     onClick={close}
-                                    className="group relative block overflow-hidden rounded-xl border border-white/10 h-[110px]"
+                                    className="group relative block overflow-hidden rounded-xl border border-white/10 h-[clamp(72px,12.5dvh,110px)]"
                                 >
                                     <Image
                                         src="/teammembers/samsuentm.webp"
@@ -390,22 +390,22 @@ export function MusicMenu({ className }: { className?: string }) {
                                 <Link
                                     href="/sam-suen"
                                     onClick={close}
-                                    className="group mt-3 flex items-center justify-between text-white/85 hover:text-white transition-colors focus-visible:outline-none focus-visible:text-[#EA9A61]"
+                                    className="group mt-[clamp(0.5rem,1.2dvh,0.75rem)] flex items-center justify-between text-white/85 hover:text-white transition-colors focus-visible:outline-none focus-visible:text-[#EA9A61]"
                                 >
                                     <span style={DISPLAY} className="text-[13px] font-bold uppercase tracking-[0.22em]">Full case study</span>
                                     <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
                                 </Link>
 
-                                <div className="mt-6 rounded-xl border border-[#EA9A61]/25 bg-[#EA9A61]/[0.07] p-4 md:p-5">
+                                <div className="mt-[clamp(0.75rem,2.4dvh,1.5rem)] rounded-xl border border-[#EA9A61]/25 bg-[#EA9A61]/[0.07] p-[clamp(0.75rem,2dvh,1.25rem)]">
                                     <p style={DISPLAY} className="text-white text-[16px] md:text-[18px] font-black uppercase tracking-[0.08em] leading-snug">
                                         Got a record to finish?
                                     </p>
-                                    <p className="mt-3 font-sans text-white/75 text-[13.5px] font-medium leading-[1.65]">
+                                    <p className="mt-[clamp(0.375rem,1.2dvh,0.75rem)] font-sans text-white/75 text-[13.5px] font-medium leading-[1.55]">
                                         First mix and master is $50. Studio time is $80 an hour, stems included.
                                     </p>
                                     <CalBookButton
                                         calLink={CAL_LINKS.hourlySession}
-                                        className="mt-4 inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#EA9A61] via-[#C56A3C] to-[#90422C] px-6 py-3 text-[#FFF4E3] text-[13px] font-bold uppercase tracking-[0.22em] hover:-translate-y-[1px] transition-transform"
+                                        className="mt-[clamp(0.5rem,1.6dvh,1rem)] inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#EA9A61] via-[#C56A3C] to-[#90422C] px-6 py-[clamp(0.5rem,1.4dvh,0.75rem)] text-[#FFF4E3] text-[13px] font-bold uppercase tracking-[0.22em] hover:-translate-y-[1px] transition-transform"
                                         style={DISPLAY}
                                     >
                                         Book a session
