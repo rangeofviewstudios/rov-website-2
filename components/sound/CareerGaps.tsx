@@ -17,8 +17,6 @@ import Gallery from "@/components/sections/Gallery";
 import VideoShowcaseSection from "@/components/sound/VideoShowcaseSection";
 import { Squiggle } from "@/components/sound/musicStory";
 
-const HEADING = "Norwige, sans-serif";
-const BODY = "'Roboto', sans-serif";
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 
 export default function CareerGaps() {
@@ -47,8 +45,7 @@ export default function CareerGaps() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={spring}
-          className="block text-xs uppercase tracking-[0.3em] text-[#EA9A61] mb-4"
-          style={{ fontFamily: BODY }}
+          className="type-eyebrow block text-[#EA9A61] mb-4"
         >
           Whatever&apos;s missing
         </motion.span>
@@ -57,8 +54,7 @@ export default function CareerGaps() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.08 }}
-          className="text-white uppercase text-3xl md:text-5xl lg:text-6xl font-bold italic leading-[1.02] mb-3 max-w-3xl"
-          style={{ fontFamily: HEADING }}
+          className="type-h2 text-white mb-3 max-w-3xl"
         >
           A record needs more than a mix.
           <br />
@@ -76,8 +72,7 @@ export default function CareerGaps() {
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-5 mb-14 md:mb-20"
         >
           <p
-            className="text-white/70 text-base md:text-lg leading-relaxed max-w-xl"
-            style={{ fontFamily: BODY }}
+            className="type-lead text-white/70 max-w-xl"
           >
             Most artists hire five people for one release and spend the whole rollout
             translating between them. Tell us what&apos;s missing and we make that part
@@ -87,8 +82,8 @@ export default function CareerGaps() {
               stray paragraph. It belongs here, as a link to the real card. */}
           <Link
             href="/pricing"
-            className="group shrink-0 inline-flex items-center gap-2 text-[#EA9A61]/85 hover:text-[#EA9A61] text-sm font-semibold transition-colors whitespace-nowrap"
-            style={{ fontFamily: HEADING, letterSpacing: "0.03em" }}
+            className="group shrink-0 inline-flex items-center gap-2 type-link text-[#EA9A61]/85 hover:text-[#EA9A61] transition-colors whitespace-nowrap"
+            style={{ letterSpacing: "0.03em" }}
           >
             See what it costs
             <span className="transition-transform duration-300 group-hover:translate-x-1">
@@ -100,9 +95,7 @@ export default function CareerGaps() {
 
       {/* ── The evidence ── */}
       <div className="relative z-10 mt-10 md:mt-14">
-        <div className="bg-black">
-          <Gallery />
-        </div>
+        <Gallery />
         <VideoShowcaseSection />
       </div>
     </section>

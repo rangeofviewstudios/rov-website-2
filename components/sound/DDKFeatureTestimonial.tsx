@@ -4,9 +4,6 @@ import { useRef } from "react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
 
-const HEADING = "Norwige, sans-serif";
-const MONO = "'DM Mono', monospace";
-const BODY = "'Roboto', sans-serif";
 
 const spring = { type: "spring" as const, stiffness: 72, damping: 18 };
 
@@ -102,9 +99,8 @@ export default function DDKFeatureTestimonial() {
             style={{ backgroundColor: "rgba(234,154,97,0.4)" }}
           />
           <span
-            className="text-[12px] uppercase tracking-[0.3em]"
+            className="type-eyebrow"
             style={{
-              fontFamily: MONO,
               color: "rgba(234,154,97,0.55)",
             }}
           >
@@ -152,8 +148,8 @@ export default function DDKFeatureTestimonial() {
               >
                 <MusicNoteIcon />
                 <span
-                  className="text-[12px] uppercase tracking-[0.22em]"
-                  style={{ fontFamily: MONO, color: "#EA9A61" }}
+                  className="type-tag"
+                  style={{ color: "#EA9A61" }}
                 >
                   On The Radar
                 </span>
@@ -175,18 +171,16 @@ export default function DDKFeatureTestimonial() {
             {/* Below-video meta */}
             <div className="flex items-center justify-between mt-3.5 px-0.5">
               <span
-                className="text-[12px] uppercase tracking-[0.2em]"
+                className="type-meta"
                 style={{
-                  fontFamily: MONO,
                   color: "rgba(255,255,255,0.2)",
                 }}
               >
                 Mixed &amp; Mastered · ROV Studios
               </span>
               <span
-                className="text-[12px] uppercase tracking-[0.18em]"
+                className="type-meta"
                 style={{
-                  fontFamily: MONO,
                   color: "rgba(255,255,255,0.15)",
                 }}
               >
@@ -219,15 +213,13 @@ export default function DDKFeatureTestimonial() {
               </div>
               <div>
                 <p
-                  className="text-white font-medium text-base tracking-wide"
-                  style={{ fontFamily: BODY }}
+                  className="type-name text-white"
                 >
                   DDK
                 </p>
                 <p
-                  className="text-[12px] uppercase tracking-[0.2em] mt-0.5"
+                  className="type-meta mt-0.5"
                   style={{
-                    fontFamily: MONO,
                     color: "rgba(255,255,255,0.35)",
                   }}
                 >
@@ -240,10 +232,8 @@ export default function DDKFeatureTestimonial() {
             <div className="relative pl-1">
               {/* Decorative opening mark */}
               <span
-                className="absolute -top-8 -left-1 text-7xl leading-none select-none pointer-events-none"
+                className="type-quote absolute -top-8 -left-1 text-7xl leading-none select-none pointer-events-none"
                 style={{
-                  fontFamily: HEADING,
-                  fontStyle: "italic",
                   color: "rgba(234,154,97,0.1)",
                 }}
                 aria-hidden
@@ -251,10 +241,8 @@ export default function DDKFeatureTestimonial() {
                 &ldquo;
               </span>
               <p
-                className="text-[clamp(1.35rem,2.4vw,1.8rem)] leading-snug"
+                className="type-quote"
                 style={{
-                  fontFamily: HEADING,
-                  fontStyle: "italic",
                   color: "rgba(255,255,255,0.88)",
                 }}
               >
@@ -271,9 +259,8 @@ export default function DDKFeatureTestimonial() {
               {BADGES.map((badge) => (
                 <span
                   key={badge}
-                  className="text-[12px] uppercase tracking-[0.16em] px-3 py-1 rounded-full"
+                  className="type-tag px-3 py-1.5 rounded-full"
                   style={{
-                    fontFamily: MONO,
                     border: "1px solid rgba(234,154,97,0.18)",
                     color: "rgba(234,154,97,0.65)",
                     background: "rgba(234,154,97,0.04)",
@@ -293,9 +280,8 @@ export default function DDKFeatureTestimonial() {
             {/* Work delivered */}
             <div className="flex flex-col gap-4">
               <p
-                className="text-[12px] uppercase tracking-[0.3em]"
+                className="type-eyebrow"
                 style={{
-                  fontFamily: MONO,
                   color: "rgba(255,255,255,0.25)",
                 }}
               >
@@ -309,9 +295,8 @@ export default function DDKFeatureTestimonial() {
                       style={{ backgroundColor: "rgba(234,154,97,0.5)" }}
                     />
                     <p
-                      className="text-sm"
+                      className="type-small"
                       style={{
-                        fontFamily: BODY,
                         color: "rgba(255,255,255,0.5)",
                       }}
                     >

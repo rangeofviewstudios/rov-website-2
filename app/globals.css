@@ -6864,3 +6864,100 @@ html[data-ctrla-photo] .ctrla-space-rank { display: none; }
 .ctrla-space-door em { font-family: var(--font-inter), 'Inter', system-ui, sans-serif; font-style: normal; font-size: clamp(15px, 1.5vw, 18px); line-height: 1.5; color: #F0E6E0; }
 .ctrla-space-door span { font-family: 'Neue Montreal', 'Helvetica Neue', Arial, sans-serif; font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase; color: #E3C24A; white-space: nowrap; transition: transform 0.2s; }
 .ctrla-space-door:hover span { transform: translateX(4px); }
+
+/* =====================================================================
+   ROV MUSIC TYPE SYSTEM (rovmusic.com home and its sections)
+   One scale, four families, every role named. Components pick a role
+   class and only add colour, alignment and spacing on top. Do not set
+   font-size / font-family / tracking inline on music sections; add or
+   adjust a role here instead so the whole page moves together.
+
+   Families
+     display  Norwige (headings, numbers, quotes)
+     heavy    Norwige ExtraBold Italic (statements, buttons, toggles)
+     body     Inter via next/font (all reading text)
+     label    Neue Montreal (eyebrows, tags, meta, text links)
+
+   Note: html font-size already scales with the viewport on desktop
+   (see the html rule above), so these rem values scale with it.
+   ===================================================================== */
+@layer components {
+  .type-mega,
+  .type-display,
+  .type-h1,
+  .type-h2,
+  .type-h3,
+  .type-h4,
+  .type-stat,
+  .type-quote {
+    font-family: Norwige, sans-serif;
+    font-style: italic;
+  }
+
+  /* Decorative giant words and numbers (FAQ, 01, MUSIC ARTWORK). */
+  .type-mega { font-weight: 700; font-size: clamp(3.5rem, 10vw, 8rem); line-height: 0.9; letter-spacing: -0.02em; text-transform: uppercase; }
+  /* Act-break statements. One per break. */
+  .type-display { font-family: NorwigeExtraBoldItalic_Hero, Norwige, sans-serif; font-weight: 400; font-size: clamp(2.25rem, 6vw, 4.25rem); line-height: 0.95; text-transform: uppercase; }
+  /* Page hero headline. */
+  .type-h1 { font-family: NorwigeHeroItalic, Norwige, sans-serif; font-weight: 400; font-size: clamp(2rem, 5vw, 3.75rem); line-height: 1; letter-spacing: 0.02em; text-transform: uppercase; }
+  /* Section titles. */
+  .type-h2 { font-weight: 700; font-size: clamp(1.875rem, 4.2vw, 3.25rem); line-height: 1.02; text-transform: uppercase; }
+  /* Card and block titles. */
+  .type-h3 { font-weight: 700; font-size: clamp(1.375rem, 2.4vw, 1.875rem); line-height: 1.1; }
+  /* Small titles: list items, card sub-heads, FAQ questions. */
+  .type-h4 { font-weight: 600; font-size: clamp(1.0625rem, 1.5vw, 1.25rem); line-height: 1.25; }
+  /* Prices and proof numbers. */
+  .type-stat { font-weight: 700; font-size: clamp(2.5rem, 4.6vw, 3.5rem); line-height: 1; }
+  /* Pull quotes and testimonials. */
+  .type-quote { font-weight: 500; font-size: clamp(1.375rem, 2.6vw, 2rem); line-height: 1.3; }
+
+  .type-lead,
+  .type-body,
+  .type-small,
+  .type-caption,
+  .type-name {
+    font-family: var(--font-inter), 'Inter', system-ui, sans-serif;
+    font-style: normal;
+  }
+  /* Section intro paragraphs. */
+  .type-lead { font-weight: 400; font-size: clamp(1rem, 1.35vw, 1.125rem); line-height: 1.65; }
+  /* Default reading text. */
+  .type-body { font-weight: 400; font-size: 1rem; line-height: 1.65; }
+  /* Card copy, list items, secondary notes. */
+  .type-small { font-weight: 400; font-size: 0.875rem; line-height: 1.6; }
+  /* Fine print under CTAs. */
+  .type-caption { font-weight: 400; font-size: 0.8125rem; line-height: 1.5; }
+  /* A person or track name. */
+  .type-name { font-weight: 600; font-size: 1rem; line-height: 1.3; }
+
+  .type-eyebrow,
+  .type-tag,
+  .type-meta,
+  .type-link {
+    font-family: 'Neue Montreal', var(--font-inter), sans-serif;
+    font-style: normal;
+    font-weight: 500;
+    text-transform: uppercase;
+  }
+  /* Section eyebrows: the small label above a title. */
+  .type-eyebrow { font-size: 0.75rem; line-height: 1.2; letter-spacing: 0.24em; }
+  /* Chips and pills. */
+  .type-tag { font-size: 0.6875rem; line-height: 1; letter-spacing: 0.16em; }
+  /* Roles, captions on stats, small meta lines. */
+  .type-meta { font-size: 0.6875rem; line-height: 1.35; letter-spacing: 0.18em; }
+  /* Inline text links ("See all work ->"). */
+  .type-link { font-size: 0.8125rem; line-height: 1.2; letter-spacing: 0.14em; }
+
+  /* Buttons. Primary and secondary share one face and size; only the
+     surface changes. -sm is for buttons inside cards. */
+  .type-btn,
+  .type-btn-sm {
+    font-family: NorwigeExtraBoldItalic_Hero, Norwige, sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 1;
+    letter-spacing: 0.03em;
+  }
+  .type-btn { font-size: clamp(0.9375rem, 1.2vw, 1.0625rem); }
+  .type-btn-sm { font-size: 0.875rem; }
+}

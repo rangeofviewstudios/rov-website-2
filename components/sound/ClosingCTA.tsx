@@ -12,10 +12,8 @@ import { CONSULT_BOOKING_URL, checkoutHref } from "@/data/soundPricing";
 import CalBookButton from "@/components/sound/CalBookButton";
 import { useEffectiveRole } from "@/components/music/IntakeContext";
 import SessionPhoto, { PhotoCredit, SESSION } from "@/components/sound/SessionPhoto";
-import { Squiggle, Hand } from "@/components/sound/musicStory";
+import { Squiggle, M } from "@/components/sound/musicStory";
 
-const HEADING = "Norwige, sans-serif";
-const BODY = "'Roboto', sans-serif";
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 const GRADIENT =
   "linear-gradient(112deg, #42201C 6.46%, #A64D2B 34.96%, #B16937 63.88%, #EA9A61 97.63%)";
@@ -57,8 +55,7 @@ export default function ClosingCTA() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={spring}
-          className="text-white uppercase text-3xl md:text-5xl font-bold italic leading-[1.05] mb-4"
-          style={{ fontFamily: HEADING }}
+          className="type-h2 text-white mb-4"
         >
           {isManager ? "Send us one artist." : "Send us one song."}
         </motion.h2>
@@ -71,8 +68,7 @@ export default function ClosingCTA() {
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.08 }}
-          className="text-white/70 text-sm md:text-base leading-relaxed max-w-lg mx-auto mb-9"
-          style={{ fontFamily: BODY }}
+          className="type-lead text-white/70 max-w-lg mx-auto mb-9"
         >
           {isManager
             ? "Pick the artist you'd most like to see handled properly and start there. If it works, we do the same thing across the roster."
@@ -87,15 +83,12 @@ export default function ClosingCTA() {
         >
           <a
             href={checkoutHref("mix_first")}
-            className="cta-shine inline-flex items-center justify-center gap-2 text-white font-semibold transition-transform duration-300 hover:scale-105 w-full sm:w-auto"
+            className="type-btn cta-shine inline-flex items-center justify-center gap-2 text-white transition-transform duration-300 hover:scale-105 w-full sm:w-auto"
             style={{
-              fontFamily: HEADING,
               borderRadius: "41.444px",
               background: GRADIENT,
               boxShadow: GRADIENT_SHADOW,
               padding: "clamp(0.95rem, 1.4vw, 1.1rem) clamp(2rem, 3.5vw, 2.6rem)",
-              fontSize: "clamp(0.875rem, 1.2vw, 1rem)",
-              letterSpacing: "0.05em",
             }}
           >
             Send your stems &rarr;
@@ -103,12 +96,9 @@ export default function ClosingCTA() {
 
           <CalBookButton
             calLink={CONSULT_BOOKING_URL}
-            className="inline-flex items-center justify-center text-white/80 hover:text-white font-semibold rounded-full border border-white/10 hover:border-[#EA9A61]/50 hover:bg-[#EA9A61]/[0.06] transition-all duration-300 w-full sm:w-auto"
+            className="type-btn inline-flex items-center justify-center text-white/80 hover:text-white rounded-full border border-white/10 hover:border-[#EA9A61]/50 hover:bg-[#EA9A61]/[0.06] transition-all duration-300 w-full sm:w-auto"
             style={{
-              fontFamily: HEADING,
               padding: "clamp(0.95rem, 1.4vw, 1.1rem) clamp(2rem, 3.5vw, 2.6rem)",
-              fontSize: "clamp(0.875rem, 1.2vw, 1rem)",
-              letterSpacing: "0.05em",
             }}
           >
             Book a call
@@ -121,9 +111,12 @@ export default function ClosingCTA() {
           transition={{ ...spring, delay: 0.26 }}
           className="mt-7 flex justify-center"
         >
-          <Hand className="text-[1.1rem] md:text-[1.25rem]" tilt={-1}>
+          <p
+            className="type-link"
+            style={{ color: M.ink }}
+          >
             Atlanta, GA · stems@rovstudios.com
-          </Hand>
+          </p>
         </motion.div>
       </div>
     </section>

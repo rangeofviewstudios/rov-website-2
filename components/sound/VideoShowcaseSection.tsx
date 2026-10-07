@@ -5,8 +5,6 @@ import { motion, useInView } from "framer-motion";
 import { Squiggle } from "@/components/sound/musicStory";
 
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
-const HEADING_FONT = "Norwige, sans-serif";
-const BODY_FONT = "'Roboto', sans-serif";
 
 const videos = [
   {
@@ -118,21 +116,18 @@ function VideoCard({
         <div className="absolute bottom-0 left-0 right-0 p-4 md:p-5 flex items-end justify-between">
           <div>
             <span
-              className="text-white/65 text-[clamp(0.7rem,1.5vw,0.75rem)] uppercase tracking-[0.25em] block mb-1"
-              style={{ fontFamily: BODY_FONT }}
+              className="type-meta text-white/65 block mb-1"
             >
               {video.credit}
             </span>
             <h3
-              className="text-white text-lg md:text-xl font-bold italic"
-              style={{ fontFamily: HEADING_FONT }}
+              className="type-h4 text-white"
             >
               {video.title}
             </h3>
           </div>
           <span
-            className="text-white/15 text-2xl md:text-3xl font-bold italic"
-            style={{ fontFamily: HEADING_FONT }}
+            className="type-h3 text-white/15"
           >
             {String(index + 1).padStart(2, "0")}
           </span>
@@ -165,8 +160,8 @@ export default function VideoShowcaseSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={headerInView ? { opacity: 1, y: 0 } : {}}
             transition={spring}
-            className="uppercase text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold italic"
-            style={{ fontFamily: HEADING_FONT, color: "#FFF4E3" }}
+            className="type-mega"
+            style={{ color: "#FFF4E3" }}
           >
             Music Videos
           </motion.h2>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { M } from "@/components/sound/musicStory";
+import { M, caveat } from "@/components/sound/musicStory";
 
 // Stills from one night session, used across the music home page. They are
 // imagery, not cards: no labels, no captions, no invented titles. The photo
@@ -34,9 +34,8 @@ export function PhotoCredit({ className }: { className?: string }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label={`Photo by ${PHOTOGRAPHER.name}, opens shotbyjess.me`}
-      className={`absolute bottom-3 right-4 z-10 inline-flex items-center gap-1 text-[1.15rem] leading-none transition-colors hover:text-white md:text-[1.35rem] ${className ?? ""}`}
+      className={`absolute bottom-3 right-4 z-10 inline-flex items-center gap-1 text-[1.15rem] leading-none transition-colors hover:text-white md:text-[1.35rem] ${caveat.className} ${className ?? ""}`}
       style={{
-        fontFamily: M.hand,
         fontWeight: 600,
         color: M.ink,
         transform: "rotate(-2deg)",

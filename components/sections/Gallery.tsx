@@ -61,16 +61,10 @@ function Gallery() {
   };
 
   return (
-    <div
-      className="pt-16 pb-16 md:pb-20 rounded-t-[30px] md:rounded-t-[50px]"
-      style={{
-        background: "linear-gradient(to bottom, #18130f 0%, #18130f 50%, #000000 100%)",
-      }}
-    >
+    <div className="pt-16 pb-16 md:pb-20">
       {/* Gallery Heading without italic */}
       <div
-        className="text-[#f5e7d1] text-5xl md:text-7xl lg:text-[8.75rem] uppercase font-bold text-center drop-shadow-xl px-4 relative"
-        style={{ fontFamily: "Norwige" }}
+        className="type-mega text-[#f5e7d1] text-center drop-shadow-xl px-4 relative"
       >
         <span
           className="relative inline-block"
@@ -89,7 +83,7 @@ function Gallery() {
 
       {/* Carousel container */}
       <div
-        className="relative w-full max-w-[1920px] mx-auto h-[60vh] sm:h-[70vh] md:h-[80vh] overflow-hidden flex items-center justify-center"
+        className="relative w-full max-w-[1920px] mx-auto h-[60vh] sm:h-[70vh] md:h-[80vh] overflow-x-clip flex items-center justify-center"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >

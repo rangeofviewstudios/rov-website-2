@@ -5,7 +5,6 @@ import { useIntake } from "@/components/music/IntakeContext";
 import { SESSION } from "@/components/sound/SessionPhoto";
 import OfferCard from "@/components/sound/OfferCard";
 
-const BODY = "'Roboto', sans-serif";
 
 // Replaces PathFork + IntroOffer, which back-to-back said "your first mix is
 // $50" twice in one scroll with no way for a newcomer to tell the second
@@ -63,9 +62,8 @@ export default function StartHere() {
               type="button"
               onClick={() => setRole("artist")}
               aria-pressed={!isManager}
-              className="rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.12em] transition-colors duration-300"
+              className="type-btn-sm rounded-full px-5 py-2.5 uppercase tracking-[0.1em] transition-colors duration-300"
               style={{
-                fontFamily: BODY,
                 background: !isManager ? "#EA9A61" : "transparent",
                 color: !isManager ? "#0B0603" : "rgba(255,244,227,0.55)",
               }}
@@ -76,9 +74,8 @@ export default function StartHere() {
               type="button"
               onClick={() => setRole("manager")}
               aria-pressed={isManager}
-              className="rounded-full px-5 py-2 text-xs font-bold uppercase tracking-[0.12em] transition-colors duration-300"
+              className="type-btn-sm rounded-full px-5 py-2.5 uppercase tracking-[0.1em] transition-colors duration-300"
               style={{
-                fontFamily: BODY,
                 background: isManager ? "#EA9A61" : "transparent",
                 color: isManager ? "#0B0603" : "rgba(255,244,227,0.55)",
               }}
@@ -104,7 +101,7 @@ export default function StartHere() {
           photo={SESSION.midPhrase}
         />
 
-        <p className="text-white/40 text-[clamp(0.7rem,1.5vw,0.75rem)] mt-6 text-center leading-relaxed" style={{ fontFamily: BODY }}>
+        <p className="type-caption text-white/40 mt-6 text-center">
           See every rate, mixing pack, and the Foundation offer on{" "}
           <a href="/pricing" className="text-[#EA9A61]/85 hover:text-[#EA9A61] underline underline-offset-2 decoration-[#EA9A61]/30">
             the pricing page

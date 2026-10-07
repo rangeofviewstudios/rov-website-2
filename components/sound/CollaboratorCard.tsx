@@ -17,8 +17,6 @@ import { useEffectiveRole } from "@/components/music/IntakeContext";
 import RoleInline from "@/components/music/RoleInline";
 import { Squiggle } from "@/components/sound/musicStory";
 
-const HEADING = "Norwige, sans-serif";
-const BODY = "'Roboto', sans-serif";
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 
 function mailto(subject: string, body: string) {
@@ -75,8 +73,7 @@ export default function CollaboratorCard() {
           initial={{ opacity: 0 }}
           animate={inView ? { opacity: 1 } : {}}
           transition={spring}
-          className="block text-xs uppercase tracking-[0.3em] text-[#EA9A61] mb-3 text-center"
-          style={{ fontFamily: BODY }}
+          className="type-eyebrow block text-[#EA9A61] mb-3 text-center"
         >
           Behind the scenes
         </motion.span>
@@ -84,8 +81,7 @@ export default function CollaboratorCard() {
           initial={{ opacity: 0, y: 20 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.08 }}
-          className="text-white uppercase text-3xl md:text-4xl font-bold italic mb-3 text-center"
-          style={{ fontFamily: HEADING }}
+          className="type-h2 text-white mb-3 text-center"
         >
           We collaborate, and we credit.
         </motion.h2>
@@ -96,8 +92,7 @@ export default function CollaboratorCard() {
           initial={{ opacity: 0, y: 10 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ ...spring, delay: 0.14 }}
-          className="text-white/70 text-sm md:text-base leading-relaxed max-w-lg mx-auto text-center mb-3"
-          style={{ fontFamily: BODY }}
+          className="type-lead text-white/70 max-w-lg mx-auto text-center mb-3"
         >
           Most of what we put out has someone else&apos;s hands on it, and their name on
           it too. Pick whichever one you are.
@@ -113,20 +108,17 @@ export default function CollaboratorCard() {
               <>
                 <Icon className="w-6 h-6 text-[#EA9A61] mb-4" strokeWidth={1.5} />
                 <h3
-                  className="text-white text-lg md:text-xl font-bold italic mb-2"
-                  style={{ fontFamily: HEADING }}
+                  className="type-h4 text-white mb-2"
                 >
                   {r.title}
                 </h3>
                 <p
-                  className="text-white/70 text-sm leading-relaxed flex-1 mb-5"
-                  style={{ fontFamily: BODY }}
+                  className="type-small text-white/70 flex-1 mb-5"
                 >
                   {r.body}
                 </p>
                 <span
-                  className="inline-flex items-center gap-2 text-[#EA9A61]/85 group-hover:text-[#EA9A61] text-sm font-semibold transition-colors"
-                  style={{ fontFamily: HEADING }}
+                  className="inline-flex items-center gap-2 type-link text-[#EA9A61]/85 group-hover:text-[#EA9A61] transition-colors"
                 >
                   {r.cta}
                   <span className="transition-transform duration-300 group-hover:translate-x-1">

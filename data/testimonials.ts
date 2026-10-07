@@ -107,3 +107,50 @@ export const aiTestimonials: Testimonial[] = [
     socialUrl: "https://www.instagram.com/dkmcorp/",
   },
 ];
+
+/** The "every client story" grid on the rovmusic home page. Longer form than
+ * the carousel: who they are, what we did, and their words. A story with an
+ * empty quote is held back from render, so never fill one with placeholder
+ * copy. Only real, approved words go here. */
+export interface ClientStory {
+  name: string;
+  role: string;
+  work: string;
+  quote: string;
+  image?: string;
+  href?: string;
+}
+
+export const soundClientStories: ClientStory[] = [
+  {
+    name: "DDK",
+    role: "Recording Artist",
+    work: "Mixed and mastered, including On The Radar",
+    quote:
+      "Basu is one of the fastest engineers ever. What he was doing with this setup back then amused me. My biggest songs are mixed by Basu.",
+    image: "/clients/ddk.webp",
+  },
+  {
+    name: "Sam Suen",
+    role: "DreamAsia Fest Headliner",
+    work: "Brand, website, sound, socials, and stage",
+    quote: "The stage at DreamAsia wasn't a destination. It was just the next logical step.",
+    image: "/teammembers/samsuentm.webp",
+    href: "/sam-suen",
+  },
+  {
+    name: "Adil Hasan",
+    role: "Recording Artist",
+    work: "",
+    // TODO(andi): Adil's approved quote. Card stays hidden until this is set.
+    quote: "",
+  },
+  {
+    name: "Lorenzo Barns",
+    role: "Recording Artist",
+    work: "Give Me Your Love: produced, written, mixed and mastered",
+    // TODO(andi): Lorenzo's approved quote. Card stays hidden until this is set.
+    quote: "",
+    image: "/audio/covers/gimmeyourlovecober.webp",
+  },
+];

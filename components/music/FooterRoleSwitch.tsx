@@ -21,8 +21,7 @@ export default function FooterRoleSwitch() {
     <button
       type="button"
       onClick={openRoleGate}
-      className="text-white/40 hover:text-white/70 text-xs md:text-sm transition-colors cursor-pointer text-left"
-      style={{ fontFamily: "Roboto, sans-serif" }}
+      className="type-caption text-white/40 hover:text-white/70 transition-colors cursor-pointer text-left"
     >
       {role ? (
         <>

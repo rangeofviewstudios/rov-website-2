@@ -10,7 +10,8 @@ import SoundHero from "@/components/sound/SoundHero";
 // serve as the evidence for the full-service claim instead of sitting in the
 // back half as decoration.
 import TestimonialsSection from "@/components/common/TestimonialsSection";
-import { soundTestimonials } from "@/data/testimonials";
+import { soundTestimonials, soundClientStories } from "@/data/testimonials";
+import ClientStories from "@/components/sound/ClientStories";
 import { soundFaqItems } from "@/data/faq";
 import { VideoSchema } from "@/components/schema/VideoSchema";
 import { ServiceSchema } from "@/components/schema/ServiceSchema";
@@ -54,7 +55,6 @@ const MusicPlayer = dynamic(() => import("@/components/sound/MusicPlayer"), {
 
 const StartHere = dynamic(() => import("@/components/sound/StartHere"));
 
-const FoundationOffer = dynamic(() => import("@/components/sound/FoundationOffer"));
 
 // Holds the cover gallery and video showcase, so it carries their weight.
 const CareerGaps = dynamic(() => import("@/components/sound/CareerGaps"), {
@@ -182,7 +182,6 @@ export default function Page() {
                 note="every rate is on this page. you leave with your stems, and whatever we mixed that day."
                 link={{ label: "hear all six records", href: "/credits" }}
                 photo={SESSION.street}
-                tag="one mic, outside, at dusk"
                 layout="bleed"
                 tilt={-1.4}
             />
@@ -234,8 +233,9 @@ export default function Page() {
                 for artists and managers.            [#collaborate] */}
             <CollaboratorCard />
 
-            {/* 10 — Foundation / Release Cycle / Development [#foundation] */}
-            <FoundationOffer />
+            {/* 10 — Foundation / Release Cycle / Development used to sit here.
+                Retired: /pricing carries those tiers now, and stating them
+                twice was dead weight. FoundationOffer.tsx is untouched. */}
 
             {/* 11 — Sam Suen: this is Act 3's proof, not general proof.
                 Brand, site, sound, and stage for one artist is a Foundation
@@ -257,7 +257,11 @@ export default function Page() {
             />
 
             {/* 12 — Testimonials (speed and process, i.e. objections) */}
-            <TestimonialsSection testimonials={soundTestimonials} variant="sound" />
+            <TestimonialsSection
+                testimonials={soundTestimonials}
+                variant="sound"
+                footer={<ClientStories stories={soundClientStories} extra={soundTestimonials} />}
+            />
 
             {/* 13 — FAQ */}
             <FAQSection items={soundFaqItems} />

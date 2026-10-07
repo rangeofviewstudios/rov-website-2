@@ -13,6 +13,16 @@ import {
 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Squiggle } from "@/components/sound/musicStory";
+import { SESSION } from "@/components/sound/SessionPhoto";
+
+const INK = "#EA9A61";
+const DISPLAY_HEAVY = "NorwigeExtraBoldItalic_Hero, Norwige, sans-serif";
+// Before is the raw take, so it wears a cool, unmixed slate. After is the
+// mix, in ink orange. Every mode-aware accent in the player reads from here.
+const MODE = {
+    before: { accent: "#9FB3C8", on: "#0B1118" },
+    after: { accent: INK, on: "#0B0603" },
+} as const;
 
 const songData = [
     {
@@ -86,7 +96,7 @@ export default function MusicPlayer() {
 
     const audioRef = useRef<HTMLAudioElement | null>(null);
     const carouselRef = useRef<HTMLDivElement>(null);
-    const cardsRef = useRef<(HTMLDivElement | null)[]>([]);
+    const cardsRef = useRef<(HTMLButtonElement | null)[]>([]);
     const savedTimeRef = useRef<number>(0);
     const playlistRef = useRef<HTMLDivElement>(null);
     const playlistBtnRef = useRef<HTMLButtonElement>(null);
@@ -238,7 +248,8 @@ export default function MusicPlayer() {
             }
 
             gsap.to(card, {
-                x: diff * 200,
+                // Tight stack: neighbours tuck behind the centre, outer covers butt up against them.
+                x: diff === 0 ? 0 : Math.sign(diff) * (110 + (absDiff - 1) * 72),
                 z: isCenter ? 0 : -200,
                 rotationY: rotationY,
                 scale: isCenter ? 1.0 : 0.8,
@@ -265,90 +276,99 @@ export default function MusicPlayer() {
         }
     };
 
+    const mode = isAfter ? MODE.after : MODE.before;
+
     return (
         <div className="w-full flex flex-col items-center bg-black">
-            <div className="w-full max-w-[95%] md:max-w-7xl px-6 md:px-12 text-left py-12 md:py-16">
-                <h2 className="text-[#FFF4E3] uppercase text-3xl md:text-4xl lg:text-5xl leading-tight" style={{ fontFamily: 'NorwigeHeroItalic, sans-serif', fontWeight: 'normal' }}>
+            <div className="w-full max-w-[95%] md:max-w-7xl px-6 md:px-12 text-left pt-8 pb-5 md:pt-10 md:pb-6">
+                <h2 className="type-h2 text-[#FFF4E3]">
                     The same song, before and after our mix.
                 </h2>
-                <div className="mt-4 max-w-[220px]">
+                <div className="mt-3 max-w-[220px]">
                     <Squiggle />
                 </div>
             </div>
 
-            <div className="w-full max-w-[95%] md:max-w-7xl px-6 md:px-12 pb-20">
-                <section className="relative w-full min-h-[60vh] md:min-h-[70vh] flex flex-col items-center justify-center pt-6 md:pt-10 overflow-hidden font-sans rounded-[2.5rem] border border-white/5">
+            <div className="w-full max-w-[95%] md:max-w-7xl px-6 md:px-12 pb-10">
+                <section className="relative w-full flex flex-col items-center justify-center pt-4 md:pt-5 overflow-hidden font-sans rounded-[2.5rem] border border-white/5">
                     {/* Background Image - Clean, no full screen glass */}
                     <div
-                        className="absolute inset-0 bg-cover bg-center blur-sm scale-110" // Added blur-sm and scale-110 to avoid blurred edges
+                        className="absolute inset-0 bg-cover bg-center blur-md scale-110" // blur + scale-110 so the blurred edges never show
                         style={{
-                            backgroundImage: "url('/soundpage/pedromvimg.webp')",
+                            backgroundImage: `url('${SESSION.eyesClosed.src}')`,
                         }}
                     />
-                    {/* Calm dark overlay, not blurred */}
-                    <div className="absolute inset-0 bg-black/40" />
+                    {/* Dark overlay, heavier at the bottom so the control bar reads */}
+                    <div className="absolute inset-0" style={{ background: "linear-gradient(180deg, rgba(0,0,0,0.45) 0%, rgba(0,0,0,0.55) 55%, rgba(0,0,0,0.8) 100%)" }} />
 
                     <div className="container max-w-6xl mx-auto px-4 flex flex-col items-center relative z-10">
 
-                        {/* Simple Top Toggle (No Glassmorphism headers) */}
-                        <div className="flex bg-black/40 rounded-full p-1 mb-6 md:mb-12 border border-white/10 scale-90 md:scale-100 origin-top">
-                            <button
-                                onClick={() => toggleBeforeAfter(false)}
-                                className={`px-6 md:px-8 py-2 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase transition-all duration-300 ${!isAfter
-                                    ? "bg-white/20 backdrop-blur-md text-white shadow-lg border border-white/10"
-                                    : "text-white/60 hover:text-white"
-                                    }`}
-                            >
-                                Before
-                            </button>
-                            <button
-                                onClick={() => toggleBeforeAfter(true)}
-                                className={`px-6 md:px-8 py-2 rounded-full text-xs md:text-sm font-bold tracking-widest uppercase transition-all duration-300 ${isAfter
-                                    ? "bg-white/20 backdrop-blur-md text-white shadow-lg border border-white/10"
-                                    : "text-white/60 hover:text-white"
-                                    }`}
-                            >
-                                After
-                            </button>
+                        {/* Before / After is the point of the whole player, so it
+                            is the loudest control: ink orange when active, with a
+                            one-line hint that flipping keeps your place. */}
+                        <div
+                            role="group"
+                            aria-label="Hear the song before or after our mix"
+                            className="relative flex rounded-full p-1 bg-black/55 border border-white/10 backdrop-blur-md"
+                        >
+                            {[false, true].map((after) => {
+                                const active = isAfter === after;
+                                return (
+                                    <button
+                                        key={String(after)}
+                                        onClick={() => toggleBeforeAfter(after)}
+                                        aria-pressed={active}
+                                        className="type-btn relative px-6 md:px-9 py-2.5 rounded-full uppercase tracking-[0.1em] transition-colors duration-300"
+                                        style={{
+                                            color: active ? (after ? MODE.after.on : MODE.before.on) : (after ? MODE.after.accent : MODE.before.accent),
+                                            opacity: active ? 1 : 0.75,
+                                        }}
+                                    >
+                                        {active && (
+                                            <motion.span
+                                                layoutId="ba-pill"
+                                                className="absolute inset-0 rounded-full"
+                                                initial={false}
+                                                animate={{ backgroundColor: after ? MODE.after.accent : MODE.before.accent }}
+                                                transition={{ type: "spring", stiffness: 400, damping: 32 }}
+                                            />
+                                        )}
+                                        <span className="relative">{after ? "After" : "Before"}</span>
+                                    </button>
+                                );
+                            })}
                         </div>
+                        <p className="type-caption mt-2 text-white/60">
+                            Flip it mid-song. It keeps your place.
+                        </p>
 
                         {/* 3D Carousel (Cover Flow) */}
-                        <div className="relative w-full h-[320px] md:h-[420px] flex items-center justify-center mb-0" style={{ perspective: "1000px" }}>
+                        <div className="relative w-full h-[180px] md:h-[210px] flex items-center justify-center mb-3" style={{ perspective: "1000px" }}>
                             <div ref={carouselRef} className="relative w-full h-full flex items-center justify-center" style={{ transformStyle: "preserve-3d" }}>
                                 {songData.map((song, i) => (
-                                    <div
+                                    <button
+                                        type="button"
                                         key={i}
                                         ref={el => { cardsRef.current[i] = el; }}
-                                        className="absolute w-[280px] md:w-[320px] aspect-square rounded-[2rem] overflow-hidden shadow-2xl border border-white/10 bg-black"
+                                        onClick={() => (i === currentIndex ? togglePlay() : selectSong(i))}
+                                        aria-label={i === currentIndex ? `${isPlaying ? "Pause" : "Play"} ${song.title}` : `Play ${song.title} by ${song.artist}`}
+                                        className="absolute w-[150px] md:w-[180px] aspect-square rounded-[1.6rem] overflow-hidden shadow-2xl border border-white/10 bg-black cursor-pointer"
                                     >
                                         <Image
                                             src={song.cover}
                                             alt={song.title}
                                             fill
                                             className="object-cover"
-                                            sizes="(max-width: 768px) 280px, 320px"
+                                            sizes="(max-width: 768px) 150px, 180px"
                                             priority={i === currentIndex}
                                         />
-                                    </div>
+                                    </button>
                                 ))}
                             </div>
                         </div>
 
-                        {/* Metadata Pill (Reference: Small, Dark, Below Active Card) */}
-                        <div className="flex justify-center mb-12 relative z-20 mt-[-20px]">
-                            <a
-                                href={songData[currentIndex].spotifyUrl}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="px-8 py-2 rounded-full bg-[#000000]/60 backdrop-blur-xl border border-white/5 flex items-center gap-3 shadow-lg transition-all hover:bg-[#000000]/80 group hover:scale-105 cursor-pointer"
-                            >
-                                <div className="flex flex-col items-center">
-                                    <h3 className="text-white text-sm font-bold tracking-wide leading-tight group-hover:text-[#1DB954] transition-colors">{songData[currentIndex].title}</h3>
-                                    <p className="text-[#9CA3AF] text-[clamp(0.7rem,1.5vw,0.75rem)] font-medium leading-tight mt-0.5">{songData[currentIndex].artist}</p>
-                                </div>
-                            </a>
-                        </div>
-
+                        {/* The title/artist pill that sat here was retired: the
+                            dashboard below already names the track and links to Spotify. */}
                         {/* Playlist Popover (Conditional) */}
                         <AnimatePresence>
                             {showPlaylist && (
@@ -360,7 +380,7 @@ export default function MusicPlayer() {
                                     className="absolute bottom-32 md:bottom-28 bg-[#1A1A1A]/90 backdrop-blur-xl border border-white/10 rounded-2xl p-4 shadow-2xl z-[150]"
                                     style={{ width: "20rem", maxWidth: "min(20rem, calc(100vw - 32px))" }}
                                 >
-                                    <h4 className="text-white/60 text-xs font-bold uppercase tracking-widest mb-3 ml-1">Up Next</h4>
+                                    <h4 className="type-eyebrow text-[#EA9A61] mb-3 ml-1">Up Next</h4>
                                     <div className="flex flex-col gap-2 max-h-[15rem] overflow-y-auto custom-scrollbar">
                                         {songData.map((song, i) => (
                                             <button
@@ -370,8 +390,8 @@ export default function MusicPlayer() {
                                             >
                                                 <Image src={song.cover} width={32} height={32} className="rounded object-cover" alt={song.title} />
                                                 <div className="flex flex-col min-w-0">
-                                                    <span className={`text-sm font-medium truncate ${i === currentIndex ? "text-[#EA9A61]" : "text-white"}`}>{song.title}</span>
-                                                    <span className="text-xs text-white/65 truncate">{song.artist}</span>
+                                                    <span className={`type-h4 text-[0.9375rem] truncate ${i === currentIndex ? "text-[#EA9A61]" : "text-white"}`}>{song.title}</span>
+                                                    <span className="type-caption text-white/65 truncate">{song.artist}</span>
                                                 </div>
                                             </button>
                                         ))}
@@ -384,11 +404,11 @@ export default function MusicPlayer() {
                         <div className="w-full max-w-[55rem] bg-[#141414]/80 backdrop-blur-2xl border border-white/10 rounded-[2.5rem] shadow-2xl relative z-[100] overflow-hidden group/dashboard transition-all hover:bg-[#1A1A1A]/90 hover:border-white/20">
 
                             {/* 1. Progress Bar - Top Edge */}
-                            <div className="absolute top-0 left-0 right-0 h-1.5 w-full bg-black/40 z-20 group-hover/dashboard:h-2 transition-all cursor-pointer">
+                            <div className="absolute top-0 left-0 right-0 h-1 w-full bg-white/10 z-20 group-hover/dashboard:h-1.5 transition-all cursor-pointer">
                                 {/* Progress Fill */}
                                 <div
-                                    className="absolute h-full bg-gradient-to-r from-[#EA9A61] to-[#B16937] transition-all duration-100 ease-linear shadow-[0_0_10px_rgba(234,154,97,0.5)]"
-                                    style={{ width: `${(currentTime / (duration || 1)) * 100}%` }}
+                                    className="absolute h-full transition-all duration-100 ease-linear"
+                                    style={{ width: `${(currentTime / (duration || 1)) * 100}%`, background: mode.accent }}
                                 >
                                     {/* Glowing Head */}
                                     <div className="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.8)] opacity-0 group-hover/dashboard:opacity-100 transition-opacity" />
@@ -406,7 +426,7 @@ export default function MusicPlayer() {
                                 />
                             </div>
 
-                            <div className="flex flex-col md:flex-row items-center justify-between w-full p-5 md:px-8 md:py-5 mt-1 gap-y-6 md:gap-y-0">
+                            <div className="flex flex-col md:flex-row items-center justify-between w-full p-4 md:px-8 md:py-3 mt-1 gap-y-4 md:gap-y-0">
 
                                 {/* Left: Track Info & Art */}
                                 <div className="flex items-center w-full md:w-1/3 justify-start order-1">
@@ -416,29 +436,32 @@ export default function MusicPlayer() {
                                         rel="noopener noreferrer"
                                         className="flex items-center gap-4 group/info cursor-pointer w-full"
                                     >
-                                        <div className="w-14 h-14 rounded-xl overflow-hidden shadow-lg relative flex-shrink-0 group-hover/info:shadow-[#EA9A61]/20 transition-all border border-white/5">
+                                        <div className="w-12 h-12 rounded-xl overflow-hidden shadow-lg relative flex-shrink-0 group-hover/info:shadow-[#EA9A61]/20 transition-all border border-white/5">
                                             <Image src={songData[currentIndex].cover} fill className="object-cover" alt={`${songData[currentIndex].title} by ${songData[currentIndex].artist}`} sizes="56px" priority />
                                         </div>
                                         <div className="flex flex-col min-w-0 justify-center">
-                                            <h3 className="text-white text-base font-bold tracking-wide truncate group-hover/info:text-[#EA9A61] transition-colors">
-                                                {songData[currentIndex].title}
+                                            <h3 className="type-h4 flex items-center gap-2 text-white min-w-0 group-hover/info:text-[#EA9A61] transition-colors">
+                                                <span className="truncate">{songData[currentIndex].title}</span>
+                                                {isPlaying && <NowPlaying color={mode.accent} />}
                                             </h3>
-                                            <p className="text-white/75 text-sm font-medium truncate mt-0.5">
+                                            <p className="type-small text-white/70 truncate mt-0.5">
                                                 {songData[currentIndex].artist}
+                                                <span style={{ color: mode.accent }}> · {isAfter ? "after" : "before"}</span>
                                             </p>
                                         </div>
                                     </a>
                                 </div>
 
                                 {/* Center: Playback Controls */}
-                                <div className="flex items-center justify-center w-full md:w-1/3 gap-8 order-3 md:order-2 pt-6 md:pt-0 border-t border-white/10 md:border-none">
+                                <div className="flex items-center justify-center w-full md:w-1/3 gap-8 order-3 md:order-2 pt-4 md:pt-0 border-t border-white/10 md:border-none">
                                     <button onClick={prevSong} className="text-white/70 hover:text-white hover:scale-110 transition-all active:scale-95 p-2.5 -m-2.5 flex items-center justify-center" aria-label="Previous song">
                                         <SkipBack size={24} fill="currentColor" />
                                     </button>
 
                                     <button
                                         onClick={togglePlay}
-                                        className="w-14 h-14 rounded-full bg-white text-black flex items-center justify-center hover:scale-105 hover:shadow-[0_0_20px_rgba(255,255,255,0.3)] transition-all active:scale-95"
+                                        className="w-12 h-12 rounded-full flex items-center justify-center hover:scale-105 transition-all duration-300 active:scale-95"
+                                        style={{ background: mode.accent, color: mode.on }}
                                         aria-label={isPlaying ? "Pause" : "Play"}
                                     >
                                         {isPlaying ? <Pause size={24} fill="currentColor" /> : <Play size={24} fill="currentColor" className="ml-1" />}
@@ -452,8 +475,8 @@ export default function MusicPlayer() {
                                 {/* Right: Time, Playlist, Volume */}
                                 <div className="flex flex-row items-center justify-between md:justify-end gap-6 md:gap-8 w-full md:w-1/3 order-2 md:order-3">
                                     {/* Time Display */}
-                                    <div className="text-xs md:text-sm font-mono text-white/75 tabular-nums">
-                                        {formatTime(currentTime)} / {formatTime(duration)}
+                                    <div className="type-small text-white/70 tabular-nums">
+                                        {duration ? `${formatTime(currentTime)} / ${formatTime(duration)}` : "Press play"}
                                     </div>
 
                                     <div className="flex items-center gap-6 md:gap-8 text-white/70">
@@ -480,18 +503,9 @@ export default function MusicPlayer() {
                             </div>
                         </div>
 
-                        {/* Carousel Indicators */}
-                        <div className="flex gap-2 mt-8 mb-10">
-                            {songData.map((_, i) => (
-                                <button
-                                    key={i}
-                                    onClick={() => selectSong(i)}
-                                    aria-label={`Go to song ${i + 1}`}
-                                    aria-current={i === currentIndex ? "true" : undefined}
-                                    className={`h-2 rounded-full transition-all duration-300 ${i === currentIndex ? "bg-white/40 w-6 shadow-[0_0_10px_rgba(255,255,255,0.3)]" : "bg-white/20 w-2"}`}
-                                />
-                            ))}
-                        </div>
+                        {/* Dot indicators retired for height; prev/next and the
+                            playlist button already move between songs. */}
+                        <div className="h-4 md:h-5" />
 
                     </div>
 
@@ -502,5 +516,22 @@ export default function MusicPlayer() {
                 </section>
             </div>
         </div>
+    );
+}
+
+/** Three small bars that bounce while a track is playing. */
+function NowPlaying({ color }: { color: string }) {
+    return (
+        <span aria-hidden className="flex h-3 items-end gap-[2px] shrink-0">
+            {[0, 0.2, 0.4].map((d) => (
+                <motion.span
+                    key={d}
+                    className="w-[3px] rounded-full"
+                    style={{ background: color }}
+                    animate={{ height: ["30%", "100%", "45%", "80%", "30%"] }}
+                    transition={{ duration: 1.1, repeat: Infinity, delay: d, ease: "easeInOut" }}
+                />
+            ))}
+        </span>
     );
 }

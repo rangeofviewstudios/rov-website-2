@@ -5,8 +5,6 @@ import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import type { Testimonial, ServiceVariant } from "@/data/testimonials";
 
-const HEADING = "Norwige, sans-serif";
-const BODY = "'Roboto', sans-serif";
 
 function VariantDecoration({ variant }: { variant: ServiceVariant }) {
   switch (variant) {
@@ -74,9 +72,11 @@ function VariantDecoration({ variant }: { variant: ServiceVariant }) {
 interface Props {
   testimonials: Testimonial[];
   variant: ServiceVariant;
+  /** Rendered under the carousel, inside the section (e.g. a "see all" button). */
+  footer?: React.ReactNode;
 }
 
-export default function TestimonialsSection({ testimonials, variant }: Props) {
+export default function TestimonialsSection({ testimonials, variant, footer }: Props) {
   const [activeIndex, setActiveIndex] = useState(0);
   const [direction, setDirection] = useState(1);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
@@ -149,13 +149,12 @@ export default function TestimonialsSection({ testimonials, variant }: Props) {
         {/* Section Label */}
         <div className="flex items-center gap-4 mb-16 md:mb-24">
           <p
-            className="text-xs uppercase tracking-[0.25em] text-white/30"
-            style={{ fontFamily: BODY }}
+            className="type-eyebrow text-white/30"
           >
             Client Testimonials
           </p>
           <div className="h-px flex-1 bg-white/10" />
-          <p className="text-xs uppercase tracking-[0.25em] text-white/30 font-mono">
+          <p className="type-eyebrow text-white/30 tabular-nums">
             0{activeIndex + 1} / 0{testimonials.length}
           </p>
         </div>
@@ -176,10 +175,8 @@ export default function TestimonialsSection({ testimonials, variant }: Props) {
                   duration: 0.5,
                   ease: [0.22, 1, 0.36, 1],
                 }}
-                className="absolute inset-0 flex items-center justify-center text-[8rem] lg:text-[10rem] xl:text-[12rem] leading-none font-bold select-none"
+                className="type-mega absolute inset-0 flex items-center justify-center text-[8rem] lg:text-[10rem] xl:text-[12rem] select-none"
                 style={{
-                  fontFamily: HEADING,
-                  fontStyle: "italic",
                   color: "transparent",
                   WebkitTextStroke: "1.5px rgba(234, 154, 97, 0.5)",
                 }}
@@ -206,10 +203,8 @@ export default function TestimonialsSection({ testimonials, variant }: Props) {
               >
                 {/* Mobile index */}
                 <span
-                  className="md:hidden block text-5xl leading-none font-bold select-none mb-6"
+                  className="type-stat md:hidden block select-none mb-6"
                   style={{
-                    fontFamily: HEADING,
-                    fontStyle: "italic",
                     color: "transparent",
                     WebkitTextStroke: "1px rgba(234, 154, 97, 0.45)",
                   }}
@@ -219,8 +214,7 @@ export default function TestimonialsSection({ testimonials, variant }: Props) {
 
                 {/* Quote */}
                 <p
-                  className="text-2xl sm:text-3xl md:text-3xl lg:text-4xl xl:text-[2.75rem] text-white/90 leading-snug lg:leading-snug mb-10 md:mb-14"
-                  style={{ fontFamily: HEADING, fontStyle: "italic" }}
+                  className="type-quote text-white/90 mb-10 md:mb-14"
                 >
                   &ldquo;{current.quote}&rdquo;
                 </p>
@@ -249,8 +243,7 @@ export default function TestimonialsSection({ testimonials, variant }: Props) {
                   <div className="flex flex-col gap-1.5">
                     <div className="flex items-center gap-3">
                       <p
-                        className="text-sm md:text-base font-medium text-white tracking-wide"
-                        style={{ fontFamily: BODY }}
+                        className="type-name text-white"
                       >
                         {current.name}
                       </p>
@@ -282,16 +275,14 @@ export default function TestimonialsSection({ testimonials, variant }: Props) {
 
                     <div className="flex items-center gap-3">
                       <p
-                        className="text-xs md:text-sm text-white/40"
-                        style={{ fontFamily: BODY }}
+                        className="type-small text-white/40"
                       >
                         {current.role}
                       </p>
 
                       {/* Impact stat badge */}
                       <span
-                        className="text-[clamp(0.7rem,1.5vw,0.75rem)] md:text-xs uppercase tracking-[0.15em] px-2.5 py-0.5 rounded-full border border-[#EA9A61]/30 text-[#EA9A61] bg-[#EA9A61]/5"
-                        style={{ fontFamily: BODY }}
+                        className="type-tag px-2.5 py-1 rounded-full border border-[#EA9A61]/30 text-[#EA9A61] bg-[#EA9A61]/5"
                       >
                         {current.impactStat}
                       </span>
@@ -382,6 +373,7 @@ export default function TestimonialsSection({ testimonials, variant }: Props) {
           </div>
         </div>
       </div>
+      {footer}
     </section>
   );
 }

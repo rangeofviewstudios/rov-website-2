@@ -501,7 +501,7 @@ export default function ReadinessAudit() {
 
                 <div className="mt-4 flex items-center justify-between gap-4">
                   <a
-                    href="#foundation"
+                    href="/pricing"
                     className="text-[#EA9A61]/80 hover:text-[#EA9A61] text-xs transition-colors"
                     style={{ fontFamily: BODY }}
                   >

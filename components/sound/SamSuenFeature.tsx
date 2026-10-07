@@ -4,19 +4,10 @@ import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { Squiggle } from "@/components/sound/musicStory";
+import { M, Squiggle } from "@/components/sound/musicStory";
 
-const HEADING = "Norwige, sans-serif";
-const MONO = "'DM Mono', monospace";
-const BODY = "'Roboto', sans-serif";
 
 const spring = { type: "spring" as const, stiffness: 72, damping: 18 };
-
-// Premium brown gradient for primary buttons: caramel → rust → espresso.
-const BROWN_GRADIENT =
-  "linear-gradient(135deg, #EA9A61 0%, #A9522F 55%, #5C2E1A 100%)";
-const BROWN_SHADOW =
-  "0 12px 34px rgba(92,46,26,0.45), inset 0 1px 0 rgba(255,244,227,0.22)";
 
 // In-house artist development proof. DDKFeatureTestimonial is the client
 // spotlight; this is the deeper cut: an artist we develop end to end.
@@ -44,7 +35,7 @@ export default function SamSuenFeature() {
     <section
       ref={ref}
       className="relative bg-[#080807] overflow-hidden"
-      style={{ padding: "clamp(80px, 12vw, 140px) clamp(16px, 5vw, 80px)" }}
+      style={{ padding: "clamp(24px, 4vw, 48px) clamp(16px, 5vw, 80px) clamp(80px, 12vw, 140px)" }}
     >
       {/* Ambient glow — right, behind photo */}
       <div
@@ -73,8 +64,8 @@ export default function SamSuenFeature() {
             style={{ backgroundColor: "rgba(234,154,97,0.4)" }}
           />
           <span
-            className="text-[12px] uppercase tracking-[0.3em]"
-            style={{ fontFamily: MONO, color: "rgba(234,154,97,0.55)" }}
+            className="type-eyebrow"
+            style={{ color: "rgba(234,154,97,0.55)" }}
           >
             Artist Development · Built In-House
           </span>
@@ -106,14 +97,13 @@ export default function SamSuenFeature() {
               </div>
               <div>
                 <p
-                  className="text-white font-medium text-base tracking-wide"
-                  style={{ fontFamily: BODY }}
+                  className="type-name text-white"
                 >
                   Sam Suen
                 </p>
                 <p
-                  className="text-[12px] uppercase tracking-[0.2em] mt-0.5"
-                  style={{ fontFamily: MONO, color: "rgba(255,255,255,0.35)" }}
+                  className="type-meta mt-0.5"
+                  style={{ color: "rgba(255,255,255,0.35)" }}
                 >
                   Korean-Chinese Hip-Hop · ROV Artist
                 </p>
@@ -122,8 +112,7 @@ export default function SamSuenFeature() {
 
             {/* Headline copy */}
             <h2
-              className="uppercase text-[clamp(1.6rem,3vw,2.4rem)] leading-tight text-white"
-              style={{ fontFamily: HEADING }}
+              className="type-h2 text-white"
             >
               One artist. Every lane.{" "}
               <span style={{ color: "#EA9A61" }}>
@@ -134,8 +123,8 @@ export default function SamSuenFeature() {
               <Squiggle />
             </div>
             <p
-              className="text-sm md:text-base leading-relaxed -mt-3"
-              style={{ fontFamily: BODY, color: "rgba(255,255,255,0.5)" }}
+              className="type-body -mt-3"
+              style={{ color: "rgba(255,255,255,0.5)" }}
             >
               Sam is the proof. We grow his socials, built his brand
               from scratch, designed his website, mix and release his records,
@@ -149,14 +138,14 @@ export default function SamSuenFeature() {
               {STATS.map((s) => (
                 <div key={s.label} className="flex flex-col gap-1.5">
                   <span
-                    className="text-[clamp(1.5rem,2.6vw,2.1rem)] leading-none"
-                    style={{ fontFamily: HEADING, color: "#EA9A61" }}
+                    className="type-stat"
+                    style={{ color: "#EA9A61" }}
                   >
                     {s.value}
                   </span>
                   <span
-                    className="text-[11px] uppercase tracking-[0.14em] leading-snug"
-                    style={{ fontFamily: MONO, color: "rgba(255,255,255,0.35)" }}
+                    className="type-meta"
+                    style={{ color: "rgba(255,255,255,0.35)" }}
                   >
                     {s.label}
                   </span>
@@ -175,9 +164,8 @@ export default function SamSuenFeature() {
               {PILLARS.map((p) => (
                 <span
                   key={p}
-                  className="text-[12px] uppercase tracking-[0.16em] px-3 py-1 rounded-full"
+                  className="type-tag px-3 py-1.5 rounded-full"
                   style={{
-                    fontFamily: MONO,
                     border: "1px solid rgba(234,154,97,0.3)",
                     color: "#EA9A61",
                     background: "rgba(234,154,97,0.08)",
@@ -195,16 +183,15 @@ export default function SamSuenFeature() {
                   linking direct would 404 in dev and on rovstudios. */}
               <Link
                 href="/sound/sam-suen"
-                className="inline-flex items-center gap-3 px-6 py-3 rounded-full transition-opacity hover:opacity-90"
-                style={{ background: BROWN_GRADIENT, boxShadow: BROWN_SHADOW }}
+                className="type-btn cta-shine inline-flex items-center gap-3 px-7 py-3.5 rounded-full transition-transform duration-300 hover:scale-105"
+                style={{ background: M.inkGradient, boxShadow: M.ctaShadow, color: M.cream }}
               >
                 <span
-                  className="text-[13px] uppercase tracking-[0.22em] font-medium"
-                  style={{ fontFamily: MONO, color: "#FFF4E3" }}
+                  
                 >
                   See the full story
                 </span>
-                <span aria-hidden style={{ color: "#FFF4E3" }}>
+                <span aria-hidden>
                   →
                 </span>
               </Link>
@@ -252,8 +239,8 @@ export default function SamSuenFeature() {
                 }}
               >
                 <span
-                  className="text-[12px] uppercase tracking-[0.22em]"
-                  style={{ fontFamily: MONO, color: "#EA9A61" }}
+                  className="type-meta"
+                  style={{ color: "#EA9A61" }}
                 >
                   DreamAsia Fest · Headliner
                 </span>
@@ -261,14 +248,14 @@ export default function SamSuenFeature() {
             </div>
             <div className="flex items-center justify-between mt-3.5 px-0.5">
               <span
-                className="text-[12px] uppercase tracking-[0.2em]"
-                style={{ fontFamily: MONO, color: "rgba(255,255,255,0.2)" }}
+                className="type-meta"
+                style={{ color: "rgba(255,255,255,0.2)" }}
               >
                 Developed · ROV Studios
               </span>
               <span
-                className="text-[12px] uppercase tracking-[0.18em]"
-                style={{ fontFamily: MONO, color: "rgba(255,255,255,0.15)" }}
+                className="type-meta"
+                style={{ color: "rgba(255,255,255,0.15)" }}
               >
                 2026
               </span>

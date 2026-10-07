@@ -1,10 +1,10 @@
 import SessionPhoto, { type SessionFrame } from "@/components/sound/SessionPhoto";
-import { Hand, HandLink, M, PinTag, Squiggle } from "@/components/sound/musicStory";
+import { HandLink, M, PinTag, Squiggle } from "@/components/sound/musicStory";
 
 // The music home page is built in four acts (proof, the song, the career, the
 // close). ActBreak is the punctuation between them, in the Wisdom case study
-// voice: one big uppercase line, a drawn underline, and a handwritten note
-// where a paragraph used to be. It must never compete with the sections
+// voice: one big uppercase line, a drawn underline, and a short note
+// where a paragraph used to be (body face, it carries real information). It must never compete with the sections
 // around it, so there is one line, one note, one route out, nothing else.
 //
 // It can carry one session photo. "bleed" puts the photo behind the line for
@@ -25,9 +25,9 @@ export default function ActBreak({
     act: string;
     /** The one line that moves the reader on. Set uppercase, keep it short. */
     line: string;
-    /** Handwritten aside in ink. The studio talking, not marketing. */
+    /** Short aside in the body face. The studio talking, not marketing. */
     note?: string;
-    /** Route out to the proof pages, handwritten. */
+    /** Route out to the proof pages. */
     link?: { label: string; href: string };
     /** Optional session still. See SessionPhoto for the frames. */
     photo?: SessionFrame;
@@ -41,19 +41,16 @@ export default function ActBreak({
     const copy = (
         <>
             <p
-                className="text-[10px] uppercase md:text-xs"
-                style={{ fontFamily: M.label, letterSpacing: "0.22em", color: M.ink }}
+                className="type-eyebrow"
+                style={{ color: M.ink }}
             >
                 {act}
             </p>
 
             <h2
-                className="mt-4 uppercase"
+                className="type-display mt-4"
                 style={{
-                    fontFamily: M.display,
                     color: M.cream,
-                    fontSize: "clamp(2.1rem, 6.5vw, 4.4rem)",
-                    lineHeight: 0.95,
                 }}
             >
                 {line}
@@ -68,9 +65,12 @@ export default function ActBreak({
                     className="mt-6 inline-block max-w-md rounded-2xl px-5 py-4"
                     style={{ background: "rgba(255,244,227,0.06)", border: "1px solid rgba(255,244,227,0.1)" }}
                 >
-                    <Hand className="text-[1.2rem] leading-tight md:text-[1.5rem]" tilt={tilt}>
+                    <p
+                        className="type-lead"
+                        style={{ color: "rgba(255,244,227,0.85)" }}
+                    >
                         {note}
-                    </Hand>
+                    </p>
                 </div>
             )}
 

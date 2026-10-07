@@ -25,8 +25,7 @@ export default function MusicFooter() {
             className="object-contain h-auto w-[80px] md:w-[120px]"
           />
           <h2
-            className="text-3xl md:text-5xl uppercase tracking-wider font-bold"
-            style={{ fontFamily: "Norwige, sans-serif" }}
+            className="type-h2"
           >
             MUSIC
           </h2>
@@ -39,12 +38,11 @@ export default function MusicFooter() {
             /atlanta-studios and /blog unreachable from the footer entirely. */}
         <div className="flex flex-col gap-3 pl-0 md:pl-8 lg:pl-0">
           <h3
-            className="text-2xl md:text-4xl uppercase tracking-wider mb-2 font-bold"
-            style={{ fontFamily: "Norwige, sans-serif" }}
+            className="type-h3 uppercase mb-2"
           >
             STUDIO
           </h3>
-          <ul className="flex flex-col gap-1 text-base md:text-xl" style={{ fontFamily: "Roboto, sans-serif" }}>
+          <ul className="type-lead flex flex-col gap-1">
             <li>
               <Link href="/pricing" className="text-white/80 hover:text-white transition-colors">Pricing</Link>
             </li>
@@ -66,12 +64,11 @@ export default function MusicFooter() {
         {/* Read */}
         <div className="flex flex-col gap-3">
           <h3
-            className="text-2xl md:text-4xl uppercase tracking-wider mb-2 font-bold"
-            style={{ fontFamily: "Norwige, sans-serif" }}
+            className="type-h3 uppercase mb-2"
           >
             READ
           </h3>
-          <ul className="flex flex-col gap-1 text-base md:text-xl" style={{ fontFamily: "Roboto, sans-serif" }}>
+          <ul className="type-lead flex flex-col gap-1">
             <li>
               <Link href="/blog" className="text-white/80 hover:text-white transition-colors">The journal</Link>
             </li>
@@ -87,15 +84,13 @@ export default function MusicFooter() {
         {/* Follow / Submit */}
         <div className="flex flex-col gap-3">
           <h3
-            className="text-2xl md:text-4xl uppercase tracking-wider mb-2 font-bold"
-            style={{ fontFamily: "Norwige, sans-serif" }}
+            className="type-h3 uppercase mb-2"
           >
             FOLLOW
           </h3>
           <a
             href={`mailto:${CONTACT_EMAIL}`}
-            className="text-base md:text-xl hover:text-gray-400 transition-colors duration-300 mb-1"
-            style={{ fontFamily: "Roboto, sans-serif" }}
+            className="type-lead hover:text-gray-400 transition-colors duration-300 mb-1"
           >
             {CONTACT_EMAIL}
           </a>
@@ -126,15 +121,14 @@ export default function MusicFooter() {
         {/* Book */}
         <div className="flex flex-col gap-3">
           <h3
-            className="text-2xl md:text-4xl uppercase tracking-wider mb-2 font-bold"
-            style={{ fontFamily: "Norwige, sans-serif" }}
+            className="type-h3 uppercase mb-2"
           >
             BOOK
           </h3>
           <CalBookButton
             calLink={CAL_LINKS.hourlySession}
-            className="inline-flex items-center justify-center w-fit px-6 py-3 rounded-full text-sm uppercase tracking-wide transition-colors hover:bg-white/5"
-            style={{ fontFamily: "'Neue Montreal', sans-serif", border: "1px solid rgba(234,154,97,0.6)", letterSpacing: "0.08em" }}
+            className="type-btn-sm inline-flex items-center justify-center w-fit px-6 py-3 rounded-full transition-colors hover:bg-white/5"
+            style={{ border: "1px solid rgba(234,154,97,0.6)" }}
           >
             Start a session
           </CalBookButton>
@@ -144,7 +138,7 @@ export default function MusicFooter() {
       {/* Bottom bar */}
       <div className="px-6 md:px-12 py-6 border-t border-white/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
         <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-5">
-          <p className="text-white/40 text-xs md:text-sm" style={{ fontFamily: "Roboto, sans-serif" }}>
+          <p className="type-caption text-white/40">
             © {new Date().getFullYear()} Range of View. Atlanta, GA.
           </p>
           <FooterRoleSwitch />
@@ -164,8 +158,7 @@ export default function MusicFooter() {
             className="object-contain w-6 h-6 opacity-80 group-hover:opacity-100 transition-opacity"
           />
           <span
-            className="text-white/60 group-hover:text-white text-xs md:text-sm uppercase transition-colors"
-            style={{ fontFamily: "'Neue Montreal', sans-serif", letterSpacing: "0.06em" }}
+            className="type-link text-white/60 group-hover:text-white transition-colors"
           >
             Range of View Studios
           </span>

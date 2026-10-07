@@ -9,8 +9,6 @@ import OfferCard from "@/components/sound/OfferCard";
 
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 
-const HEADING_FONT = "Norwige, sans-serif";
-const BODY_FONT = "'Roboto', sans-serif";
 
 const valueProps = [
   {
@@ -54,8 +52,7 @@ function ValueAccordion() {
         initial={{ opacity: 0, x: -20 }}
         animate={inView ? { opacity: 1, x: 0 } : {}}
         transition={spring}
-        className="block text-xs uppercase tracking-[0.3em] text-[#EA9A61] mb-10 md:mb-14"
-        style={{ fontFamily: BODY_FONT }}
+        className="type-eyebrow block text-[#EA9A61] mb-10 md:mb-14"
       >
         What You Get
       </motion.span>
@@ -87,10 +84,8 @@ function ValueAccordion() {
               <div className="py-6 md:py-8 flex items-start md:items-center gap-4 md:gap-8">
                 {/* Index number */}
                 <span
-                  className="text-3xl md:text-5xl font-bold italic shrink-0 w-12 md:w-16 transition-colors duration-500"
-                  style={{
-                    fontFamily: HEADING_FONT,
-                    color: isActive ? "#EA9A61" : "rgba(255,255,255,0.12)",
+                  className="type-stat shrink-0 w-12 md:w-16 transition-colors duration-500"
+                  style={{ color: isActive ? "#EA9A61" : "rgba(255,255,255,0.12)",
                   }}
                 >
                   {idx}
@@ -100,10 +95,8 @@ function ValueAccordion() {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-3 md:gap-4 flex-wrap">
                     <h3
-                      className="text-xl md:text-3xl lg:text-4xl font-bold italic transition-colors duration-500"
-                      style={{
-                        fontFamily: HEADING_FONT,
-                        color: isActive ? "#fff" : "rgba(255,255,255,0.35)",
+                      className="type-h3 transition-colors duration-500"
+                      style={{ color: isActive ? "#fff" : "rgba(255,255,255,0.35)",
                       }}
                     >
                       {prop.label}
@@ -111,8 +104,7 @@ function ValueAccordion() {
                     <motion.span
                       animate={{ opacity: isActive ? 1 : 0, scale: isActive ? 1 : 0.8 }}
                       transition={{ duration: 0.3 }}
-                      className="text-[clamp(0.7rem,1.5vw,0.75rem)] md:text-xs uppercase tracking-[0.2em] px-3 py-1 rounded-full border border-[#EA9A61]/30 text-[#EA9A61] shrink-0"
-                      style={{ fontFamily: BODY_FONT }}
+                      className="type-tag px-3 py-1.5 rounded-full border border-[#EA9A61]/30 text-[#EA9A61] shrink-0"
                     >
                       {prop.tag}
                     </motion.span>
@@ -128,8 +120,7 @@ function ValueAccordion() {
                         className="overflow-hidden"
                       >
                         <p
-                          className="text-white/60 text-sm md:text-base leading-relaxed max-w-2xl pt-3"
-                          style={{ fontFamily: BODY_FONT }}
+                          className="type-body text-white/60 max-w-2xl pt-3"
                         >
                           {prop.detail}
                         </p>
@@ -180,8 +171,7 @@ function RecordingRates() {
         initial={{ opacity: 0, x: -20 }}
         animate={inView ? { opacity: 1, x: 0 } : {}}
         transition={spring}
-        className="block text-xs uppercase tracking-[0.3em] text-[#EA9A61] mb-3"
-        style={{ fontFamily: BODY_FONT }}
+        className="type-eyebrow block text-[#EA9A61] mb-3"
       >
         Recording Rates
       </motion.span>
@@ -189,8 +179,7 @@ function RecordingRates() {
         initial={{ opacity: 0, y: 20 }}
         animate={inView ? { opacity: 1, y: 0 } : {}}
         transition={{ ...spring, delay: 0.1 }}
-        className="uppercase text-white text-3xl md:text-4xl lg:text-5xl font-bold italic mb-3"
-        style={{ fontFamily: HEADING_FONT }}
+        className="type-h2 text-white mb-3"
       >
         Published rates, stems in hand.
       </motion.h3>
@@ -215,12 +204,8 @@ function RecordingRates() {
           <CalBookButton
             calLink={CAL_LINKS.finishedSingle}
             fallbackHref={BOOKING_URL}
-            className="cta-shine block w-full text-center text-white font-semibold rounded-full transition-all duration-300 hover:scale-[1.03]"
-            style={{
-              fontFamily: HEADING_FONT,
-              padding: "14px",
-              fontSize: "14px",
-              letterSpacing: "0.05em",
+            className="type-btn cta-shine block w-full text-center text-white rounded-full transition-all duration-300 hover:scale-[1.03]"
+            style={{ padding: "1rem",
               background: "linear-gradient(112deg, #42201C 6.46%, #A64D2B 34.96%, #B16937 63.88%, #EA9A61 97.63%)",
               boxShadow: "3px 4px 4px 0 rgba(255, 244, 227, 0.15) inset, 0 4.385px 4.385px 0 rgba(0, 0, 0, 0.25)",
             }}
@@ -235,7 +220,7 @@ function RecordingRates() {
         photo={SESSION.knit}
       />
 
-      <p className="text-white/45 text-xs md:text-sm mt-6" style={{ fontFamily: BODY_FONT }}>
+      <p className="type-caption text-white/45 mt-6">
         Booking by the hour, mixing packs, and student rates are all on{" "}
         <a href="/pricing" className="text-[#EA9A61]/85 hover:text-[#EA9A61] underline underline-offset-2 decoration-[#EA9A61]/30">
           the pricing page
@@ -264,8 +249,7 @@ export default function StudioSection() {
               initial={{ opacity: 0, x: -20 }}
               animate={headerInView ? { opacity: 1, x: 0 } : {}}
               transition={spring}
-              className="inline-block text-xs uppercase tracking-[0.3em] text-[#EA9A61] mb-4"
-              style={{ fontFamily: BODY_FONT }}
+              className="type-eyebrow inline-block text-[#EA9A61] mb-4"
             >
               In-House Recording
             </motion.span>
@@ -274,8 +258,7 @@ export default function StudioSection() {
               initial={{ opacity: 0, y: 30 }}
               animate={headerInView ? { opacity: 1, y: 0 } : {}}
               transition={{ ...spring, delay: 0.1 }}
-              className="text-white text-4xl sm:text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight"
-              style={{ fontFamily: HEADING_FONT }}
+              className="type-h2 text-white normal-case"
             >
               <span className="font-bold">Real</span>{" "}
               <span className="italic">Studio.</span>
@@ -301,8 +284,7 @@ export default function StudioSection() {
             transition={{ ...spring, delay: 0.2 }}
           >
             <p
-              className="text-white/75 text-base md:text-lg leading-relaxed mb-6"
-              style={{ fontFamily: BODY_FONT }}
+              className="type-lead text-white/75 mb-6"
             >
               We don&apos;t just mix files from a laptop. Artists record in our Atlanta studio, stand behind real mics,
               and walk out with their stems the same day. Add the mix and master and the record is ready for Spotify, Apple Music, and every streaming platform.
@@ -313,8 +295,7 @@ export default function StudioSection() {
               className="inline-flex items-center gap-3 group"
             >
               <span
-                className="text-[#EA9A61] text-sm uppercase tracking-[0.15em] group-hover:tracking-[0.25em] transition-all duration-500"
-                style={{ fontFamily: BODY_FONT }}
+                className="type-link text-[#EA9A61] group-hover:tracking-[0.22em] transition-all duration-500"
               >
                 Book a Session
               </span>
@@ -360,8 +341,7 @@ export default function StudioSection() {
         >
           <div className="shrink-0">
             <span
-              className="text-[#EA9A61] text-5xl md:text-6xl font-bold italic"
-              style={{ fontFamily: HEADING_FONT }}
+              className="type-stat text-[#EA9A61]"
             >
               Students
             </span>
@@ -369,8 +349,7 @@ export default function StudioSection() {
           <div className="h-px md:h-12 md:w-px w-full bg-white/[0.08] shrink-0" />
           <div className="flex-1">
             <p
-              className="text-white/60 text-sm md:text-base leading-relaxed"
-              style={{ fontFamily: BODY_FONT }}
+              className="type-body text-white/60"
             >
               Students may be eligible for additional discounts. Get in touch.
             </p>
@@ -378,8 +357,7 @@ export default function StudioSection() {
           <CalBookButton
             calLink={CAL_LINKS.hourlySession}
             fallbackHref={BOOKING_URL}
-            className="shrink-0 text-[#EA9A61] text-sm uppercase tracking-[0.15em] hover:tracking-[0.25em] transition-all duration-500"
-            style={{ fontFamily: BODY_FONT }}
+            className="type-link shrink-0 text-[#EA9A61] hover:tracking-[0.22em] transition-all duration-500"
           >
             Inquire &rarr;
           </CalBookButton>

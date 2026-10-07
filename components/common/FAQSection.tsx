@@ -36,11 +36,8 @@ export default function FAQSection({ items }: FAQSectionProps) {
                     {/* Left Side - FAQ Title and CTA Card */}
                     <div className="lg:col-span-5 space-y-8 lg:sticky lg:top-8">
                         <h2
-                            className="text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-bold"
+                            className="type-mega"
                             style={{
-                                fontFamily: "Norwige, sans-serif",
-                                fontStyle: "italic",
-                                letterSpacing: "-0.02em",
                                 color: "#FFF4E3"
                             }}
                         >
@@ -54,14 +51,14 @@ export default function FAQSection({ items }: FAQSectionProps) {
                         >
                             <div>
                                 <h3
-                                    className="text-xl md:text-2xl font-bold mb-3"
-                                    style={{ fontFamily: "Roboto, sans-serif", color: "#FFF4E3" }}
+                                    className="type-h3 mb-3"
+                                    style={{ color: "#FFF4E3" }}
                                 >
                                     Still have questions?
                                 </h3>
                                 <p
-                                    className="text-sm md:text-base leading-relaxed"
-                                    style={{ fontFamily: "Roboto, sans-serif", color: "#FFF4E3", opacity: 0.9 }}
+                                    className="type-body"
+                                    style={{ color: "#FFF4E3", opacity: 0.9 }}
                                 >
                                     Let&apos;s discuss your project and bring your vision to life.
                                 </p>
@@ -113,10 +110,10 @@ export default function FAQSection({ items }: FAQSectionProps) {
                                     href="https://cal.com/rov-studios-imhphw/15min"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="flex-1 px-6 py-3 md:px-8 md:py-4 rounded-full font-medium hover:opacity-90 transition-opacity uppercase tracking-wide text-sm md:text-base flex items-center justify-center"
+                                    className="type-btn cta-shine flex-1 px-6 py-3.5 md:px-8 md:py-4 rounded-full hover:scale-[1.02] transition-transform flex items-center justify-center"
                                     style={{
-                                        background: "linear-gradient(132deg, #EA9A61 4.77%, #B16937 27.26%, #A64D2B 50.09%, #42201C 76.74%)",
-                                        fontFamily: "Roboto, sans-serif",
+                                        background: "linear-gradient(112deg, #42201C 6.46%, #A64D2B 34.96%, #B16937 63.88%, #EA9A61 97.63%)",
+                                        boxShadow: "3px 4px 4px 0 rgba(255,244,227,0.15) inset, 0 4px 14px rgba(0,0,0,0.3)",
                                         color: "#FFF4E3"
                                     }}
                                 >
@@ -146,8 +143,8 @@ export default function FAQSection({ items }: FAQSectionProps) {
                                         className="w-full flex justify-between items-center text-left px-6 md:px-8 py-5 md:py-6 cursor-pointer group"
                                     >
                                         <span
-                                            className="text-base md:text-lg lg:text-xl font-medium pr-4"
-                                            style={{ fontFamily: "Roboto, sans-serif", color: "#FFF4E3" }}
+                                            className="type-h4 normal-case pr-4"
+                                            style={{ color: "#FFF4E3" }}
                                         >
                                             {item.question}
                                         </span>
@@ -175,8 +172,8 @@ export default function FAQSection({ items }: FAQSectionProps) {
                                         <div className="overflow-hidden">
                                             <div className="px-6 md:px-8 pb-5 md:pb-6 pt-2">
                                                 <p
-                                                    className="text-base md:text-lg lg:text-xl leading-relaxed"
-                                                    style={{ fontFamily: "Roboto, sans-serif", color: "#FFF4E3", opacity: 0.85 }}
+                                                    className="type-lead"
+                                                    style={{ color: "#FFF4E3", opacity: 0.85 }}
                                                 >
                                                     {item.answer}
                                                 </p>

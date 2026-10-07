@@ -4,8 +4,6 @@ import { motion, useInView } from "framer-motion";
 import { useRef, type ReactNode } from "react";
 import SessionPhoto, { type SessionFrame } from "@/components/sound/SessionPhoto";
 
-const HEADING = "Norwige, sans-serif";
-const BODY = "'Roboto', sans-serif";
 const spring = { type: "spring" as const, stiffness: 100, damping: 20 };
 
 // The split-screen "lead offer" card: price and deliverables on the left,
@@ -63,45 +61,43 @@ export default function OfferCard({
       <div className="relative p-8 md:p-12 flex flex-col">
         <span
           aria-hidden
-          className="absolute -top-2 right-4 text-[6.5rem] md:text-[8.5rem] font-bold italic leading-none pointer-events-none select-none"
-          style={{ fontFamily: HEADING, color: "rgba(255,255,255,0.05)" }}
+          className="type-mega absolute -top-2 right-4 text-[6.5rem] md:text-[8.5rem] pointer-events-none select-none"
+          style={{ color: "rgba(255,255,255,0.05)" }}
         >
           {numeral}
         </span>
 
         <span
-          className="relative inline-flex self-start rounded-full border border-[#EA9A61]/30 px-3 py-1 text-[11px] uppercase tracking-[0.2em] text-[#EA9A61] mb-6"
-          style={{ fontFamily: BODY }}
+          className="type-tag relative inline-flex self-start rounded-full border border-[#EA9A61]/30 px-3 py-1.5 text-[#EA9A61] mb-6"
         >
           {tag}
         </span>
 
         <h3
-          className="relative text-white text-2xl md:text-3xl font-bold uppercase mb-5 leading-tight"
-          style={{ fontFamily: HEADING }}
+          className="type-h3 relative text-white uppercase mb-5"
         >
           {headline}
         </h3>
 
         <div className="flex items-baseline gap-2">
-          <span className="text-white text-5xl md:text-6xl font-bold italic" style={{ fontFamily: HEADING }}>
+          <span className="type-stat text-white">
             {price}
           </span>
           {priceUnit && (
-            <span className="text-white/40 text-base" style={{ fontFamily: BODY }}>
+            <span className="type-body text-white/40">
               {priceUnit}
             </span>
           )}
         </div>
         {priceNote && (
-          <p className="text-white/45 text-sm mt-1 mb-6" style={{ fontFamily: BODY }}>
+          <p className="type-small text-white/45 mt-1 mb-6">
             {priceNote}
           </p>
         )}
 
         <ul className={`space-y-2.5 mb-8 ${priceNote ? "" : "mt-6"}`}>
           {features.map((f) => (
-            <li key={f} className="flex items-center gap-3 text-white/75 text-sm" style={{ fontFamily: BODY }}>
+            <li key={f} className="type-small flex items-center gap-3 text-white/75">
               <span className="text-[#EA9A61] shrink-0">
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <polyline points="20 6 9 17 4 12" />
@@ -117,15 +113,12 @@ export default function OfferCard({
             cta && (
               <a
                 href={cta.href}
-                className="cta-shine inline-flex w-full items-center justify-center gap-2 text-white font-semibold transition-all duration-300 hover:scale-[1.02]"
+                className="type-btn cta-shine inline-flex w-full items-center justify-center gap-2 text-white transition-all duration-300 hover:scale-[1.02]"
                 style={{
-                  fontFamily: HEADING,
                   borderRadius: "9999px",
                   background: "linear-gradient(112deg, #42201C 6.46%, #A64D2B 34.96%, #B16937 63.88%, #EA9A61 97.63%)",
                   boxShadow: "3px 4px 4px 0 rgba(255, 244, 227, 0.15) inset, 0 4.385px 4.385px 0 rgba(0, 0, 0, 0.25)",
-                  padding: "14px",
-                  fontSize: "14px",
-                  letterSpacing: "0.05em",
+                  padding: "1rem",
                 }}
               >
                 {cta.label} &rarr;
@@ -144,19 +137,18 @@ export default function OfferCard({
         )}
         <div className="relative">
           <span
-            className="block text-[11px] uppercase tracking-[0.2em] text-[#EA9A61] mb-4"
-            style={{ fontFamily: BODY }}
+            className="type-eyebrow block text-[#EA9A61] mb-4"
           >
             {guaranteeTag}
           </span>
-          <h4 className="text-white text-xl md:text-2xl font-semibold mb-4 leading-snug" style={{ fontFamily: BODY }}>
+          <h4 className="type-h3 text-white mb-4">
             {guaranteeHeadline}
           </h4>
-          <p className="text-white/60 text-sm md:text-base leading-relaxed mb-6" style={{ fontFamily: BODY }}>
+          <p className="type-body text-white/60 mb-6">
             {guaranteeBody}
           </p>
           {stats && stats.length > 0 && (
-            <div className="flex flex-wrap items-center gap-x-3 gap-y-2 text-white/40 text-xs uppercase tracking-[0.15em]" style={{ fontFamily: BODY }}>
+            <div className="type-meta flex flex-wrap items-center gap-x-3 gap-y-2 text-white/40">
               {stats.map((s, i) => (
                 <span key={s} className="flex items-center gap-3">
                   {i > 0 && <span aria-hidden>&middot;</span>}

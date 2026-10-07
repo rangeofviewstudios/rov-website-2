@@ -1,7 +1,6 @@
 "use client";
 
 import React from 'react';
-import { Squiggle } from "@/components/sound/musicStory";
 
 const SoundHero: React.FC = () => {
     // Only mount/autoplay the heavy hero video on >=768px. On mobile we render
@@ -50,22 +49,21 @@ const SoundHero: React.FC = () => {
 
                 {/* Content */}
                 <div className="relative z-20 px-8 md:px-16 w-full">
-                    <span className="block text-white/65 mb-6 uppercase" style={{ fontFamily: 'Roboto, sans-serif', fontSize: '12px', letterSpacing: '0.2em' }}>
+                    <span className="type-eyebrow block text-white/65 mb-6">
                         Sound Engineering
                     </span>
                     <div className="flex flex-col md:flex-row justify-between items-start md:items-start gap-12 md:gap-6 pb-12 pt-2 md:pt-4">
                         {/* Left side - Tagline */}
                         <h1 className="flex flex-col">
                             <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-                                <span className="text-[#FFF4E3] text-3xl md:text-5xl lg:text-6xl tracking-wide leading-none" style={{ fontFamily: 'NorwigeHeroItalic, sans-serif', fontWeight: 'normal' }}>
+                                <span className="type-h1 text-[#FFF4E3]">
                                     RAW.
                                 </span>
 
                                 <div className="relative flex items-center scale-90 md:scale-100 origin-left">
                                     {/* Refined Pill */}
                                     <span
-                                        className="bg-[#8B7355] text-[#FFF4E3] text-3xl md:text-5xl lg:text-6xl px-4 md:px-6 py-1 md:py-2 rounded-2xl tracking-wide relative z-20"
-                                        style={{ fontFamily: 'NorwigeHeroItalic, sans-serif', fontWeight: 'normal' }}
+                                        className="type-h1 bg-[#8B7355] text-[#FFF4E3] px-4 md:px-6 py-1 md:py-2 rounded-2xl relative z-20"
                                     >
                                         REFINED.
                                     </span>
@@ -77,17 +75,13 @@ const SoundHero: React.FC = () => {
                                 </div>
                             </div>
 
-                            <span className="text-[#FFF4E3] text-3xl md:text-5xl lg:text-6xl tracking-wide mt-2" style={{ fontFamily: 'NorwigeHeroItalic, sans-serif', fontWeight: 'normal' }}>
+                            <span className="type-h1 text-[#FFF4E3] mt-2">
                                 RELEASED.
                             </span>
                         </h1>
-                        <div className="mt-4 max-w-[220px] hidden md:block">
-                            <Squiggle />
-                        </div>
-
                         {/* Right side - Description */}
                         <div className="max-w-sm pt-2">
-                            <p className="text-[#FFF4E3] text-lg md:text-xl italic leading-tight text-right md:text-left drop-shadow-md" style={{ fontFamily: 'Norwige, sans-serif' }}>
+                            <p className="type-h4 text-[#FFF4E3] text-right md:text-left drop-shadow-md">
                                 From bedroom demos to radio-<br />ready hits, mixed and mastered<br />in just 48 hours.
                             </p>
                         </div>
