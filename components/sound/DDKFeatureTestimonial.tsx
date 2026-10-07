@@ -3,6 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
+import { LightSplash } from "@/components/sound/musicStory";
 
 
 const spring = { type: "spring" as const, stiffness: 72, damping: 18 };
@@ -38,21 +39,16 @@ export default function DDKFeatureTestimonial() {
   return (
     <section
       ref={ref}
-      className="relative bg-[#080807] overflow-hidden"
+      className="relative bg-black overflow-hidden"
       style={{ padding: "clamp(80px, 12vw, 140px) clamp(16px, 5vw, 80px)" }}
     >
-      {/* Ambient glow — left, behind video */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          left: "-8%",
-          top: "15%",
-          width: "55%",
-          height: "70%",
-          background:
-            "radial-gradient(ellipse, rgba(234,154,97,0.055) 0%, transparent 68%)",
-          filter: "blur(72px)",
-        }}
+      {/* Splashes of brown light on black, mirrored from the Sam Suen
+          section: behind the video on the left, a smaller one top right. */}
+      <LightSplash
+        splashes={[
+          { left: "-8%", top: "22%", size: "min(60vw, 820px)", tone: "ember", strength: 0.28 },
+          { right: "-12%", top: "-12%", size: "min(45vw, 600px)", tone: "rust", strength: 0.3 },
+        ]}
       />
 
       {/* Waveform bars — top right decoration */}
@@ -109,7 +105,7 @@ export default function DDKFeatureTestimonial() {
         </motion.div>
 
         {/* Main grid */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-start">
 
           {/* ── LEFT — YouTube embed ── */}
           <motion.div
@@ -261,9 +257,10 @@ export default function DDKFeatureTestimonial() {
                   key={badge}
                   className="type-tag px-3 py-1.5 rounded-full"
                   style={{
-                    border: "1px solid rgba(234,154,97,0.18)",
-                    color: "rgba(234,154,97,0.65)",
-                    background: "rgba(234,154,97,0.04)",
+                    border: "1px solid rgba(234,154,97,0.45)",
+                    color: "#FFF4E3",
+                    background: "rgba(8,5,3,0.78)",
+                    backdropFilter: "blur(8px)",
                   }}
                 >
                   {badge}

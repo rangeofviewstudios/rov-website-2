@@ -567,7 +567,7 @@ export function FeatureRow({
     index: number;
 }) {
     return (
-        <Rise delay={0.05} className={`grid grid-cols-1 items-center gap-6 md:gap-12 lg:grid-cols-[1.35fr_1fr] ${flip ? "lg:[&>*:first-child]:order-2" : ""}`}>
+        <Rise delay={0.05} className={`grid grid-cols-1 items-start gap-6 md:gap-12 lg:grid-cols-[1.35fr_1fr] ${flip ? "lg:[&>*:first-child]:order-2" : ""}`}>
             <div
                 className="relative overflow-hidden rounded-xl"
                 style={{ border: "1px solid rgba(255,244,227,0.14)", backgroundColor: "rgba(255,244,227,0.03)" }}
@@ -647,7 +647,7 @@ export function SiteArchitecture() {
     });
 
     return (
-        <Rise className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-center lg:gap-16">
+        <Rise className="grid grid-cols-1 gap-10 lg:grid-cols-[1.1fr_1fr] lg:items-start lg:gap-16">
             {/* Desktop radial map */}
             <div
                 className="relative mx-auto hidden aspect-square w-full max-w-[540px] md:block"

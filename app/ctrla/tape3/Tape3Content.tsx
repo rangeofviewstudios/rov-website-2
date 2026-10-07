@@ -71,7 +71,7 @@ export default function Tape3Content() {
                     style={{ background: "radial-gradient(circle, rgba(234,154,97,0.06) 0%, transparent 60%)" }}
                 />
 
-                <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+                <div className="relative z-10 max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
                     {/* Left — Vinyl + title */}
                     <div className="lg:col-span-5 flex flex-col items-center lg:items-start gap-8">
                         <motion.div

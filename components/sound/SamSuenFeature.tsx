@@ -4,7 +4,7 @@ import { useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion, useInView } from "framer-motion";
-import { M, Squiggle } from "@/components/sound/musicStory";
+import { LightSplash, M, Squiggle } from "@/components/sound/musicStory";
 
 
 const spring = { type: "spring" as const, stiffness: 72, damping: 18 };
@@ -34,21 +34,18 @@ export default function SamSuenFeature() {
   return (
     <section
       ref={ref}
-      className="relative bg-[#080807] overflow-hidden"
+      className="relative bg-black overflow-hidden"
       style={{ padding: "clamp(24px, 4vw, 48px) clamp(16px, 5vw, 80px) clamp(80px, 12vw, 140px)" }}
     >
-      {/* Ambient glow — right, behind photo */}
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          right: "-8%",
-          top: "20%",
-          width: "50%",
-          height: "65%",
-          background:
-            "radial-gradient(ellipse, rgba(234,154,97,0.055) 0%, transparent 68%)",
-          filter: "blur(72px)",
-        }}
+      {/* Splashes of brown light on black: one behind the festival photo,
+          one low on the left under the headline, so the section blends into
+          the page instead of sitting on a tinted panel. */}
+      <LightSplash
+        splashes={[
+          { right: "-6%", top: "28%", size: "min(60vw, 820px)", tone: "ember", strength: 0.3 },
+          { left: "-14%", bottom: "-10%", size: "min(55vw, 700px)", tone: "rust", strength: 0.34 },
+          { left: "30%", top: "-18%", size: "min(35vw, 460px)", tone: "rust", strength: 0.18 },
+        ]}
       />
 
       <div className="max-w-7xl mx-auto relative z-10">
@@ -72,7 +69,7 @@ export default function SamSuenFeature() {
         </motion.div>
 
         {/* Main grid — copy left, photo right (mirrors DDK, which is video-left) */}
-        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-20 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-[1fr_1.05fr] gap-12 lg:gap-20 items-start">
           {/* ── LEFT — story + stats ── */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
@@ -166,9 +163,10 @@ export default function SamSuenFeature() {
                   key={p}
                   className="type-tag px-3 py-1.5 rounded-full"
                   style={{
-                    border: "1px solid rgba(234,154,97,0.3)",
-                    color: "#EA9A61",
-                    background: "rgba(234,154,97,0.08)",
+                    border: "1px solid rgba(234,154,97,0.45)",
+                    color: "#FFF4E3",
+                    background: "rgba(8,5,3,0.78)",
+                    backdropFilter: "blur(8px)",
                   }}
                 >
                   {p}

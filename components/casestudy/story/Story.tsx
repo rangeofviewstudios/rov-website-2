@@ -638,7 +638,7 @@ export function FeatureRow({
 }) {
     const t = useStoryTheme();
     return (
-        <Rise delay={0.05} className={`grid grid-cols-1 items-center gap-6 md:gap-12 lg:grid-cols-[1.35fr_1fr] ${flip ? "lg:[&>*:first-child]:order-2" : ""}`}>
+        <Rise delay={0.05} className={`grid grid-cols-1 items-start gap-6 md:gap-12 lg:grid-cols-[1.35fr_1fr] ${flip ? "lg:[&>*:first-child]:order-2" : ""}`}>
             <div className="relative overflow-hidden rounded-xl" style={{ border: `1px solid ${tint(t.text, 0.14)}`, backgroundColor: tint(t.text, 0.03) }}>
                 {videoSrc ? (
                     <video src={videoSrc} autoPlay muted loop playsInline className="block h-auto w-full" />

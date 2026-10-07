@@ -32,7 +32,7 @@ export default function IknaInstagramFeature() {
         }}
       />
 
-      <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto] items-center gap-12 lg:gap-16">
+      <div className="relative grid grid-cols-1 lg:grid-cols-[1fr_auto] items-start gap-12 lg:gap-16">
         {/* Copy column */}
         <div className="max-w-xl text-left mx-auto lg:mx-0">
           {/* Live eyebrow */}

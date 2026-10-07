@@ -1,191 +1,154 @@
-// Content for rovmusic.com/toolkit.
+// Content for rovmusic.com/toolkit ("How we make records").
 //
 // Deliberately NOT shared with app/ctrla/data.ts. The CTRL A music toolkit is a
 // community artifact: a flat grid of picks plus the history of recorded sound.
-// This page is the commercial expert page for the music host, and it is
-// organised by signal chain, the order a vocal actually moves through one of our
-// sessions. Same studio, different question. CTRL A answers "what should I try",
-// this answers "what happens to my record when I hand it over".
+// This page is the commercial page for the music host and walks the actual
+// process a song goes through with us, mix to release and every round after.
 //
-// Keeping the copy separate is the point: two genuinely different pages remove
-// the duplicate-content question instead of managing it with a canonical hint.
+// Keep the copy short and in our voice. Each stage is a headline, two or three
+// short points, and one outcome line. No paragraphs. The pictures do the rest.
 
-export interface ChainStage {
-    /** Two-digit rail number. */
+export type StageVisual =
+    | { kind: "photo"; src: string; alt: string; session?: "profile" | "midPhrase" | "knit" | "street" | "eyesClosed" }
+    | { kind: "grid"; items: { src: string; alt: string; tag: string }[] }
+    | { kind: "kit" }
+    | { kind: "email" };
+
+export interface ProcessStage {
     step: string;
-    /** Stage of the signal path. */
+    /** Short stage name, used as the eyebrow. */
+    name: string;
+    /** The one line people remember. */
     title: string;
-    /** What this stage is actually for, in one line. */
-    purpose: string;
-    /** The longer explanation. Written to be quotable by an answer engine. */
-    body: string;
-    /** What we reach for, and the setting that matters. */
-    tools: { name: string; note: string }[];
-    /** The mistake we see most often at this stage. */
-    trap: string;
+    /** Two or three short lines. One idea each, read at a glance. */
+    points: string[];
+    /** What the artist walks away with. Set in ink as the accent line. */
+    outcome: string;
+    /** Optional small tags under the copy. */
+    tags?: string[];
+    /** Optional link to real work that shows this stage done. */
+    proof?: { label: string; href: string };
+    visual: StageVisual;
 }
 
-export const chainStages: ChainStage[] = [
+export const processStages: ProcessStage[] = [
     {
         step: "01",
-        title: "Capture",
-        purpose: "Everything downstream is a reaction to what the mic heard.",
-        body: "Post amplifies what you captured, it does not invent it. A clean take is easier to mix than a hot one, and no plugin recovers a distorted peak. We gain stage so peaks land around -12dB and record at 24-bit/48kHz, which leaves enough headroom that the rest of the chain has room to work.",
-        tools: [
-            { name: "Pop filter, six inches back", note: "Closer is not better. Proximity buildup is a low-end problem you pay for twice." },
-            { name: "24-bit / 48kHz", note: "The session standard. Higher rates cost storage and buy nothing you can hear." },
+        name: "Mix",
+        title: "Get the song right first.",
+        points: [
+            "We build the record around your vocal.",
+            "Tuned by hand, cleaned up before anything gets added.",
+            "You hear passes as we go. No big reveal at the end.",
         ],
-        trap: "Recording hot because the meter looks exciting. Peaks at -3dB leave the compressor nothing to grab and bake in harshness you cannot undo.",
+        outcome: "A mix you've already signed off on.",
+        tags: ["Hand-tuned vocals", "Pro-Q", "LA-2A", "EchoBoy"],
+        visual: { kind: "photo", src: "/soundpage/session-02.webp", alt: "A vocalist mid-phrase at the mic during a session", session: "midPhrase" },
     },
     {
         step: "02",
-        title: "Tuning",
-        purpose: "Pitch is a performance decision before it is a correction.",
-        body: "We tune by hand first, then let Auto-Tune ride on top. Hand tuning in graph mode fixes the notes that are genuinely wrong while leaving the drift and scoop that make a vocal sound human. Auto mode then holds the whole take in place. Retune Speed is the entire sound: slow reads as natural, near zero is the locked effect that became its own genre.",
-        tools: [
-            { name: "Auto-Tune Pro, graph mode", note: "Detailed by-hand work. This is the pass that decides whether the vocal sounds sung or processed." },
-            { name: "Auto-Tune Pro, auto mode", note: "Rides on top of the hand-tuned take to hold pitch in real time." },
+        name: "Master",
+        title: "Make it hold up everywhere.",
+        points: [
+            "Mastered for streaming, not a loudness war.",
+            "Checked in the car, on earbuds, and on a phone.",
         ],
-        trap: "Reaching for auto mode alone and turning Retune Speed to zero because it sounds confident. It flattens the performance and there is no way back once it is printed.",
+        outcome: "A master that sounds right wherever it plays.",
+        visual: { kind: "photo", src: "/soundpage/session-01.webp", alt: "A vocalist in a beanie singing into a condenser mic at night", session: "profile" },
     },
     {
         step: "03",
-        title: "Cleanup",
-        purpose: "Take away what is wrong before adding anything that is right.",
-        body: "Most of what people call a bad vocal is a frequency problem, not a performance problem. Mud, harshness, and boxiness each live in a predictable place, and carving them out is subtractive work that happens before any compression. Sibilance gets handled here too, and the order matters: the de-esser sits before the compressor so the compressor is not reacting to harshness and pumping the whole take in response.",
-        tools: [
-            { name: "FabFilter Pro-Q", note: "Surgical subtractive EQ. Find the offending band, cut it, move on." },
-            { name: "A transparent de-esser", note: "Placed before the compressor. Single-vocal or wideband depending on how wide the problem is." },
+        name: "Shoot",
+        title: "One day, a stack of clips.",
+        points: [
+            "Shot in one batch while the master settles.",
+            "Performance takes, the hook from five angles, the in-between moments.",
         ],
-        trap: "Boosting to fix. If it sounds muddy, cut the mud instead of boosting the top. Boosting stacks gain and pushes the next stage into working harder than it should.",
+        outcome: "Weeks of posts from one good day.",
+        visual: { kind: "photo", src: "/thumbnails/studiothumbnail.webp", alt: "A session in the studio with the day's shot list on the whiteboard" },
     },
     {
         step: "04",
-        title: "Dynamics",
-        purpose: "Hold the vocal in one place so it sits in the record.",
-        body: "A vocal that swings 20dB between the verse and the hook cannot sit in a mix at a single fader level. Optical compression smooths that without sounding like a machine did it, which is why the LA-2A circuit is still the reference forty years on. We compress in service of consistency, not loudness. If you can hear the compressor working, it is doing too much.",
-        tools: [
-            { name: "LA-2A style optical compressor", note: "Smooth, musical, forgiving. Works on vocals and bass alike." },
+        name: "Edit and test",
+        title: "Post, watch, keep what works.",
+        points: [
+            "We cut the clips and post them before the song is out.",
+            "The ones people stop for go to the main grid.",
+            "The rest get retired, and we learn from them.",
         ],
-        trap: "Compressing to make it louder. That is the fader's job. Compression is about range, and using it for volume costs you the dynamics that make a hook land.",
+        outcome: "A grid built on what actually worked.",
+        visual: {
+            kind: "grid",
+            items: [
+                { src: "/thumbnails/ykwiw1.webp", alt: "Short-form clip from the YKWIW shoot", tag: "Test" },
+                { src: "/heroassets/samxbasuvid.webp", alt: "Short-form clip from Sam Suen's autumn shoot", tag: "Main grid" },
+                { src: "/thumbnails/starboythumb.webp", alt: "Short-form clip from the Starboy shoot", tag: "Test" },
+            ],
+        },
     },
     {
         step: "05",
-        title: "Color",
-        purpose: "The part that stops being correction and starts being taste.",
-        body: "Once the vocal is clean and steady, character is a choice rather than a repair. Formant shifting, doubling, and analog-modeled delay are where a record starts sounding like a specific record instead of a competent one. This is the stage where the reference tracks in the session actually earn their place.",
-        tools: [
-            { name: "Little Alterboy", note: "Formant and pitch shifting for doubles, hard-panned thickeners, and effect vocals." },
-            { name: "EchoBoy", note: "Delay with character. Throws and slaps that sit behind the lead instead of competing with it." },
+        name: "Release kit",
+        title: "Ready before the song is.",
+        points: [
+            "Cover art, lyric video, and lyrics, done early.",
+            "Website updated, every link in place.",
         ],
-        trap: "Adding color to fix a problem from stage 03. Effects on an uncleaned vocal amplify the mud rather than covering it.",
+        outcome: "Release week is posting, not scrambling.",
+        visual: { kind: "kit" },
     },
     {
         step: "06",
-        title: "Space",
-        purpose: "Depth without washing the record in mud.",
-        body: "Reverb is the easiest way to make a mix sound worse, because the thing it adds most efficiently is low-mid buildup. A reverb with a Decay Rate EQ lets you keep the tail while pulling the frequencies that turn a room into a fog. We set the size first and the amount last, and we do not touch it at all until levels are right.",
-        tools: [
-            { name: "A natural reverb with Decay Rate EQ", note: "One Space knob from a tight room to a cathedral. Shape the tail, not just the amount." },
+        name: "Pitch",
+        title: "The emails are already written.",
+        points: [
+            "Curators, blogs, and the people who backed you last time.",
+            "Pitches drafted and templated before release.",
         ],
-        trap: "Setting reverb early. Reverb decisions made before the levels are balanced always end up too wet, because you were using it to hide a level problem.",
+        outcome: "They go out the day it drops, not a week late.",
+        visual: { kind: "email" },
     },
     {
         step: "07",
-        title: "Master",
-        purpose: "Polish, not repair.",
-        body: "Mastering enhances a good mix. If the mix is muddy, mastering makes it a louder muddy mix. The other half of the job is target loudness: streaming normalization keeps winning, so we master for LUFS and dynamics rather than for the loudest possible file. A master that wins the volume war gets turned down by the platform anyway, and arrives flat.",
-        tools: [
-            { name: "Ozone", note: "AI-assisted starting point, manual controls when precision matters. The skill is knowing which half you need." },
+        name: "Run it back",
+        title: "Again, until the streams move. Then the next one.",
+        points: [
+            "Numbers not there yet? Another round: new clips, new angles, another push.",
+            "When they are, we start on the next record.",
         ],
-        trap: "Sending a mix to mastering hoping it gets fixed. It gets amplified. Every problem you left in is a problem the master makes louder.",
-    },
-    {
-        step: "08",
-        title: "Release",
-        purpose: "The record is not finished until it is live and the splits are clean.",
-        body: "Distribution is the cheap part now. The part artists get wrong is paperwork: splits agreed after a song does well are the single most common way collaborations end badly. Agree them in writing before release, while everyone is still happy. Then the artwork, the metadata, and the release date are all one job rather than three panics.",
-        tools: [
-            { name: "DistroKid", note: "Unlimited uploads, you keep 100% of royalties, splits handled in the platform." },
-        ],
-        trap: "Releasing before splits are written down. It is a conversation that costs nothing in advance and costs friendships afterward.",
+        outcome: "Then we do it all again.",
+        // Stays /sound/sam-suen: on the music host it 308s to /sam-suen, and
+        // /sam-suen alone would 404 in dev and on rovstudios.
+        proof: { label: "See a full rollout: Sam Suen", href: "/sound/sam-suen" },
+        visual: { kind: "photo", src: "/ctrla/VOL1/dreamasiafestpic2.webp", alt: "Sam Suen on stage at DreamAsia Festival" },
     },
 ];
 
-/** Studio advice, written as what we actually say in a first session. */
-export const beforeYouBook: { claim: string; truth: string }[] = [
-    {
-        claim: "I need better plugins first.",
-        truth: "Stock plugins in Logic or Pro Tools get you roughly 90% of the way. We have finished records on stock chains. Learn one EQ and one compressor completely before you buy a third of either. Skill compounds, plugin folders do not.",
-    },
-    {
-        claim: "Mastering will fix it.",
-        truth: "Mastering is polish, not repair. It makes a good mix competitive and a bad mix loud. If something is wrong, it gets fixed in the mix or it gets fixed in a re-record, and knowing which one is most of the job.",
-    },
-    {
-        claim: "I need a treated room before I can mix.",
-        truth: "Knowing how your room lies to you matters more than making it stop. Reference on car speakers, earbuds, a phone, and monitors. Engineers who know their room beat engineers with a better one.",
-    },
-    {
-        claim: "More tracks means a bigger record.",
-        truth: "Some of the best records ever made used eight tracks or fewer. Arrangement is about what you leave out. If a part does not serve the song, muting it is the mix move.",
-    },
+/** Six finished covers, shown in the release-kit stage. */
+export const kitCovers = [
+    { src: "/audio/covers/backintimecover.webp", alt: "Back In Time cover, Sam Suen" },
+    { src: "/audio/covers/gimmeyourlovecober.webp", alt: "Give Me Your Love cover, Lorenzo Barns" },
+    { src: "/audio/covers/martyrcover.webp", alt: "Martyr cover, DDK" },
+    { src: "/audio/covers/talkmyshitcover.webp", alt: "Talk My Shit cover, DDK" },
+    { src: "/audio/covers/guapcover.webp", alt: "Guap cover, Dafes" },
+    { src: "/audio/covers/ykwiwcover.webp", alt: "YKWIW cover, Basu" },
 ];
-
-/** Session prep. Emitted as HowTo schema, so keep steps concrete and ordered. */
-export const sessionPrep: { title: string; steps: { title: string; body: string }[] } = {
-    title: "How to show up with a session we can work on",
-    steps: [
-        {
-            title: "Pick a DAW and stay in it for six months",
-            body: "Logic, Pro Tools, Ableton, FL Studio, or something free. It genuinely does not matter which. They all reach the same finish line, and speed comes from muscle memory, not features. Do not DAW-hop.",
-        },
-        {
-            title: "Build a session template",
-            body: "Pre-route lead vocal, doubles, adlibs, beat bus, and master. Color code it. A template saves about twenty minutes at the top of every session, which is twenty minutes you are not paying us to spend on routing.",
-        },
-        {
-            title: "Record clean takes with headroom",
-            body: "Peaks around -12dB, 24-bit/48kHz, pop filter six inches out. A clean recording is easier and faster to mix than a hot one, and it costs nothing to do right.",
-        },
-        {
-            title: "Export consolidated stems from bar one",
-            body: "Every stem starting at the same point, no plugins printed unless the effect is part of the performance. Name them plainly. Mislabeled stems are the most common reason a first pass takes two days instead of one.",
-        },
-        {
-            title: "Send two or three reference tracks",
-            body: "Not songs you like. Songs that sound like what you want this record to sound like. References settle more arguments in five minutes than a paragraph of adjectives settles in an hour.",
-        },
-        {
-            title: "Agree the splits before release",
-            body: "In writing, while everyone is still happy about the song. Producer, features, writers. This is the step people skip and the only one that gets more expensive with time.",
-        },
-    ],
-};
 
 export const toolkitFaqs: { question: string; answer: string }[] = [
     {
-        question: "Do I need to mix and master with the same engineer?",
-        answer: "No, and there is an argument for fresh ears on the master. We do both because it shortens the loop: when the master reveals a mix problem, we go back and fix the mix instead of compensating for it. If you already have a mix you love, we will master it on its own.",
+        question: "Do I have to do the whole process?",
+        answer: "No. Plenty of artists just want the mix and master, and that's fine. The rest is there when you want it, and it's the same team either way.",
     },
     {
         question: "What do you need from me to start?",
-        answer: "Consolidated stems from bar one, named plainly, with no printed effects unless the effect is part of the performance. Two or three reference tracks. A note on what is bothering you about the current version. That is enough to start a first pass.",
+        answer: "Stems exported from bar one, named plainly, plus two or three songs that sound like where you want this to land. That's enough for a first pass.",
     },
     {
-        question: "How long does a mix take?",
-        answer: "First pass typically inside 48 hours once we have usable stems. Revisions are faster. Sessions that arrive with mislabeled or unconsolidated stems take longer, which is why the prep list above exists.",
-    },
-    {
-        question: "Can you fix a vocal that was recorded badly?",
-        answer: "Sometimes, and we will tell you honestly which case you are in before you pay. Pitch, timing, and mild room tone are workable. Clipping, heavy bleed, and a blown low end are not, because post amplifies what was captured rather than replacing it. Re-recording one take is often cheaper than three rounds of repair.",
+        question: "How long does it take?",
+        answer: "A first mix is usually back inside 48 hours. A full rollout, from shoot to release day, typically runs a few weeks, depending on how much content we're making.",
     },
     {
         question: "Do you work with artists outside Atlanta?",
-        answer: "Yes. Mixing and mastering are remote by default and most of our work arrives as stems. Atlanta artists additionally get studio time, which is where the tracking and the arrangement conversations happen in the room.",
-    },
-    {
-        question: "What makes you different from any other mixing engineer in Atlanta?",
-        answer: "We are a studio, not only an engineer. The same team that mixes your record can shoot the visual, build the artwork, and put the release page together. For most artists the bottleneck is not the mix, it is everything that has to happen around it.",
+        answer: "Yes. Mixing and mastering are remote by default. Shoots and studio time happen here in Atlanta.",
     },
 ];

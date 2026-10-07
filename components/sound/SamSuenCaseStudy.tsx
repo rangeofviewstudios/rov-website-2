@@ -246,7 +246,7 @@ export default function SamSuenCaseStudy() {
       <section
         style={{ padding: "clamp(40px, 6vw, 80px) clamp(16px, 5vw, 80px)" }}
       >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-start">
           <Reveal className="flex flex-col gap-6">
             <Eyebrow>The Setup</Eyebrow>
             <h2
@@ -383,7 +383,7 @@ export default function SamSuenCaseStudy() {
       <section
         style={{ padding: "clamp(40px, 6vw, 80px) clamp(16px, 5vw, 80px)" }}
       >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-20 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1.1fr] gap-12 lg:gap-20 items-start">
           <Reveal className="flex flex-col gap-6">
             <Eyebrow>Behind the Scenes · In-House</Eyebrow>
             <h2
@@ -463,7 +463,7 @@ export default function SamSuenCaseStudy() {
       <section
         style={{ padding: "clamp(40px, 6vw, 80px) clamp(16px, 5vw, 80px)" }}
       >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1.1fr_1fr] gap-12 lg:gap-20 items-start">
           <Reveal>
             <div
               className="relative rounded-2xl overflow-hidden"
@@ -624,7 +624,7 @@ export default function SamSuenCaseStudy() {
       <section
         style={{ padding: "clamp(40px, 6vw, 80px) clamp(16px, 5vw, 80px)" }}
       >
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-center">
+        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-[1fr_1fr] gap-12 lg:gap-20 items-start">
           <Reveal className="flex flex-col gap-8">
             <div className="flex flex-col gap-5">
               <Eyebrow>Live · Shows Produced</Eyebrow>

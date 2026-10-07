@@ -99,3 +99,40 @@ export function HandLink({ href, children }: { href: string; children: React.Rea
     </a>
   );
 }
+
+/** Soft splashes of warm brown light on a black section, so sections blend
+ * into the page instead of sitting on a tinted panel. Each splash is a
+ * blurred radial gradient; place them with CSS position values. Parent must
+ * be `relative overflow-hidden`. */
+export type Splash = {
+  top?: string;
+  left?: string;
+  right?: string;
+  bottom?: string;
+  size: string;
+  /** rust (deep, default), ember (orange-brown), ink (brand orange) */
+  tone?: "rust" | "ember" | "ink";
+  strength?: number;
+};
+
+const SPLASH_RGB = { rust: "144,66,44", ember: "177,105,55", ink: "234,154,97" } as const;
+
+export function LightSplash({ splashes }: { splashes: Splash[] }) {
+  return (
+    <div aria-hidden className="pointer-events-none absolute inset-0">
+      {splashes.map(({ size, tone = "rust", strength = 0.32, ...pos }, i) => (
+        <div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            ...pos,
+            width: size,
+            height: size,
+            background: `radial-gradient(circle, rgba(${SPLASH_RGB[tone]},${strength}) 0%, rgba(${SPLASH_RGB[tone]},${strength * 0.35}) 40%, transparent 70%)`,
+            filter: "blur(60px)",
+          }}
+        />
+      ))}
+    </div>
+  );
+}

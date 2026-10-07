@@ -242,7 +242,7 @@ export default function StudioSection() {
     >
       {/* ── Header ── */}
       <div className="max-w-7xl mx-auto mb-16 md:mb-24">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-end">
+        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
           {/* Left — headline */}
           <div className="md:col-span-7">
             <motion.span
