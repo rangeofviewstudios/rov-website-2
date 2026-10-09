@@ -14,7 +14,7 @@ cardAlt: Aerial view of new-build homes in an Atlanta neighborhood
 published: true
 indexed: true
 date: 2026-07-21
-dateModified: 2026-07-21
+dateModified: 2026-10-08
 
 headline: Every listing looks the same.
 headlineAccent: Yours does not have to.
@@ -24,11 +24,12 @@ heroGradient: ember
 answerLine: "Range of View Studios is an Atlanta creative studio that builds brand identities, websites, and listing content for real estate agents and brokerages."
 heroMedia:
   src: /videoprod/Atlskylineweb.mp4
+  poster: /industries/real-estate/atlskyline-poster.webp
 
 stats:
-  - { value: "48%", label: "of online real estate inquiries never get a reply at all" }
-  - { value: "~15 hrs", label: "average time an agent takes to respond to a new lead" }
-  - { value: "4", label: "practice areas under one roof: brand, web, video, creative tech" }
+  - { value: "48%", label: "of buyer inquiries to real estate brokers never got a reply (WAV Group study)" }
+  - { value: "~15 hrs", label: "average broker response time to a new inquiry (WAV Group study)" }
+  - { value: "21x", label: "better odds of qualifying a lead when you reply in 5 minutes instead of 30 (MIT lead response study)" }
 
 pains:
   - { title: "Your headshot is doing all the work", body: "A photo, a logo from a template, and the same three fonts every other agent in the metro uses. Nothing in it tells a seller why their listing should be yours." }
@@ -157,7 +158,8 @@ bodyAsides:
   - { afterH2: "Why Atlanta agents blend in, and what actually fixes it", type: pull, kicker: "The real shortage", text: "The market is not short on agents. It is short on agents a buyer can tell apart." }
   - { afterH2: "Your brand is not your logo, it is the whole impression", type: keywords, kicker: "The whole impression", items: ["The yard sign", "The Instagram grid", "The listing deck", "The site"] }
   - { afterH2: "Listings are stories, not spec sheets", type: media, kicker: "One voice", src: /videoprod/amentity_neighborhood/Neighborhoodcar.mp4, mediaKind: video, label: "We sell the block and the life around it, not just the four walls." }
-  - { afterH2: "The lead problem is really a follow-up problem", type: number, kicker: "How deals slip", value: "48%", caption: "of online real estate inquiries never get a reply at all." }
+  - { afterH2: "The lead problem is really a follow-up problem", type: number, kicker: "How deals slip", value: "48%", caption: "of buyer inquiries to real estate brokers never got a reply (WAV Group study)." }
+  - { afterH2: "How to tell if your brand is the problem", type: keywords, kicker: "Quick check", items: ["Could a stranger name what makes you different?", "Do your sign, grid, and site match?", "Do listings share one look?", "Does a lead hear back in minutes?"] }
   - { afterH2: "What working with us looks like", type: pull, kicker: "One team", text: "The pieces are designed to fit, because they were drawn by the same hands." }
   - { afterH2: "Built for Atlanta", type: media, kicker: "This city", src: /videoprod/Atlskylineweb.mp4, mediaKind: video, label: "The city as the backdrop your listings deserve, not a stock skyline." }
 ---
@@ -182,9 +184,15 @@ We treat each listing as a short story with a consistent voice. Photo, motion, a
 
 ## The lead problem is really a follow-up problem
 
-Here is the part most agents underrate. Nearly half of online real estate inquiries never get a reply, and the average response takes around fifteen hours. By then the buyer has messaged three other agents and booked with the first one who answered. You did not lose that deal on price or on the house. You lost it to a slow inbox.
+Here is the part most agents underrate. In a [WAV Group study of 384 real estate brokers](https://www.wavgroup.com/2014/01/13/agent-responsiveness-study-reveals-critical-flaws-in-real-estate-lead-response/), 48% of buyer inquiries were never answered, and the average response to the rest took about fifteen hours. The study is from 2014, but the habit it describes has not gone anywhere. Speed matters well beyond real estate too: [MIT-backed lead response research](https://25649.fs1.hubspotusercontent-na2.net/hub/25649/file-13535879-pdf/docs/mit_study.pdf) found the odds of qualifying a lead are 21 times higher when the first reply lands within 5 minutes instead of 30. That study covers sales leads in general, not just real estate, but the pattern is the same. By hour fifteen the buyer has messaged other agents and booked with the first one who answered. You did not lose that deal on price or on the house. You lost it to a slow inbox.
 
 This is where our creative-tech practice earns its place. We set up an automated first touch, so a new lead hears back within minutes, feels seen, and stays warm until you can pick it up yourself. The brand and the site bring the lead to the door. The follow-up system makes sure someone is home. Designing both together, by one team, is the whole point. A gorgeous site that emails you and does nothing else is a leak with a nice paint job.
+
+## How to tell if your brand is the problem
+
+Not every slow quarter is a branding problem. But a few signs point that way. Someone who just saw your sign cannot say what makes you different from the agent two streets over. Your yard sign, Instagram grid, and website look like they belong to three different people. Your listings share a subject but not a style, so no post builds on the last one. Or leads reach you, and then nothing happens for hours.
+
+If two or more of those sound familiar, the house is probably not the issue. Start with a look at what you already have: the mark, the templates, the site, the first reply a new lead gets. That honest look is where we begin, before anything gets quoted.
 
 ## What working with us looks like
 
