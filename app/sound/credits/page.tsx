@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { MusicMenu } from "@/components/music/MusicMenu";
 import MusicFooter from "@/components/music/MusicFooter";
@@ -7,6 +6,7 @@ import { IntakeProvider } from "@/components/music/IntakeContext";
 import { BreadcrumbSchema } from "@/components/schema/BreadcrumbSchema";
 import { credits, artistProfiles, stages } from "./credits-data";
 import { Squiggle, HandLink } from "@/components/sound/musicStory";
+import CreditsDiscCarousel from "@/components/music/CreditsDiscCarousel";
 
 // rovmusic.com/credits — the proof layer.
 //
@@ -100,7 +100,7 @@ export default function CreditsPage() {
             />
 
             <main className="bg-black" style={{ minHeight: "100vh" }}>
-                <section className="px-6 pt-28 pb-14 sm:pt-36">
+                <section className="px-6 pt-28 pb-10 sm:pt-36">
                     <div className="mx-auto max-w-5xl">
                         <span
                             className="text-[11px] uppercase tracking-[0.2em] text-white/65"
@@ -133,58 +133,12 @@ export default function CreditsPage() {
                     </div>
                 </section>
 
-                {/* The catalogue */}
-                <section className="px-6 pb-16">
-                    <div className="mx-auto max-w-5xl">
-                        <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
-                            {credits.map((credit) => (
-                                <a
-                                    key={credit.spotifyUrl}
-                                    href={credit.spotifyUrl}
-                                    target="_blank"
-                                    rel="noopener noreferrer"
-                                    className="group block rounded-xl border border-white/10 p-4 transition-colors hover:border-white/25"
-                                >
-                                    <div className="relative aspect-square w-full overflow-hidden rounded-lg">
-                                        <Image
-                                            src={credit.cover}
-                                            alt={`${credit.title} by ${credit.artist}`}
-                                            fill
-                                            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                                            style={{ objectFit: "cover" }}
-                                        />
-                                    </div>
-                                    <h2
-                                        className="mt-4 text-lg text-white"
-                                        style={{ fontFamily: HEADING_FONT }}
-                                    >
-                                        {credit.title}
-                                    </h2>
-                                    <p
-                                        className="mt-1 text-sm text-white/60"
-                                        style={{ fontFamily: BODY_FONT }}
-                                    >
-                                        {credit.artist}
-                                    </p>
-                                    <p
-                                        className="mt-3 text-xs uppercase tracking-[0.14em]"
-                                        style={{ fontFamily: BODY_FONT, color: ACCENT }}
-                                    >
-                                        {credit.role}
-                                    </p>
-                                    <span
-                                        className="mt-4 inline-block text-xs text-white/60 group-hover:text-[#EA9A61] transition-colors"
-                                        style={{ fontFamily: BODY_FONT }}
-                                    >
-                                        Listen on Spotify →
-                                    </span>
-                                </a>
-                            ))}
-                        </div>
+                {/* The catalogue: a sticky scroll carousel, one disc per release */}
+                <CreditsDiscCarousel credits={credits} />
 
-                        <div className="mt-8">
-                            <HandLink href="/">hear the before and after on the home page player</HandLink>
-                        </div>
+                <section className="px-6 py-10">
+                    <div className="mx-auto max-w-5xl">
+                        <HandLink href="/">hear the before and after on the home page player</HandLink>
                     </div>
                 </section>
 
