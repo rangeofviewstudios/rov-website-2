@@ -15,8 +15,8 @@ export default function MusicFooter() {
   return (
     <footer className="relative w-full bg-black text-white overflow-hidden">
       {/* Logo + MUSIC wordmark */}
-      <div className="px-6 md:px-12 pl-6 md:pl-16 pt-10 pb-12">
-        <Link href="/" className="flex items-center gap-4 md:gap-6 w-fit">
+      <div className="px-6 md:px-12 pt-10 pb-12">
+        <Link href="/" className="flex items-center gap-4 md:gap-6 w-fit pl-0 md:pl-8 lg:pl-0 -ml-[3px]">
           <Image
             src="/brand/rov-logo.webp"
             alt="Range of View Music"

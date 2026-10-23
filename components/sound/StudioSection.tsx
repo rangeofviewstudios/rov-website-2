@@ -231,97 +231,11 @@ function RecordingRates() {
 }
 
 export default function StudioSection() {
-  const sectionRef = useRef<HTMLElement>(null);
-  const headerInView = useInView(sectionRef, { once: true, margin: "-100px" });
-
   return (
     <section
-      ref={sectionRef}
       className="relative bg-black overflow-hidden"
       style={{ padding: "clamp(60px, 10vw, 120px) clamp(16px, 5vw, 60px) clamp(20px, 4vw, 40px)" }}
     >
-      {/* ── Header ── */}
-      <div className="max-w-7xl mx-auto mb-16 md:mb-24">
-        <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-12 items-start">
-          {/* Left — headline */}
-          <div className="md:col-span-7">
-            <motion.span
-              initial={{ opacity: 0, x: -20 }}
-              animate={headerInView ? { opacity: 1, x: 0 } : {}}
-              transition={spring}
-              className="type-eyebrow inline-block text-[#EA9A61] mb-4"
-            >
-              In-House Recording
-            </motion.span>
-
-            <motion.h2
-              initial={{ opacity: 0, y: 30 }}
-              animate={headerInView ? { opacity: 1, y: 0 } : {}}
-              transition={{ ...spring, delay: 0.1 }}
-              className="type-h2 text-white normal-case"
-            >
-              <span className="font-bold">Real</span>{" "}
-              <span className="italic">Studio.</span>
-              <br />
-              <span className="font-bold">Real</span>{" "}
-              <span className="italic">Engineers.</span>
-              <br />
-              <span
-                className="font-bold italic bg-clip-text text-transparent"
-                style={{ backgroundImage: "linear-gradient(112deg, #EA9A61 6.46%, #B16937 34.96%, #A64D2B 63.88%, #42201C 97.63%)" }}
-              >Real Sound.</span>
-            </motion.h2>
-            <div className="mt-5 max-w-[220px]">
-              <Squiggle />
-            </div>
-          </div>
-
-          {/* Right — supporting text */}
-          <motion.div
-            className="md:col-span-5"
-            initial={{ opacity: 0, y: 20 }}
-            animate={headerInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ ...spring, delay: 0.2 }}
-          >
-            <p
-              className="type-lead text-white/75 mb-6"
-            >
-              We don&apos;t just mix files from a laptop. Artists record in our Atlanta studio, stand behind real mics,
-              and walk out with their stems the same day. Add the mix and master and the record is ready for Spotify, Apple Music, and every streaming platform.
-            </p>
-            <CalBookButton
-              calLink={CAL_LINKS.hourlySession}
-              fallbackHref={BOOKING_URL}
-              className="inline-flex items-center gap-3 group"
-            >
-              <span
-                className="type-link text-[#EA9A61] group-hover:tracking-[0.22em] transition-all duration-500"
-              >
-                Book a Session
-              </span>
-              <motion.span
-                className="inline-block w-8 h-px bg-[#EA9A61]"
-                whileHover={{ width: 48 }}
-                transition={spring}
-              />
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="#EA9A61"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="group-hover:translate-x-1 transition-transform duration-300"
-              >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </CalBookButton>
-          </motion.div>
-        </div>
-      </div>
-
       {/* ── Recording Rates ── */}
       <RecordingRates />
 
